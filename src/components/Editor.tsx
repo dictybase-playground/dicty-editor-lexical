@@ -1,5 +1,6 @@
 import { $getRoot, $getSelection } from "lexical"
 import { useEffect } from "react"
+import { Container, Paper } from "@material-ui/core"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
@@ -7,6 +8,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import exampleTheme from "themes/exampleTheme"
+import ToolbarPlugin from "plugins/ToolbarPlugin"
 
 // When the editor changes, you can get notified via the
 // LexicalOnChangePlugin!
@@ -51,8 +53,10 @@ const Editor = () => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <div className="editor-container">
-        <div className="editor-inner">
+      <Container>
+        <ToolbarPlugin />
+        {/* use Makestyles later */}
+        <Paper style={{ position: "relative" }}>
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}
             placeholder={
@@ -62,8 +66,8 @@ const Editor = () => {
           <OnChangePlugin onChange={onChange} />
           <HistoryPlugin />
           <MyCustomAutoFocusPlugin />
-        </div>
-      </div>
+        </Paper>
+      </Container>
     </LexicalComposer>
   )
 }
