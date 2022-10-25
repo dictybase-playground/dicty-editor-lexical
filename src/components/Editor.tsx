@@ -6,6 +6,7 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable"
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
+import exampleTheme from "themes/exampleTheme"
 
 // When the editor changes, you can get notified via the
 // LexicalOnChangePlugin!
@@ -37,25 +38,32 @@ const MyCustomAutoFocusPlugin = () => {
 // Catch any errors that occur during Lexical updates and log them
 // or throw them as needed. If you don't throw them, Lexical will
 // try to recover gracefully without losing user data.
-function onError(error) {
+const onError = (error) => {
   console.error(error)
 }
 
 const Editor = () => {
   const initialConfig = {
     namespace: "MyEditor",
+    theme: exampleTheme,
     onError,
   }
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <RichTextPlugin
-        contentEditable={<ContentEditable />}
-        placeholder={<div>Enter some text...</div>}
-      />
-      <OnChangePlugin onChange={onChange} />
-      <HistoryPlugin />
-      <MyCustomAutoFocusPlugin />
+      <div className="editor-container">
+        <div className="editor-inner">
+          <RichTextPlugin
+            contentEditable={<ContentEditable className="editor-input" />}
+            placeholder={
+              <div className="editor-placeholder">Enter some text...</div>
+            }
+          />
+          <OnChangePlugin onChange={onChange} />
+          <HistoryPlugin />
+          <MyCustomAutoFocusPlugin />
+        </div>
+      </div>
     </LexicalComposer>
   )
 }
