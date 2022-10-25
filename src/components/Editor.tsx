@@ -1,4 +1,5 @@
 import { $getRoot, $getSelection } from "lexical"
+import type { EditorState } from "lexical"
 import { useEffect } from "react"
 import { Container, Paper } from "@material-ui/core"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
@@ -12,7 +13,7 @@ import ToolbarPlugin from "plugins/ToolbarPlugin"
 
 // When the editor changes, you can get notified via the
 // LexicalOnChangePlugin!
-const onChange = (editorState) => {
+const onChange = (editorState: EditorState) => {
   editorState.read(() => {
     // Read the contents of the EditorState here.
     const root = $getRoot()
@@ -40,7 +41,7 @@ const MyCustomAutoFocusPlugin = () => {
 // Catch any errors that occur during Lexical updates and log them
 // or throw them as needed. If you don't throw them, Lexical will
 // try to recover gracefully without losing user data.
-const onError = (error) => {
+const onError = (error: Error) => {
   console.error(error)
 }
 
