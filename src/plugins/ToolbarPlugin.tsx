@@ -1,5 +1,13 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
+import React from "react"
 import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
@@ -13,11 +21,11 @@ import {
   $createParagraphNode,
   $getNodeByKey,
 } from "lexical"
-import type { LexicalEditor } from "lexical"
+import type { LexicalEditor, RangeSelection } from "lexical"
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link"
 import {
   $isParentElementRTL,
-  $wrapLeafNodesInElements,
+  $wrapNodes,
   $isAtNodeEnd,
 } from "@lexical/selection"
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils"
@@ -53,6 +61,18 @@ const supportedBlockTypes = new Set([
   "ol",
 ])
 
+type BlockType =
+  | "code"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "ol"
+  | "paragraph"
+  | "quote"
+  | "ul"
+
 const blockTypeToBlockName = {
   code: "Code Block",
   h1: "Large Heading",
@@ -66,9 +86,42 @@ const blockTypeToBlockName = {
   ul: "Bulleted List",
 }
 
+type SelectProperties = {
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+  className: string
+  options: string[]
+  value: string
+}
+
+const Select = ({ onChange, className, options, value }: SelectProperties) => (
+  <select className={className} onChange={onChange} value={value}>
+    <option hidden value="" />
+    {options.map((option) => (
+      <option key={option} value={option}>
+        {option}
+      </option>
+    ))}
+  </select>
+)
+
+const getSelectedNode = (selection: RangeSelection) => {
+  const { anchor } = selection
+  const { focus } = selection
+  const anchorNode = selection.anchor.getNode()
+  const focusNode = focus.getNode()
+  if (anchorNode === focusNode) {
+    return anchorNode
+  }
+  const isBackward = selection.isBackward()
+  if (isBackward) {
+    return $isAtNodeEnd(focus) ? anchorNode : focusNode
+  }
+  return $isAtNodeEnd(anchor) ? focusNode : anchorNode
+}
+
 const Divider = () => <div className="divider" />
 
-const positionEditorElement = (editor, rect) => {
+const positionEditorElement = (editor: HTMLDivElement, rect: DOMRect) => {
   if (rect === null) {
     editor.style.opacity = "0"
     editor.style.top = "-1000px"
@@ -81,6 +134,28 @@ const positionEditorElement = (editor, rect) => {
     }px`
   }
 }
+
+const getEditorElementPosition = (editor: HTMLDivElement, rect: DOMRect) =>
+  rect === null
+    ? {
+        style: {
+          opacity: "0",
+          top: "-1000px",
+          left: "-1000px",
+        },
+      }
+    : {
+        style: {
+          opacity: "1",
+          top: `${rect.top + rect.height + window.pageYOffset + 10}px`,
+          left: `${
+            rect.left +
+            window.pageXOffset -
+            editor.offsetWidth / 2 +
+            rect.width / 2
+          }px`,
+        },
+      }
 
 type FloatingLinkEditorProperties = {
   editor: LexicalEditor
@@ -226,30 +301,11 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
   )
 }
 
-const Select = ({ onChange, className, options, value }) => (
-  <select className={className} onChange={onChange} value={value}>
-    <option hidden value="" />
-    {options.map((option) => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ))}
-  </select>
-)
-
-function getSelectedNode(selection) {
-  const { anchor } = selection
-  const { focus } = selection
-  const anchorNode = selection.anchor.getNode()
-  const focusNode = selection.focus.getNode()
-  if (anchorNode === focusNode) {
-    return anchorNode
-  }
-  const isBackward = selection.isBackward()
-  if (isBackward) {
-    return $isAtNodeEnd(focus) ? anchorNode : focusNode
-  }
-  return $isAtNodeEnd(anchor) ? focusNode : anchorNode
+type BlockOptionsDropdownListProperties = {
+  editor: LexicalEditor
+  blockType: BlockType
+  toolbarRef: React.MutableRefObject<null>
+  setShowBlockOptionsDropDown: React.Dispatch<SetStateAction<boolean>>
 }
 
 const BlockOptionsDropdownList = ({
@@ -257,7 +313,7 @@ const BlockOptionsDropdownList = ({
   blockType,
   toolbarRef,
   setShowBlockOptionsDropDown,
-}) => {
+}: BlockOptionsDropdownListProperties) => {
   const dropDownReference = useRef(null)
 
   useEffect(() => {
@@ -297,7 +353,7 @@ const BlockOptionsDropdownList = ({
         const selection = $getSelection()
 
         if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createParagraphNode())
+          $wrapNodes(selection, () => $createParagraphNode())
         }
       })
     }
@@ -310,7 +366,7 @@ const BlockOptionsDropdownList = ({
         const selection = $getSelection()
 
         if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createHeadingNode("h1"))
+          $wrapNodes(selection, () => $createHeadingNode("h1"))
         }
       })
     }
@@ -323,7 +379,7 @@ const BlockOptionsDropdownList = ({
         const selection = $getSelection()
 
         if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createHeadingNode("h2"))
+          $wrapNodes(selection, () => $createHeadingNode("h2"))
         }
       })
     }
@@ -332,8 +388,10 @@ const BlockOptionsDropdownList = ({
 
   const formatBulletList = () => {
     if (blockType !== "ul") {
+      // @ts-ignore --- 2nd parameter (payload) is optional
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND)
     } else {
+      // @ts-ignore --- 2nd parameter (payload) is optional
       editor.dispatchCommand(REMOVE_LIST_COMMAND)
     }
     setShowBlockOptionsDropDown(false)
@@ -354,7 +412,7 @@ const BlockOptionsDropdownList = ({
         const selection = $getSelection()
 
         if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createQuoteNode())
+          $wrapNodes(selection, () => $createQuoteNode())
         }
       })
     }
@@ -367,7 +425,7 @@ const BlockOptionsDropdownList = ({
         const selection = $getSelection()
 
         if ($isRangeSelection(selection)) {
-          $wrapLeafNodesInElements(selection, () => $createCodeNode())
+          $wrapNodes(selection, () => $createCodeNode())
         }
       })
     }
@@ -415,13 +473,14 @@ const BlockOptionsDropdownList = ({
   )
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const ToolbarPlugin = () => {
   const [editor] = useLexicalComposerContext()
   const toolbarReference = useRef(null)
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
-  const [blockType, setBlockType] = useState("paragraph")
-  const [selectedElementKey, setSelectedElementKey] = useState(null)
+  const [blockType, setBlockType] = useState<BlockType>("paragraph")
+  const [selectedElementKey, setSelectedElementKey] = useState("")
   const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
     useState(false)
   const [codeLanguage, setCodeLanguage] = useState("")
@@ -433,6 +492,7 @@ const ToolbarPlugin = () => {
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [isCode, setIsCode] = useState(false)
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
     if ($isRangeSelection(selection)) {
@@ -453,7 +513,7 @@ const ToolbarPlugin = () => {
           const type = $isHeadingNode(element)
             ? element.getTag()
             : element.getType()
-          setBlockType(type)
+          setBlockType(type as BlockType)
           if ($isCodeNode(element)) {
             setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage())
           }
@@ -488,7 +548,7 @@ const ToolbarPlugin = () => {
         }),
         editor.registerCommand(
           SELECTION_CHANGE_COMMAND,
-          (_payload, newEditor) => {
+          () => {
             updateToolbar()
             return false
           },
@@ -516,12 +576,12 @@ const ToolbarPlugin = () => {
 
   const codeLanguges = useMemo(() => getCodeLanguages(), [])
   const onCodeLanguageSelect = useCallback(
-    (e) => {
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
       editor.update(() => {
-        if (selectedElementKey !== null) {
+        if (selectedElementKey) {
           const node = $getNodeByKey(selectedElementKey)
           if ($isCodeNode(node)) {
-            node.setLanguage(e.target.value)
+            node.setLanguage(event.target.value)
           }
         }
       })
@@ -533,6 +593,7 @@ const ToolbarPlugin = () => {
     if (!isLink) {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://")
     } else {
+      // eslint-disable-next-line unicorn/no-null
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null)
     }
   }, [editor, isLink])
@@ -543,6 +604,7 @@ const ToolbarPlugin = () => {
         type="button"
         disabled={!canUndo}
         onClick={() => {
+          // @ts-ignore --- 2nd parameter (payload) is optional
           editor.dispatchCommand(UNDO_COMMAND)
         }}
         className="toolbar-item spaced"
@@ -553,6 +615,7 @@ const ToolbarPlugin = () => {
         type="button"
         disabled={!canRedo}
         onClick={() => {
+          // @ts-ignore --- 2nd parameter (payload) is optional
           editor.dispatchCommand(REDO_COMMAND)
         }}
         className="toolbar-item"

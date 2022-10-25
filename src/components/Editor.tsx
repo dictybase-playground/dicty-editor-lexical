@@ -19,6 +19,7 @@ const onChange = (editorState: EditorState) => {
     const root = $getRoot()
     const selection = $getSelection()
 
+    // eslint-disable-next-line no-console
     console.log(root, selection)
   })
 }
@@ -42,6 +43,7 @@ const MyCustomAutoFocusPlugin = () => {
 // or throw them as needed. If you don't throw them, Lexical will
 // try to recover gracefully without losing user data.
 const onError = (error: Error) => {
+  // eslint-disable-next-line no-console
   console.error(error)
 }
 
