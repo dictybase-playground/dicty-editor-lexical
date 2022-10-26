@@ -47,6 +47,19 @@ import {
   getDefaultCodeLanguage,
   getCodeLanguages,
 } from "@lexical/code"
+import { IconButton, Button } from "@material-ui/core"
+import {
+  FormatBold,
+  FormatItalic,
+  FormatUnderlined,
+  StrikethroughS,
+  Code,
+  InsertLink,
+  FormatAlignLeft,
+  FormatAlignCenter,
+  FormatAlignRight,
+  FormatAlignJustify,
+} from "@material-ui/icons"
 
 const LowPriority = 1
 
@@ -583,7 +596,7 @@ const ToolbarPlugin = () => {
 
   return (
     <div className="toolbar" ref={toolbarReference}>
-      <button
+      <IconButton
         type="button"
         disabled={!canUndo}
         onClick={() => {
@@ -593,8 +606,8 @@ const ToolbarPlugin = () => {
         className="toolbar-item spaced"
         aria-label="Undo">
         <i className="format undo" />
-      </button>
-      <button
+      </IconButton>
+      <IconButton
         type="button"
         disabled={!canRedo}
         onClick={() => {
@@ -604,7 +617,7 @@ const ToolbarPlugin = () => {
         className="toolbar-item"
         aria-label="Redo">
         <i className="format redo" />
-      </button>
+      </IconButton>
       <Divider />
       {supportedBlockTypes.has(blockType) && (
         <>
@@ -644,97 +657,97 @@ const ToolbarPlugin = () => {
         </>
       ) : (
         <>
-          <button
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")
             }}
             className={`toolbar-item spaced ${isBold ? "active" : ""}`}
             aria-label="Format Bold">
-            <i className="format bold" />
-          </button>
-          <button
+            <FormatBold />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")
             }}
             className={`toolbar-item spaced ${isItalic ? "active" : ""}`}
             aria-label="Format Italics">
-            <i className="format italic" />
-          </button>
-          <button
+            <FormatItalic />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")
             }}
             className={`toolbar-item spaced ${isUnderline ? "active" : ""}`}
             aria-label="Format Underline">
-            <i className="format underline" />
-          </button>
-          <button
+            <FormatUnderlined />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")
             }}
             className={`toolbar-item spaced ${isStrikethrough ? "active" : ""}`}
             aria-label="Format Strikethrough">
-            <i className="format strikethrough" />
-          </button>
-          <button
+            <StrikethroughS />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code")
             }}
             className={`toolbar-item spaced ${isCode ? "active" : ""}`}
             aria-label="Insert Code">
-            <i className="format code" />
-          </button>
-          <button
+            <Code />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={insertLink}
             className={`toolbar-item spaced ${isLink ? "active" : ""}`}
             aria-label="Insert Link">
-            <i className="format link" />
-          </button>
+            <InsertLink />
+          </IconButton>
           {isLink &&
             createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
           <Divider />
-          <button
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left")
             }}
             className="toolbar-item spaced"
             aria-label="Left Align">
-            <i className="format left-align" />
-          </button>
-          <button
+            <FormatAlignLeft />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center")
             }}
             className="toolbar-item spaced"
             aria-label="Center Align">
-            <i className="format center-align" />
-          </button>
-          <button
+            <FormatAlignCenter />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right")
             }}
             className="toolbar-item spaced"
             aria-label="Right Align">
-            <i className="format right-align" />
-          </button>
-          <button
+            <FormatAlignRight />
+          </IconButton>
+          <IconButton
             type="button"
             onClick={() => {
               editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify")
             }}
             className="toolbar-item"
             aria-label="Justify Align">
-            <i className="format justify-align" />
-          </button>{" "}
+            <FormatAlignJustify />
+          </IconButton>{" "}
         </>
       )}
     </div>
