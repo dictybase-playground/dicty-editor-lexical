@@ -1,5 +1,5 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import {
+import React, {
   SetStateAction,
   useCallback,
   useEffect,
@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from "react"
-import React from "react"
 import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
@@ -135,28 +134,6 @@ const positionEditorElement = (editor: HTMLDivElement, rect: DOMRect) => {
   }
 }
 
-const getEditorElementPosition = (editor: HTMLDivElement, rect: DOMRect) =>
-  rect === null
-    ? {
-        style: {
-          opacity: "0",
-          top: "-1000px",
-          left: "-1000px",
-        },
-      }
-    : {
-        style: {
-          opacity: "1",
-          top: `${rect.top + rect.height + window.pageYOffset + 10}px`,
-          left: `${
-            rect.left +
-            window.pageXOffset -
-            editor.offsetWidth / 2 +
-            rect.width / 2
-          }px`,
-        },
-      }
-
 type FloatingLinkEditorProperties = {
   editor: LexicalEditor
 }
@@ -252,6 +229,7 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
 
   useEffect(() => {
     if (isEditMode && inputReference.current) {
+      //  @ts-ignore --- reference.current gets value when elements render
       inputReference.current.focus()
     }
   }, [isEditMode])
@@ -321,20 +299,25 @@ const BlockOptionsDropdownList = ({
     const dropDown = dropDownReference.current
 
     if (toolbar !== null && dropDown !== null) {
+      //  @ts-ignore --- reference.current gets value when elements render
       const { top, left } = toolbar.getBoundingClientRect()
+      //  @ts-ignore --- reference.current gets value when elements render
       dropDown.style.top = `${top + 40}px`
+      //  @ts-ignore --- reference.current gets value when elements render
       dropDown.style.left = `${left}px`
     }
   }, [dropDownReference, toolbarRef])
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     const dropDown = dropDownReference.current
     const toolbar = toolbarRef.current
 
     if (dropDown !== null && toolbar !== null) {
-      const handle = (event) => {
+      const handle = (event: Event) => {
         const { target } = event
 
+        //  @ts-ignore --- reference.current gets value when elements render
         if (!dropDown.contains(target) && !toolbar.contains(target)) {
           setShowBlockOptionsDropDown(false)
         }
