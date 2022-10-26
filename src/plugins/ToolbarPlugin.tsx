@@ -19,6 +19,8 @@ import {
   $isRangeSelection,
   $createParagraphNode,
   $getNodeByKey,
+  GridSelection,
+  NodeSelection,
 } from "lexical"
 import type { LexicalEditor, RangeSelection } from "lexical"
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link"
@@ -47,7 +49,7 @@ import {
   getDefaultCodeLanguage,
   getCodeLanguages,
 } from "@lexical/code"
-import { IconButton, Button } from "@material-ui/core"
+import { IconButton } from "@material-ui/core"
 import {
   FormatBold,
   FormatItalic,
@@ -59,6 +61,7 @@ import {
   FormatAlignCenter,
   FormatAlignRight,
   FormatAlignJustify,
+  SaveAlt,
 } from "@material-ui/icons"
 
 const LowPriority = 1
@@ -107,6 +110,7 @@ type SelectProperties = {
 
 const Select = ({ onChange, className, options, value }: SelectProperties) => (
   <select className={className} onChange={onChange} value={value}>
+    {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
     <option hidden value="" />
     {options.map((option) => (
       <option key={option} value={option}>
@@ -133,17 +137,23 @@ const getSelectedNode = (selection: RangeSelection) => {
 
 const Divider = () => <div className="divider" />
 
-const positionEditorElement = (editor: HTMLDivElement, rect: DOMRect) => {
-  if (rect === null) {
-    editor.style.opacity = "0"
-    editor.style.top = "-1000px"
-    editor.style.left = "-1000px"
-  } else {
+const positionEditorElement = (editor: HTMLDivElement, rect?: DOMRect) => {
+  if (rect) {
+    // eslint-disable-next-line no-param-reassign
     editor.style.opacity = "1"
+    // eslint-disable-next-line no-param-reassign
     editor.style.top = `${rect.top + rect.height + window.pageYOffset + 10}px`
+    // eslint-disable-next-line no-param-reassign
     editor.style.left = `${
       rect.left + window.pageXOffset - editor.offsetWidth / 2 + rect.width / 2
     }px`
+  } else {
+    // eslint-disable-next-line no-param-reassign
+    editor.style.opacity = "0"
+    // eslint-disable-next-line no-param-reassign
+    editor.style.top = "-1000px"
+    // eslint-disable-next-line no-param-reassign
+    editor.style.left = "-1000px"
   }
 }
 
@@ -157,8 +167,12 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
   const mouseDownReference = useRef(false)
   const [linkUrl, setLinkUrl] = useState("")
   const [isEditMode, setEditMode] = useState(false)
-  const [lastSelection, setLastSelection] = useState(null)
+  const [lastSelection, setLastSelection] = useState<
+    RangeSelection | GridSelection | NodeSelection | null
+    // eslint-disable-next-line unicorn/no-null
+  >(null)
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection()
     if ($isRangeSelection(selection)) {
@@ -182,17 +196,18 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
 
     const rootElement = editor.getRootElement()
     if (
-      selection !== null &&
+      selection &&
+      nativeSelection &&
       !nativeSelection.isCollapsed &&
-      rootElement !== null &&
+      rootElement &&
       rootElement.contains(nativeSelection.anchorNode)
     ) {
       const domRange = nativeSelection.getRangeAt(0)
       let rect
       if (nativeSelection.anchorNode === rootElement) {
         let inner = rootElement
-        while (inner.firstElementChild != undefined) {
-          inner = inner.firstElementChild
+        while (inner.firstElementChild) {
+          inner = inner.firstElementChild as HTMLElement
         }
         rect = inner.getBoundingClientRect()
       } else {
@@ -204,13 +219,12 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
       }
       setLastSelection(selection)
     } else if (!activeElement || activeElement.className !== "link-input") {
-      positionEditorElement(editorElement, null)
+      positionEditorElement(editorElement)
+      // eslint-disable-next-line unicorn/no-null
       setLastSelection(null)
       setEditMode(false)
       setLinkUrl("")
     }
-
-    return true
   }, [editor])
 
   useEffect(
@@ -277,11 +291,15 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
           <a href={linkUrl} target="_blank" rel="noopener noreferrer">
             {linkUrl}
           </a>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
           <div
             className="link-edit"
             role="button"
             tabIndex={0}
             onMouseDown={(event) => event.preventDefault()}
+            onKeyDown={(event) => {
+              if (event.key === "13") setEditMode(true)
+            }}
             onClick={() => {
               setEditMode(true)
             }}
@@ -395,8 +413,10 @@ const BlockOptionsDropdownList = ({
 
   const formatNumberedList = () => {
     if (blockType !== "ol") {
+      // @ts-ignore --- 2nd parameter (payload) is optional
       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND)
     } else {
+      // @ts-ignore --- 2nd parameter (payload) is optional
       editor.dispatchCommand(REMOVE_LIST_COMMAND)
     }
     setShowBlockOptionsDropDown(false)
@@ -480,6 +500,7 @@ const ToolbarPlugin = () => {
   const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
     useState(false)
   const [codeLanguage, setCodeLanguage] = useState("")
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isRTL, setIsRTL] = useState(false)
   const [isLink, setIsLink] = useState(false)
   const [isBold, setIsBold] = useState(false)
@@ -747,7 +768,10 @@ const ToolbarPlugin = () => {
             className="toolbar-item"
             aria-label="Justify Align">
             <FormatAlignJustify />
-          </IconButton>{" "}
+          </IconButton>
+          <IconButton>
+            <SaveAlt />
+          </IconButton>
         </>
       )}
     </div>

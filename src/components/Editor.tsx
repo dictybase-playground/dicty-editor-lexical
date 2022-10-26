@@ -11,13 +11,11 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
-import { TableCellNode, TableNode, TableRowNode } from "@lexical/table"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { CodeHighlightNode, CodeNode } from "@lexical/code"
 import { LinkNode } from "@lexical/link"
 import exampleTheme from "themes/exampleTheme"
 import ToolbarPlugin from "plugins/ToolbarPlugin"
-import AutoLinkPlugin from "plugins/AutoLinkPlugin"
 
 // When the editor changes, you can get notified via the
 // LexicalOnChangePlugin!
