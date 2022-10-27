@@ -52,7 +52,6 @@ import {
   getDefaultCodeLanguage,
   getCodeLanguages,
 } from "@lexical/code"
-import { $generateHtmlFromNodes } from "@lexical/html"
 import { IconButton } from "@material-ui/core"
 import {
   FormatBold,
@@ -68,6 +67,7 @@ import {
   SaveAlt,
   Publish,
 } from "@material-ui/icons"
+import { saveLocalForage, retrieveLocalForage } from "utils/handlers"
 
 const LowPriority = 1
 
@@ -783,23 +783,13 @@ const ToolbarPlugin = () => {
           </IconButton>
           <IconButton
             onClick={() => {
-              const editorState = editor.getEditorState()
-              const editorStateString = JSON.stringify(editorState)
-              window.localStorage.setItem(
-                "lexicalEditorState",
-                editorStateString,
-              )
+              saveLocalForage(editor)
             }}>
             <SaveAlt />
           </IconButton>
           <IconButton
             onClick={() => {
-              const editorString =
-                window.localStorage.getItem("lexicalEditorState")
-              if (editorString) {
-                const editorState = editor.parseEditorState(editorString)
-                editor.setEditorState(editorState)
-              }
+              retrieveLocalForage(editor)
             }}>
             <Publish />
           </IconButton>
