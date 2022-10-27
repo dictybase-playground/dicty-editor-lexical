@@ -15,7 +15,8 @@ import { ListItemNode, ListNode } from "@lexical/list"
 import { CodeHighlightNode, CodeNode } from "@lexical/code"
 import { LinkNode } from "@lexical/link"
 import exampleTheme from "themes/exampleTheme"
-import ToolbarPlugin from "plugins/ToolbarPlugin"
+import ToolbarPlugin from "plugins/ToolbarPlugin/ToolbarPlugin"
+import TreeViewPlugin from "plugins/TreeViewPlugin"
 
 // When the editor changes, you can get notified via the
 // LexicalOnChangePlugin!
@@ -88,6 +89,7 @@ const Editor = () => {
           <LinkPlugin />
           <OnChangePlugin onChange={onChange} />
           <HistoryPlugin />
+          <TreeViewPlugin />
           <MyCustomAutoFocusPlugin />
         </Paper>
       </Container>

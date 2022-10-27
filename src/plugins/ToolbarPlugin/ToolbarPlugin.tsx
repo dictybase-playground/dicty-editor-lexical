@@ -31,6 +31,8 @@ import {
   $isParentElementRTL,
   $wrapNodes,
   $isAtNodeEnd,
+  $patchStyleText,
+  $getSelectionStyleValueForProperty,
 } from "@lexical/selection"
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils"
 import {
@@ -68,6 +70,8 @@ import {
   Publish,
 } from "@material-ui/icons"
 import { saveLocalForage, retrieveLocalForage } from "utils/handlers"
+import ToolbarContext from "context/ToolbarContext"
+import FontFamilyDropDown from "./components/FontFamilyDropdown"
 
 const LowPriority = 1
 
@@ -507,12 +511,10 @@ const ToolbarPlugin = () => {
   const toolbarReference = useRef(null)
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
+  const [fontFamily, setFontFamily] = useState<string>("Arial")
   const [blockType, setBlockType] = useState<BlockType>("paragraph")
   const [selectedElementKey, setSelectedElementKey] = useState("")
-  const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
-    useState(false)
   const [codeLanguage, setCodeLanguage] = useState("")
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isRTL, setIsRTL] = useState(false)
   const [isLink, setIsLink] = useState(false)
   const [isBold, setIsBold] = useState(false)
@@ -520,6 +522,8 @@ const ToolbarPlugin = () => {
   const [isUnderline, setIsUnderline] = useState(false)
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [isCode, setIsCode] = useState(false)
+  const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
+    useState(false)
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const updateToolbar = useCallback(() => {
@@ -564,6 +568,10 @@ const ToolbarPlugin = () => {
       } else {
         setIsLink(false)
       }
+
+      setFontFamily(
+        $getSelectionStyleValueForProperty(selection, "font-family", "Arial"),
+      )
     }
   }, [editor])
 
@@ -600,6 +608,7 @@ const ToolbarPlugin = () => {
           LowPriority,
         ),
       ),
+
     [editor, updateToolbar],
   )
 
@@ -627,175 +636,210 @@ const ToolbarPlugin = () => {
     }
   }, [editor, isLink])
 
+  const applyStyleText = useCallback(
+    (styles: Record<string, string>) => {
+      editor.update(() => {
+        const selection = $getSelection()
+        if ($isRangeSelection(selection)) {
+          $patchStyleText(selection, styles)
+        }
+      })
+    },
+    [editor],
+  )
+
   return (
-    <div className="toolbar" ref={toolbarReference}>
-      <IconButton
-        type="button"
-        disabled={!canUndo}
-        onClick={() => {
-          // @ts-ignore --- 2nd parameter (payload) is optional
-          editor.dispatchCommand(UNDO_COMMAND)
-        }}
-        className="toolbar-item spaced"
-        aria-label="Undo">
-        <i className="format undo" />
-      </IconButton>
-      <IconButton
-        type="button"
-        disabled={!canRedo}
-        onClick={() => {
-          // @ts-ignore --- 2nd parameter (payload) is optional
-          editor.dispatchCommand(REDO_COMMAND)
-        }}
-        className="toolbar-item"
-        aria-label="Redo">
-        <i className="format redo" />
-      </IconButton>
-      <Divider />
-      {supportedBlockTypes.has(blockType) && (
-        <>
-          <button
-            type="button"
-            className="toolbar-item block-controls"
-            onClick={() =>
-              setShowBlockOptionsDropDown(!showBlockOptionsDropDown)
-            }
-            aria-label="Formatting Options">
-            <span className={`icon block-type ${blockType}`} />
-            <span className="text">{blockTypeToBlockName[blockType]}</span>
-            <i className="chevron-down" />
-          </button>
-          {showBlockOptionsDropDown &&
-            createPortal(
-              <BlockOptionsDropdownList
-                editor={editor}
-                blockType={blockType}
-                toolbarRef={toolbarReference}
-                setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
-              />,
-              document.body,
-            )}
-          <Divider />
-        </>
-      )}
-      {blockType === "code" ? (
-        <>
-          <Select
-            className="toolbar-item code-language"
-            onChange={onCodeLanguageSelect}
-            options={codeLanguges}
-            value={codeLanguage}
-          />
-          <i className="chevron-down inside" />
-        </>
-      ) : (
-        <>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")
-            }}
-            className={`toolbar-item spaced ${isBold ? "active" : ""}`}
-            aria-label="Format Bold">
-            <FormatBold />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")
-            }}
-            className={`toolbar-item spaced ${isItalic ? "active" : ""}`}
-            aria-label="Format Italics">
-            <FormatItalic />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")
-            }}
-            className={`toolbar-item spaced ${isUnderline ? "active" : ""}`}
-            aria-label="Format Underline">
-            <FormatUnderlined />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")
-            }}
-            className={`toolbar-item spaced ${isStrikethrough ? "active" : ""}`}
-            aria-label="Format Strikethrough">
-            <StrikethroughS />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code")
-            }}
-            className={`toolbar-item spaced ${isCode ? "active" : ""}`}
-            aria-label="Insert Code">
-            <Code />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={insertLink}
-            className={`toolbar-item spaced ${isLink ? "active" : ""}`}
-            aria-label="Insert Link">
-            <InsertLink />
-          </IconButton>
-          {isLink &&
-            createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
-          <Divider />
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left")
-            }}
-            className="toolbar-item spaced"
-            aria-label="Left Align">
-            <FormatAlignLeft />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center")
-            }}
-            className="toolbar-item spaced"
-            aria-label="Center Align">
-            <FormatAlignCenter />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right")
-            }}
-            className="toolbar-item spaced"
-            aria-label="Right Align">
-            <FormatAlignRight />
-          </IconButton>
-          <IconButton
-            type="button"
-            onClick={() => {
-              editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify")
-            }}
-            className="toolbar-item"
-            aria-label="Justify Align">
-            <FormatAlignJustify />
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              saveLocalForage(editor)
-            }}>
-            <SaveAlt />
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              retrieveLocalForage(editor)
-            }}>
-            <Publish />
-          </IconButton>
-        </>
-      )}
-    </div>
+    <ToolbarContext.Provider
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
+      value={{
+        isRTL,
+        isBold,
+        isItalic,
+        isUnderline,
+        isCode,
+        isLink,
+        isStrikethrough,
+        fontFamily,
+        canUndo,
+        canRedo,
+        blockType,
+        applyStyleText,
+      }}>
+      <div className="toolbar" ref={toolbarReference}>
+        <IconButton
+          type="button"
+          disabled={!canUndo}
+          onClick={() => {
+            // @ts-ignore --- 2nd parameter (payload) is optional
+            editor.dispatchCommand(UNDO_COMMAND)
+          }}
+          className="toolbar-item spaced"
+          aria-label="Undo">
+          <i className="format undo" />
+        </IconButton>
+        <IconButton
+          type="button"
+          disabled={!canRedo}
+          onClick={() => {
+            // @ts-ignore --- 2nd parameter (payload) is optional
+            editor.dispatchCommand(REDO_COMMAND)
+          }}
+          className="toolbar-item"
+          aria-label="Redo">
+          <i className="format redo" />
+        </IconButton>
+        <Divider />
+        {supportedBlockTypes.has(blockType) && (
+          <>
+            <button
+              type="button"
+              className="toolbar-item block-controls"
+              onClick={() =>
+                setShowBlockOptionsDropDown(!showBlockOptionsDropDown)
+              }
+              aria-label="Formatting Options">
+              <span className={`icon block-type ${blockType}`} />
+              <span className="text">{blockTypeToBlockName[blockType]}</span>
+              <i className="chevron-down" />
+            </button>
+            {showBlockOptionsDropDown &&
+              createPortal(
+                <BlockOptionsDropdownList
+                  editor={editor}
+                  blockType={blockType}
+                  toolbarRef={toolbarReference}
+                  setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
+                />,
+                document.body,
+              )}
+            <Divider />
+          </>
+        )}
+        <FontFamilyDropDown />
+        {blockType === "code" ? (
+          <>
+            <Select
+              className="toolbar-item code-language"
+              onChange={onCodeLanguageSelect}
+              options={codeLanguges}
+              value={codeLanguage}
+            />
+            <i className="chevron-down inside" />
+          </>
+        ) : (
+          <>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")
+              }}
+              className={`toolbar-item spaced ${isBold ? "active" : ""}`}
+              aria-label="Format Bold">
+              <FormatBold />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")
+              }}
+              className={`toolbar-item spaced ${isItalic ? "active" : ""}`}
+              aria-label="Format Italics">
+              <FormatItalic />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")
+              }}
+              className={`toolbar-item spaced ${isUnderline ? "active" : ""}`}
+              aria-label="Format Underline">
+              <FormatUnderlined />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough")
+              }}
+              className={`toolbar-item spaced ${
+                isStrikethrough ? "active" : ""
+              }`}
+              aria-label="Format Strikethrough">
+              <StrikethroughS />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code")
+              }}
+              className={`toolbar-item spaced ${isCode ? "active" : ""}`}
+              aria-label="Insert Code">
+              <Code />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={insertLink}
+              className={`toolbar-item spaced ${isLink ? "active" : ""}`}
+              aria-label="Insert Link">
+              <InsertLink />
+            </IconButton>
+            {isLink &&
+              createPortal(
+                <FloatingLinkEditor editor={editor} />,
+                document.body,
+              )}
+            <Divider />
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left")
+              }}
+              className="toolbar-item spaced"
+              aria-label="Left Align">
+              <FormatAlignLeft />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center")
+              }}
+              className="toolbar-item spaced"
+              aria-label="Center Align">
+              <FormatAlignCenter />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right")
+              }}
+              className="toolbar-item spaced"
+              aria-label="Right Align">
+              <FormatAlignRight />
+            </IconButton>
+            <IconButton
+              type="button"
+              onClick={() => {
+                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify")
+              }}
+              className="toolbar-item"
+              aria-label="Justify Align">
+              <FormatAlignJustify />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                saveLocalForage(editor)
+              }}>
+              <SaveAlt />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                retrieveLocalForage(editor)
+              }}>
+              <Publish />
+            </IconButton>
+          </>
+        )}
+      </div>
+    </ToolbarContext.Provider>
   )
 }
 
