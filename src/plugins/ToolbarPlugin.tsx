@@ -19,10 +19,13 @@ import {
   $isRangeSelection,
   $createParagraphNode,
   $getNodeByKey,
+} from "lexical"
+import type {
+  LexicalEditor,
+  RangeSelection,
   GridSelection,
   NodeSelection,
 } from "lexical"
-import type { LexicalEditor, RangeSelection } from "lexical"
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link"
 import {
   $isParentElementRTL,
@@ -49,6 +52,7 @@ import {
   getDefaultCodeLanguage,
   getCodeLanguages,
 } from "@lexical/code"
+import { $generateHtmlFromNodes } from "@lexical/html"
 import { IconButton } from "@material-ui/core"
 import {
   FormatBold,
@@ -62,6 +66,7 @@ import {
   FormatAlignRight,
   FormatAlignJustify,
   SaveAlt,
+  Publish,
 } from "@material-ui/icons"
 
 const LowPriority = 1
@@ -225,6 +230,13 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
       setEditMode(false)
       setLinkUrl("")
     }
+    /* Lexical command handlers return true to signal to other listeners that the command
+       has been handled, and stop propagation. 
+       
+       https://lexical.dev/docs/concepts/commands#editorregistercommand
+    */
+    // eslint-disable-next-line consistent-return
+    return true
   }, [editor])
 
   useEffect(
@@ -769,8 +781,27 @@ const ToolbarPlugin = () => {
             aria-label="Justify Align">
             <FormatAlignJustify />
           </IconButton>
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              const editorState = editor.getEditorState()
+              const editorStateString = JSON.stringify(editorState)
+              window.localStorage.setItem(
+                "lexicalEditorState",
+                editorStateString,
+              )
+            }}>
             <SaveAlt />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              const editorString =
+                window.localStorage.getItem("lexicalEditorState")
+              if (editorString) {
+                const editorState = editor.parseEditorState(editorString)
+                editor.setEditorState(editorState)
+              }
+            }}>
+            <Publish />
           </IconButton>
         </>
       )}
