@@ -682,14 +682,24 @@ i.redo {
   background-image: url(images/icons/text-paragraph.svg);
 }
 
-.icon.large-heading,
+.icon.heading-1,
 .icon.h1 {
   background-image: url(images/icons/type-h1.svg);
 }
 
-.icon.small-heading,
+.icon.heading-2,
 .icon.h2 {
   background-image: url(images/icons/type-h2.svg);
+}
+
+.icon.heading-3,
+.icon.h3 {
+  background-image: url(images/icons/type-h3.svg);
+}
+
+.icon.heading-4,
+.icon.h4 {
+  background-image: url(images/icons/type-h4.svg);
 }
 
 .icon.bullet-list,

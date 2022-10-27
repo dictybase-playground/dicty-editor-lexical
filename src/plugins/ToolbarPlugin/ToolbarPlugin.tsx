@@ -47,6 +47,7 @@ import {
   $createHeadingNode,
   $createQuoteNode,
   $isHeadingNode,
+  HeadingTagType,
 } from "@lexical/rich-text"
 import {
   $createCodeNode,
@@ -81,6 +82,8 @@ const supportedBlockTypes = new Set([
   "code",
   "h1",
   "h2",
+  "h3",
+  "h4",
   "ul",
   "ol",
 ])
@@ -91,7 +94,6 @@ type BlockType =
   | "h2"
   | "h3"
   | "h4"
-  | "h5"
   | "ol"
   | "paragraph"
   | "quote"
@@ -99,11 +101,10 @@ type BlockType =
 
 const blockTypeToBlockName = {
   code: "Code Block",
-  h1: "Large Heading",
-  h2: "Small Heading",
-  h3: "Heading",
-  h4: "Heading",
-  h5: "Heading",
+  h1: "Heading 1",
+  h2: "Heading 2",
+  h3: "Heading 3",
+  h4: "Heading 4",
   ol: "Numbered List",
   paragraph: "Normal",
   quote: "Quote",
@@ -390,26 +391,13 @@ const BlockOptionsDropdownList = ({
     setShowBlockOptionsDropDown(false)
   }
 
-  const formatLargeHeading = () => {
-    if (blockType !== "h1") {
+  const formatHeading = (heading: HeadingTagType) => {
+    if (blockType !== heading) {
       editor.update(() => {
         const selection = $getSelection()
 
         if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode("h1"))
-        }
-      })
-    }
-    setShowBlockOptionsDropDown(false)
-  }
-
-  const formatSmallHeading = () => {
-    if (blockType !== "h2") {
-      editor.update(() => {
-        const selection = $getSelection()
-
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode("h2"))
+          $wrapNodes(selection, () => $createHeadingNode(heading))
         }
       })
     }
@@ -471,15 +459,37 @@ const BlockOptionsDropdownList = ({
         <span className="text">Normal</span>
         {blockType === "paragraph" && <span className="active" />}
       </button>
-      <button type="button" className="item" onClick={formatLargeHeading}>
-        <span className="icon large-heading" />
-        <span className="text">Large Heading</span>
+      <button
+        type="button"
+        className="item"
+        onClick={() => formatHeading("h1")}>
+        <span className="icon heading-1" />
+        <span className="text">Heading 1</span>
         {blockType === "h1" && <span className="active" />}
       </button>
-      <button type="button" className="item" onClick={formatSmallHeading}>
-        <span className="icon small-heading" />
-        <span className="text">Small Heading</span>
+      <button
+        type="button"
+        className="item"
+        onClick={() => formatHeading("h2")}>
+        <span className="icon heading-2" />
+        <span className="text">Heading 2</span>
         {blockType === "h2" && <span className="active" />}
+      </button>
+      <button
+        type="button"
+        className="item"
+        onClick={() => formatHeading("h3")}>
+        <span className="icon heading-3" />
+        <span className="text">Heading 3</span>
+        {blockType === "h3" && <span className="active" />}
+      </button>
+      <button
+        type="button"
+        className="item"
+        onClick={() => formatHeading("h4")}>
+        <span className="icon heading-4" />
+        <span className="text">Heading 4</span>
+        {blockType === "h4" && <span className="active" />}
       </button>
       <button type="button" className="item" onClick={formatBulletList}>
         <span className="icon bullet-list" />
@@ -716,6 +726,7 @@ const ToolbarPlugin = () => {
           </>
         )}
         <FontFamilyDropDown />
+        <Divider />
         {blockType === "code" ? (
           <>
             <Select
