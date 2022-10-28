@@ -84,18 +84,7 @@ const supportedBlockTypes = new Set([
   "ol",
 ])
 
-type BlockType =
-  | "code"
-  | "h1"
-  | "h2"
-  | "h3"
-  | "h4"
-  | "ol"
-  | "paragraph"
-  | "quote"
-  | "ul"
-
-const blockTypeToBlockName = {
+const blockTypeToBlockName: Record<string, string> = {
   code: "Code Block",
   h1: "Heading 1",
   h2: "Heading 2",
@@ -323,7 +312,7 @@ const FloatingLinkEditor = ({ editor }: FloatingLinkEditorProperties) => {
 
 type BlockOptionsDropdownListProperties = {
   editor: LexicalEditor
-  blockType: BlockType
+  blockType: string
   toolbarRef: React.MutableRefObject<null>
   setShowBlockOptionsDropDown: React.Dispatch<SetStateAction<boolean>>
 }
@@ -498,7 +487,7 @@ const ToolbarPlugin = () => {
   const [canRedo, setCanRedo] = useState(false)
   const [fontFamily, setFontFamily] = useState<string>("Arial")
   const [fontSize, setFontSize] = useState<string>("15px")
-  const [blockType, setBlockType] = useState<BlockType>("paragraph")
+  const [blockType, setBlockType] = useState("paragraph")
   const [selectedElementKey, setSelectedElementKey] = useState("")
   const [codeLanguage, setCodeLanguage] = useState("")
   const [isRTL, setIsRTL] = useState(false)
@@ -531,7 +520,7 @@ const ToolbarPlugin = () => {
           const type = $isHeadingNode(element)
             ? element.getTag()
             : element.getType()
-          setBlockType(type as BlockType)
+          setBlockType(type)
           if ($isCodeNode(element)) {
             setCodeLanguage(element.getLanguage() || getDefaultCodeLanguage())
           }
