@@ -1,8 +1,7 @@
 import React, { useCallback, useContext } from "react"
 import { Select, MenuItem } from "@material-ui/core"
 import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
-
-type FontOptions = Array<[string, string]>
+import type FontOptions from "types/FontOptions"
 
 const defaultFontFamilyOptions: FontOptions = [
   ["Arial", "Arial"],
