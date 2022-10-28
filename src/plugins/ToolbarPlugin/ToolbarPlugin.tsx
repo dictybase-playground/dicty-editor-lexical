@@ -50,7 +50,6 @@ import {
   HeadingTagType,
 } from "@lexical/rich-text"
 import {
-  $createCodeNode,
   $isCodeNode,
   getDefaultCodeLanguage,
   getCodeLanguages,
@@ -61,7 +60,6 @@ import {
   FormatItalic,
   FormatUnderlined,
   StrikethroughS,
-  Code,
   InsertLink,
   FormatAlignLeft,
   FormatAlignCenter,
@@ -439,19 +437,6 @@ const BlockOptionsDropdownList = ({
     setShowBlockOptionsDropDown(false)
   }
 
-  const formatCode = () => {
-    if (blockType !== "code") {
-      editor.update(() => {
-        const selection = $getSelection()
-
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createCodeNode())
-        }
-      })
-    }
-    setShowBlockOptionsDropDown(false)
-  }
-
   return (
     <div className="dropdown" ref={dropDownReference}>
       <button type="button" className="item" onClick={formatParagraph}>
@@ -506,16 +491,10 @@ const BlockOptionsDropdownList = ({
         <span className="text">Quote</span>
         {blockType === "quote" && <span className="active" />}
       </button>
-      <button type="button" className="item" onClick={formatCode}>
-        <span className="icon code" />
-        <span className="text">Code Block</span>
-        {blockType === "code" && <span className="active" />}
-      </button>
     </div>
   )
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const ToolbarPlugin = () => {
   const [editor] = useLexicalComposerContext()
   const toolbarReference = useRef(null)
@@ -531,7 +510,6 @@ const ToolbarPlugin = () => {
   const [isItalic, setIsItalic] = useState(false)
   const [isUnderline, setIsUnderline] = useState(false)
   const [isStrikethrough, setIsStrikethrough] = useState(false)
-  const [isCode, setIsCode] = useState(false)
   const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
     useState(false)
 
@@ -567,7 +545,6 @@ const ToolbarPlugin = () => {
       setIsItalic(selection.hasFormat("italic"))
       setIsUnderline(selection.hasFormat("underline"))
       setIsStrikethrough(selection.hasFormat("strikethrough"))
-      setIsCode(selection.hasFormat("code"))
       setIsRTL($isParentElementRTL(selection))
 
       // Update links
@@ -666,7 +643,6 @@ const ToolbarPlugin = () => {
         isBold,
         isItalic,
         isUnderline,
-        isCode,
         isLink,
         isStrikethrough,
         fontFamily,
@@ -776,15 +752,6 @@ const ToolbarPlugin = () => {
               }`}
               aria-label="Format Strikethrough">
               <StrikethroughS />
-            </IconButton>
-            <IconButton
-              type="button"
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code")
-              }}
-              className={`toolbar-item spaced ${isCode ? "active" : ""}`}
-              aria-label="Insert Code">
-              <Code />
             </IconButton>
             <IconButton
               type="button"

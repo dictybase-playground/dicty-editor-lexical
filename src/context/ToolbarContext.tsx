@@ -5,7 +5,7 @@ export interface IToolbarContext {
   isBold: boolean
   isItalic: boolean
   isUnderline: boolean
-  isCode: boolean
+  // isCode: boolean
   isLink: boolean
   isStrikethrough: boolean
   //   isSubscript: boolean

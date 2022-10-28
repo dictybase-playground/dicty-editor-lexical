@@ -12,7 +12,6 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import { ListItemNode, ListNode } from "@lexical/list"
-import { CodeHighlightNode, CodeNode } from "@lexical/code"
 import { LinkNode } from "@lexical/link"
 import exampleTheme from "themes/exampleTheme"
 import ToolbarPlugin from "plugins/ToolbarPlugin/ToolbarPlugin"
@@ -54,15 +53,7 @@ const onError = (error: Error) => {
   console.error(error)
 }
 
-const nodes = [
-  HeadingNode,
-  QuoteNode,
-  CodeHighlightNode,
-  CodeNode,
-  LinkNode,
-  ListItemNode,
-  ListNode,
-]
+const nodes = [HeadingNode, QuoteNode, LinkNode, ListItemNode, ListNode]
 
 const Editor = () => {
   const initialConfig = {
