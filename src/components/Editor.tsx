@@ -67,6 +67,7 @@ const Editor = () => {
     <LexicalComposer initialConfig={initialConfig}>
       <Container>
         <ToolbarPlugin />
+        {/* use Makestyles later */}
         <Paper style={{ position: "relative" }}>
           <RichTextPlugin
             contentEditable={<ContentEditable className="editor-input" />}
