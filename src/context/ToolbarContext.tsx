@@ -13,7 +13,7 @@ export interface IToolbarContext {
   canUndo: boolean
   canRedo: boolean
   fontFamily: string
-  //   fontSize: string
+  fontSize: string
   //   fontColor: string
   //   bgColor: string
   blockType: string
