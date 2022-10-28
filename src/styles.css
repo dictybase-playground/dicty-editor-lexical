@@ -744,18 +744,32 @@ i.link {
   background-image: url(images/icons/link.svg);
 }
 
+.icon.left-align,
 i.left-align {
   background-image: url(images/icons/text-left.svg);
 }
 
+.icon.center-align,
 i.center-align {
   background-image: url(images/icons/text-center.svg);
 }
 
+.icon.right-align,
 i.right-align {
   background-image: url(images/icons/text-right.svg);
 }
 
+.icon.justify-align,
 i.justify-align {
   background-image: url(images/icons/justify.svg);
+}
+
+.icon.indent,
+i.indent {
+  background-image: url(images/icons/indent.svg);
+}
+
+.icon.outdent,
+i.outdent {
+  background-image: url(images/icons/outdent.svg);
 }
