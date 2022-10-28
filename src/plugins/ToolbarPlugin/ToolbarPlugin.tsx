@@ -14,7 +14,6 @@ import {
   UNDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   FORMAT_TEXT_COMMAND,
-  FORMAT_ELEMENT_COMMAND,
   $getSelection,
   $isRangeSelection,
   $createParagraphNode,
@@ -61,16 +60,15 @@ import {
   FormatUnderlined,
   StrikethroughS,
   InsertLink,
-  FormatAlignLeft,
-  FormatAlignCenter,
-  FormatAlignRight,
-  FormatAlignJustify,
   SaveAlt,
   Publish,
 } from "@material-ui/icons"
 import { saveLocalForage, retrieveLocalForage } from "utils/handlers"
 import ToolbarContext from "context/ToolbarContext"
+import Divider from "ui/Divider"
 import FontFamilyDropDown from "./components/FontFamilyDropdown"
+import FontSizeDropdown from "./components/FontSizeDropdown"
+import AlignDropdown from "./components/AlignDropdown"
 
 const LowPriority = 1
 
@@ -142,8 +140,6 @@ const getSelectedNode = (selection: RangeSelection) => {
   }
   return $isAtNodeEnd(anchor) ? focusNode : anchorNode
 }
-
-const Divider = () => <div className="divider" />
 
 const positionEditorElement = (editor: HTMLDivElement, rect?: DOMRect) => {
   if (rect) {
@@ -501,6 +497,7 @@ const ToolbarPlugin = () => {
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
   const [fontFamily, setFontFamily] = useState<string>("Arial")
+  const [fontSize, setFontSize] = useState<string>("15px")
   const [blockType, setBlockType] = useState<BlockType>("paragraph")
   const [selectedElementKey, setSelectedElementKey] = useState("")
   const [codeLanguage, setCodeLanguage] = useState("")
@@ -558,6 +555,10 @@ const ToolbarPlugin = () => {
 
       setFontFamily(
         $getSelectionStyleValueForProperty(selection, "font-family", "Arial"),
+      )
+
+      setFontSize(
+        $getSelectionStyleValueForProperty(selection, "font-size", "15px"),
       )
     }
   }, [editor])
@@ -646,6 +647,7 @@ const ToolbarPlugin = () => {
         isLink,
         isStrikethrough,
         fontFamily,
+        fontSize,
         canUndo,
         canRedo,
         blockType,
@@ -702,6 +704,7 @@ const ToolbarPlugin = () => {
           </>
         )}
         <FontFamilyDropDown />
+        <FontSizeDropdown />
         <Divider />
         {blockType === "code" ? (
           <>
@@ -766,42 +769,7 @@ const ToolbarPlugin = () => {
                 document.body,
               )}
             <Divider />
-            <IconButton
-              type="button"
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left")
-              }}
-              className="toolbar-item spaced"
-              aria-label="Left Align">
-              <FormatAlignLeft />
-            </IconButton>
-            <IconButton
-              type="button"
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center")
-              }}
-              className="toolbar-item spaced"
-              aria-label="Center Align">
-              <FormatAlignCenter />
-            </IconButton>
-            <IconButton
-              type="button"
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right")
-              }}
-              className="toolbar-item spaced"
-              aria-label="Right Align">
-              <FormatAlignRight />
-            </IconButton>
-            <IconButton
-              type="button"
-              onClick={() => {
-                editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify")
-              }}
-              className="toolbar-item"
-              aria-label="Justify Align">
-              <FormatAlignJustify />
-            </IconButton>
+            <AlignDropdown />
             <IconButton
               onClick={() => {
                 saveLocalForage(editor)
