@@ -714,7 +714,7 @@ const ToolbarPlugin = () => {
               }}
               className={`toolbar-item spaced ${isBold ? "active" : ""}`}
               aria-label="Format Bold">
-              <FormatBold />
+              <FormatBold fontSize="small" />
             </IconButton>
             <IconButton
               type="button"
@@ -723,7 +723,7 @@ const ToolbarPlugin = () => {
               }}
               className={`toolbar-item spaced ${isItalic ? "active" : ""}`}
               aria-label="Format Italics">
-              <FormatItalic />
+              <FormatItalic fontSize="small" />
             </IconButton>
             <IconButton
               type="button"
@@ -732,7 +732,7 @@ const ToolbarPlugin = () => {
               }}
               className={`toolbar-item spaced ${isUnderline ? "active" : ""}`}
               aria-label="Format Underline">
-              <FormatUnderlined />
+              <FormatUnderlined fontSize="small" />
             </IconButton>
             <IconButton
               type="button"
@@ -743,7 +743,7 @@ const ToolbarPlugin = () => {
                 isStrikethrough ? "active" : ""
               }`}
               aria-label="Format Strikethrough">
-              <StrikethroughS />
+              <StrikethroughS fontSize="small" />
             </IconButton>
             <IconButton
               type="button"
@@ -763,13 +763,13 @@ const ToolbarPlugin = () => {
               onClick={() => {
                 saveLocalForage(editor)
               }}>
-              <SaveAlt />
+              <SaveAlt fontSize="small" />
             </IconButton>
             <IconButton
               onClick={() => {
                 retrieveLocalForage(editor)
               }}>
-              <Publish />
+              <Publish fontSize="small" />
             </IconButton>
           </>
         )}
