@@ -1,7 +1,9 @@
 import React, { useCallback, useContext } from "react"
 import { Select, MenuItem } from "@material-ui/core"
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
 import type FontOptions from "types/FontOptions"
+import applyStyleText from "../utils/applyTextStyles"
 
 const defaultFontSizeOptions: FontOptions = [
   ["10px", "10px"],
@@ -25,17 +27,16 @@ interface IFontSizeDropdown {
 const FontSizeDropdown = ({
   fontSizeOptions = defaultFontSizeOptions,
 }: IFontSizeDropdown) => {
-  const { fontSize, applyStyleText } = useContext(
-    ToolbarContext,
-  ) as IToolbarContext
+  const [editor] = useLexicalComposerContext()
+  const { fontSize } = useContext(ToolbarContext) as IToolbarContext
 
   const onFontSizeSelect = useCallback(
     (
       event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>,
     ) => {
-      applyStyleText({ "font-size": event.target.value as string })
+      applyStyleText(editor, { "font-size": event.target.value as string })
     },
-    [applyStyleText],
+    [editor],
   )
   return (
     <Select

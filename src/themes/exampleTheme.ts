@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 const exampleTheme = {
   ltr: "ltr",
   rtl: "rtl",

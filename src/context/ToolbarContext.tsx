@@ -1,25 +1,25 @@
 import { createContext } from "react"
 
 export interface IToolbarContext {
-  isRTL: boolean
-  isBold: boolean
-  isItalic: boolean
-  isUnderline: boolean
+  isRTL?: boolean
+  isBold?: boolean
+  isItalic?: boolean
+  isUnderlined?: boolean
   // isCode: boolean
-  isLink: boolean
-  isStrikethrough: boolean
+  isLink?: boolean
+  isStrikethrough?: boolean
   //   isSubscript: boolean
   //   isSuperscript: boolean
-  canUndo: boolean
-  canRedo: boolean
-  fontFamily: string
-  fontSize: string
+  canUndo?: boolean
+  canRedo?: boolean
+  fontFamily?: string
+  fontSize?: string
   //   fontColor: string
   //   bgColor: string
-  blockType: string
+  blockType?: string
   //   codeLanguage: string
   //   selectedElementKey: string
-  applyStyleText: (styles: Record<string, string>) => void
+  applyStyleText?: (styles: Record<string, string>) => void
   //   insertLink: () => void
 }
 

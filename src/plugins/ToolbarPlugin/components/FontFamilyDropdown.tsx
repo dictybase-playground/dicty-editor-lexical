@@ -1,7 +1,9 @@
-import React, { useCallback, useContext } from "react"
+import React, { useContext } from "react"
 import { Select, MenuItem } from "@material-ui/core"
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
 import type FontOptions from "types/FontOptions"
+import applyStyleText from "../utils/applyTextStyles"
 
 const defaultFontFamilyOptions: FontOptions = [
   ["Arial", "Arial"],
@@ -20,18 +22,14 @@ interface IFontFamilyDropdown {
 const FontFamilyDropdown = ({
   fontOptions = defaultFontFamilyOptions,
 }: IFontFamilyDropdown) => {
-  const { fontFamily, applyStyleText } = useContext(
-    ToolbarContext,
-  ) as IToolbarContext
+  const { fontFamily } = useContext(ToolbarContext) as IToolbarContext
+  const [editor] = useLexicalComposerContext()
 
-  const onFontFamilySelect = useCallback(
-    (
-      event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>,
-    ) => {
-      applyStyleText({ "font-family": event.target.value as string })
-    },
-    [applyStyleText],
-  )
+  const onFontFamilySelect = (
+    event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>,
+  ) => {
+    applyStyleText(editor, { "font-family": event.target.value as string })
+  }
 
   return (
     <Select

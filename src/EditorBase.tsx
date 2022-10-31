@@ -6,12 +6,13 @@ import EditorComposer from "./EditorComposer"
 
 type EditorBaseProperties = {
   // eslint-disable-next-line react/require-default-props
-  children?: React.ReactElement[]
+  children?: React.ReactElement | React.ReactElement[]
 }
 
 const EditorBase = ({ children = [] }: EditorBaseProperties) => (
   <EditorComposer>
     <Container>
+      {children}
       <Paper style={{ position: "relative" }}>
         <RichTextPlugin
           contentEditable={<ContentEditable className="editor-input" />}
@@ -19,7 +20,6 @@ const EditorBase = ({ children = [] }: EditorBaseProperties) => (
             <div className="editor-placeholder">Enter some text...</div>
           }
         />
-        {children}
       </Paper>
     </Container>
   </EditorComposer>

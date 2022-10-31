@@ -494,7 +494,7 @@ const ToolbarPlugin = () => {
   const [isLink, setIsLink] = useState(false)
   const [isBold, setIsBold] = useState(false)
   const [isItalic, setIsItalic] = useState(false)
-  const [isUnderline, setIsUnderline] = useState(false)
+  const [isUnderlined, setIsUnderlined] = useState(false)
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [showBlockOptionsDropDown, setShowBlockOptionsDropDown] =
     useState(false)
@@ -503,6 +503,8 @@ const ToolbarPlugin = () => {
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
     if ($isRangeSelection(selection)) {
+      // only while the current selection is a range selction will these
+      // toolbar updates occur.
       const anchorNode = selection.anchor.getNode()
       const element =
         anchorNode.getKey() === "root"
@@ -529,7 +531,7 @@ const ToolbarPlugin = () => {
       // Update text format
       setIsBold(selection.hasFormat("bold"))
       setIsItalic(selection.hasFormat("italic"))
-      setIsUnderline(selection.hasFormat("underline"))
+      setIsUnderlined(selection.hasFormat("underline"))
       setIsStrikethrough(selection.hasFormat("strikethrough"))
       setIsRTL($isParentElementRTL(selection))
 
@@ -632,7 +634,7 @@ const ToolbarPlugin = () => {
         isRTL,
         isBold,
         isItalic,
-        isUnderline,
+        isUnderlined,
         isLink,
         isStrikethrough,
         fontFamily,
@@ -730,7 +732,7 @@ const ToolbarPlugin = () => {
               onClick={() => {
                 editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")
               }}
-              className={`toolbar-item spaced ${isUnderline ? "active" : ""}`}
+              className={`toolbar-item spaced ${isUnderlined ? "active" : ""}`}
               aria-label="Format Underline">
               <FormatUnderlined fontSize="small" />
             </IconButton>
