@@ -11,12 +11,14 @@ import CAN_USE_DOM from "./canUseDom"
 
 const documentMode =
   // @ts-ignore
+  // eslint-disable-next-line unicorn/no-null
   CAN_USE_DOM && "documentMode" in document ? document.documentMode : null
 
 export const IS_APPLE: boolean =
   CAN_USE_DOM && /Mac|iPod|iPhone|iPad/.test(navigator.platform)
 
 export const IS_FIREFOX: boolean =
+  // eslint-disable-next-line unicorn/better-regex
   CAN_USE_DOM && /^(?!.*Seamonkey)(?=.*Firefox).*/i.test(navigator.userAgent)
 
 export const CAN_USE_BEFORE_INPUT: boolean =
@@ -25,6 +27,7 @@ export const CAN_USE_BEFORE_INPUT: boolean =
     : false
 
 export const IS_SAFARI: boolean =
+  // eslint-disable-next-line unicorn/better-regex
   CAN_USE_DOM && /Version\/[\d\.]+.*Safari/.test(navigator.userAgent)
 
 export const IS_IOS: boolean =
