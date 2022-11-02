@@ -13,8 +13,12 @@ import {
 import { ImageNode } from "nodes/ImageNode"
 import Divider from "ui/Divider"
 
+const imageTheme = {
+  image: "editor-image",
+}
+
 const EditorV6 = () => (
-  <EditorBase nodes={[ImageNode]}>
+  <EditorBase nodes={[ImageNode]} theme={imageTheme}>
     <HistoryPlugin />
     <ToolbarV5>
       <FontSizeDropdown />
