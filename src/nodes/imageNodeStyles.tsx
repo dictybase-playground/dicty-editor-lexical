@@ -31,6 +31,20 @@ const useImageNodeStyles = makeStyles({
     display: "inline-block",
     pointerEvents: "none",
   },
+  "image-caption-container": {
+    display: "block",
+    position: "absolute",
+    bottom: "4px",
+    left: "0",
+    right: "0",
+    padding: "0",
+    margin: "0",
+    borderTop: "1px solid #fff",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    minWidth: "100px",
+    color: "#000",
+    overflow: "hidden",
+  },
 })
 
 export default useImageNodeStyles
