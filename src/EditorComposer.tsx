@@ -1,11 +1,14 @@
 import React from "react"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
-import type { LexicalNode, Klass } from "lexical"
+import type { LexicalNode, Klass, EditorThemeClasses } from "lexical"
+import "./EditorComposer.css"
 
 type EditorComposerProperties = {
   children: React.ReactElement
   // eslint-disable-next-line react/require-default-props
   nodes?: Klass<LexicalNode>[]
+  // eslint-disable-next-line react/require-default-props
+  theme?: EditorThemeClasses
 }
 
 const baseTheme = {
@@ -22,16 +25,22 @@ const onError = (error: Error) => {
   console.error(error)
 }
 
-const EditorComposer = ({ children, nodes = [] }: EditorComposerProperties) => {
+const EditorComposer = ({
+  children,
+  nodes = [],
+  theme = {},
+}: EditorComposerProperties) => {
   const initialConfig = {
     namespace: "DictyEditor",
-    theme: baseTheme,
+    theme: { ...baseTheme, ...theme },
     onError,
     nodes,
   }
 
   return (
-    <LexicalComposer initialConfig={initialConfig}>{children}</LexicalComposer>
+    <LexicalComposer initialConfig={initialConfig}>
+      <div className="editor-shell">{children}</div>
+    </LexicalComposer>
   )
 }
 
