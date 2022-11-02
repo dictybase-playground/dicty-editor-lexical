@@ -36,7 +36,7 @@ import {
   KEY_BACKSPACE_COMMAND,
   KEY_DELETE_COMMAND,
 } from "lexical"
-import ContentEditable from "@lexical/react/LexicalContentEditable"
+import { ContentEditable } from "@lexical/react/LexicalContentEditable"
 import { Spread } from "libdefs/globals"
 import { Suspense, useCallback, useEffect, useRef, useState } from "react"
 import ImageResizer from "ui/ImageResizer"
@@ -152,7 +152,7 @@ const ImageComponent = ({
   src: string
   width: "inherit" | number
 }): JSX.Element => {
-  const ref = useRef(null)
+  const reference = useRef(null)
   const [isSelected, setSelected, clearSelection] =
     useLexicalNodeSelection(nodeKey)
   const [isResizing, setIsResizing] = useState<boolean>(false)
@@ -190,7 +190,7 @@ const ImageComponent = ({
             if (isResizing) {
               return true
             }
-            if (event.target === ref.current) {
+            if (event.target === reference.current) {
               if (!event.shiftKey) {
                 clearSelection()
               }
@@ -264,17 +264,17 @@ const ImageComponent = ({
             className={isFocused ? "focused" : null}
             src={src}
             altText={altText}
-            imageRef={ref}
+            imageRef={reference}
             width={width}
             height={height}
             maxWidth={maxWidth}
           />
         </div>
         {showCaption && (
-          <div className="image-caption-container">
+          <div className={classes["image-caption-container"]}>
             <LexicalNestedComposer initialEditor={caption}>
-              <LinkPlugin />
-              <HistoryPlugin />
+              {/* <LinkPlugin />
+              <HistoryPlugin /> */}
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable className={classes.contentEditable} />
@@ -293,7 +293,7 @@ const ImageComponent = ({
             showCaption={showCaption}
             setShowCaption={setShowCaption}
             editor={editor}
-            imageRef={ref}
+            imageRef={reference}
             maxWidth={maxWidth}
             onResizeStart={onResizeStart}
             onResizeEnd={onResizeEnd}
@@ -365,7 +365,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   constructor(
-    src: string,
+    source: string,
     altText: string,
     maxWidth: number,
     width?: "inherit" | number,
@@ -375,7 +375,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
     key?: NodeKey,
   ) {
     super(key)
-    this.__src = src
+    this.__src = source
     this.__altText = altText
     this.__maxWidth = maxWidth
     this.__width = width || "inherit"
@@ -416,7 +416,7 @@ export class ImageNode extends DecoratorNode<JSX.Element> {
 
   createDOM(config: EditorConfig): HTMLElement {
     const span = document.createElement("span")
-    const theme = config.theme
+    const { theme } = config
     const className = theme.image
     if (className !== undefined) {
       span.className = className
