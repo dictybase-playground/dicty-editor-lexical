@@ -12,6 +12,7 @@ import { mergeRegister } from "@lexical/utils"
 import ToolbarContext from "context/ToolbarContext"
 import Divider from "ui/Divider"
 import { UndoButton, RedoButton } from "../components/buttons"
+import "../ToolbarPlugin.css"
 
 const LowPriority = 1
 

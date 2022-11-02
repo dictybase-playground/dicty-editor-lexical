@@ -39,7 +39,6 @@ const ImageResizer = ({
   onResizeStart: () => void
   setShowCaption: (argument0: boolean) => void
   showCaption: boolean
-  // eslint-disable-next-line no-undef
 }): JSX.Element => {
   const buttonReference = useRef(null)
   const positioningReference = useRef<{

@@ -64,23 +64,17 @@ const ImagesPlugin = (): JSX.Element | null => {
       ),
       editor.registerCommand<DragEvent>(
         DRAGSTART_COMMAND,
-        (event) => {
-          return onDragStart(event)
-        },
+        (event) => onDragStart(event),
         COMMAND_PRIORITY_HIGH,
       ),
       editor.registerCommand<DragEvent>(
         DRAGOVER_COMMAND,
-        (event) => {
-          return onDragover(event)
-        },
+        (event) => onDragover(event),
         COMMAND_PRIORITY_LOW,
       ),
       editor.registerCommand<DragEvent>(
         DROP_COMMAND,
-        (event) => {
-          return onDrop(event, editor)
-        },
+        (event) => onDrop(event, editor),
         COMMAND_PRIORITY_HIGH,
       ),
     )
@@ -99,7 +93,7 @@ function onDragStart(event: DragEvent): boolean {
   if (!node) {
     return false
   }
-  const dataTransfer = event.dataTransfer
+  const { dataTransfer } = event
   if (!dataTransfer) {
     return false
   }
@@ -209,7 +203,7 @@ function getDragSelection(event: DragEvent): Range | null | undefined {
     domSelection.collapse(event.rangeParent, event.rangeOffset || 0)
     range = domSelection.getRangeAt(0)
   } else {
-    throw Error(`Cannot get the selection when dragging`)
+    throw new Error(`Cannot get the selection when dragging`)
   }
 
   return range

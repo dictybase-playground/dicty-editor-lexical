@@ -8,7 +8,6 @@
 
 import "./Modal.css"
 
-import * as React from "react"
 import { useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 
@@ -26,22 +25,23 @@ const PortalImpl = ({
   const modalReference = useRef<HTMLDivElement>()
 
   useEffect(() => {
-    if (modalReference.current !== null) {
+    if (modalReference.current) {
       modalReference.current.focus()
     }
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line unicorn/no-null
     let modalOverlayElement: HTMLElement | null | undefined = null
-    const handler = (event) => {
-      if (event.keyCode === 27) {
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === "27") {
         onClose()
       }
     }
     const clickOutsideHandler = (event: MouseEvent) => {
       const { target } = event
       if (
-        modalReference.current !== null &&
+        modalReference.current &&
         !modalReference.current.contains(target as Node) &&
         closeOnClickOutside
       ) {

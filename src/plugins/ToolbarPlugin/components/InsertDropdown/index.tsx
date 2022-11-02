@@ -5,15 +5,15 @@ import { INSERT_TABLE_COMMAND } from "@lexical/table"
 import { INSERT_HORIZONTAL_RULE_COMMAND } from "@lexical/react/LexicalHorizontalRuleNode"
 import { TablePlugin } from "@lexical/react/LexicalTablePlugin"
 import Dropdown from "ui/Dropdown"
-import type { InsertImagePayload } from "../../ImagesPlugin"
-import ImagesPlugin, { INSERT_IMAGE_COMMAND } from "../../ImagesPlugin"
+import type { InsertImagePayload } from "../../../ImagesPlugin"
+import ImagesPlugin, { INSERT_IMAGE_COMMAND } from "../../../ImagesPlugin"
 import YouTubePlugin, { INSERT_YOUTUBE_COMMAND } from "../../YouTubePlugin"
-import TableCellActionMenuPlugin from "../../TableActionMenuPlugin"
+import TableCellActionMenuPlugin from "../../../TableActionMenuPlugin"
 import HorizontalRulePlugin from "../../HorizontalRulePlugin"
-import Button from "../../../ui/Button"
-import TextInput from "../../../ui/TextInput"
-import FileInput from "../../../ui/FileInput"
-import useModal from "../../../hooks/useModal"
+import Button from "../../../../ui/Button"
+import TextInput from "../../../../ui/TextInput"
+import FileInput from "../../../../ui/FileInput"
+import useModal from "../../../../hooks/useModal"
 import TableCellResizer from "../../TableCellResizer"
 
 // Taken from https://stackoverflow.com/a/9102270
@@ -26,7 +26,7 @@ const parseYouTubeVideoID = (url: string) => {
   return urlMatches?.[2].length === 11 ? urlMatches[2] : null
 }
 
-//#region Inserting different modules
+// #region Inserting different modules
 const InsertImageDialog = ({
   activeEditor,
   onClose,
@@ -50,7 +50,7 @@ const InsertImageDialog = ({
             onClick={() =>
               onClick({
                 altText: "Yellow flower in tilt shift lens",
-                src: null, //yellowFlowerImage,
+                src: null, // yellowFlowerImage,
               })
             }>
             Sample
@@ -101,25 +101,25 @@ const InsertTableDialog = ({
   )
 }
 
-const VALID_TWITTER_URL = /twitter.com\/[0-9a-zA-Z]{1,20}\/status\/([0-9]*)/g
+const VALID_TWITTER_URL = /twitter.com\/[\dA-Za-z]{1,20}\/status\/(\d*)/g
 
 const InsertImageUriDialogBody = ({
   onClick,
 }: {
   onClick: (payload: InsertImagePayload) => void
 }) => {
-  const [src, setSrc] = useState("")
+  const [source, setSource] = useState("")
   const [altText, setAltText] = useState("")
 
-  const isDisabled = src === ""
+  const isDisabled = source === ""
 
   return (
     <>
       <TextInput
         label="Image URL"
         placeholder="i.e. https://source.unsplash.com/random"
-        onChange={setSrc}
-        value={src}
+        onChange={setSource}
+        value={source}
         data-test-id="image-modal-url-input"
       />
       <TextInput
@@ -133,7 +133,7 @@ const InsertImageUriDialogBody = ({
         <Button
           data-test-id="image-modal-confirm-btn"
           disabled={isDisabled}
-          onClick={() => onClick({ altText, src })}>
+          onClick={() => onClick({ altText, src: source })}>
           Confirm
         </Button>
       </div>
@@ -146,19 +146,19 @@ const InsertImageUploadedDialogBody = ({
 }: {
   onClick: (payload: InsertImagePayload) => void
 }) => {
-  const [src, setSrc] = useState("")
+  const [source, setSource] = useState("")
   const [altText, setAltText] = useState("")
 
-  const isDisabled = src === ""
+  const isDisabled = source === ""
 
   const loadImage = (files: FileList) => {
     const reader = new FileReader()
-    reader.onload = function () {
+    reader.addEventListener("load", () => {
       if (typeof reader.result === "string") {
-        setSrc(reader.result)
+        setSource(reader.result)
       }
       return ""
-    }
+    })
     reader.readAsDataURL(files[0])
   }
 
@@ -181,7 +181,7 @@ const InsertImageUploadedDialogBody = ({
         <Button
           data-test-id="image-modal-file-upload-btn"
           disabled={isDisabled}
-          onClick={() => onClick({ altText, src })}>
+          onClick={() => onClick({ altText, src: source })}>
           Confirm
         </Button>
       </div>
@@ -229,9 +229,9 @@ const InsertYouTubeDialog = ({
   )
 }
 
-//#endregion Inserting different modules
+// #endregion Inserting different modules
 
-export interface IInsertDropdownProps {
+export interface IInsertDropdownProperties {
   enableTable?: boolean
   enableYoutube?: boolean
   enableTwitter?: boolean
@@ -243,12 +243,12 @@ export interface IInsertDropdownProps {
   enableStickyNote?: boolean
 }
 
-const InsertDropdown: React.FC<IInsertDropdownProps> = ({
+const InsertDropdown: React.FC<IInsertDropdownProperties> = ({
   enableTable = true,
   enableImage = true,
   enableYoutube = false,
   enableHorizontalRule = false,
-}: IInsertDropdownProps) => {
+}: IInsertDropdownProperties) => {
   const [editor] = useLexicalComposerContext()
   const [modal, showModal] = useModal()
 
@@ -273,7 +273,7 @@ const InsertDropdown: React.FC<IInsertDropdownProps> = ({
         {enableHorizontalRule && (
           <button
             onClick={() => {
-              editor.dispatchCommand(INSERT_HORIZONTAL_RULE_COMMAND, undefined)
+              editor.dispatchCommand(INSERT_HORIZONTAL_RULE_COMMAND)
             }}
             className="item"
             type="button">

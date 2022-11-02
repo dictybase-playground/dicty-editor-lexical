@@ -23,6 +23,7 @@ const Button = ({
   title,
 }: {
   "data-test-id"?: string
+
   children: JSX.Element | string | (JSX.Element | string)[]
   className?: string
   disabled?: boolean

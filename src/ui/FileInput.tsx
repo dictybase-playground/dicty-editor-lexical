@@ -8,13 +8,11 @@
 
 import "./Input.css"
 
-import * as React from "react"
-
-type Props = Readonly<{
+type Properties = Readonly<{
   "data-test-id"?: string
   accept?: string
   label: string
-  onChange: (files: FileList) => void
+  onChange: (files: FileList | null) => void
 }>
 
 // eslint-disable-next-line react/function-component-definition
@@ -23,7 +21,7 @@ export default function FileInput({
   label,
   onChange,
   "data-test-id": dataTestId,
-}: Props): JSX.Element {
+}: Properties): JSX.Element {
   return (
     <div className="Input__wrapper">
       <label className="Input__label">{label}</label>
@@ -31,7 +29,7 @@ export default function FileInput({
         type="file"
         accept={accept}
         className="Input__input"
-        onChange={(e) => onChange(e.target.files)}
+        onChange={(event) => onChange(event.target.files)}
         data-test-id={dataTestId}
       />
     </div>

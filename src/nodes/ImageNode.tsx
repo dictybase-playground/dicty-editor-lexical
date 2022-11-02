@@ -19,8 +19,6 @@ import type {
 import useImageNodeStyles from "nodes/imageNodeStyles"
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
-import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin"
 import { LexicalNestedComposer } from "@lexical/react/LexicalNestedComposer"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { useLexicalNodeSelection } from "@lexical/react/useLexicalNodeSelection"
@@ -251,8 +249,6 @@ const ImageComponent = ({
     setIsResizing(true)
   }
 
-  //   const { historyState } = useSharedHistoryContext()
-
   const draggable = isSelected && $isNodeSelection(selection)
   const isFocused = $isNodeSelection(selection) && (isSelected || isResizing)
 
@@ -273,8 +269,6 @@ const ImageComponent = ({
         {showCaption && (
           <div className={classes["image-caption-container"]}>
             <LexicalNestedComposer initialEditor={caption}>
-              {/* <LinkPlugin />
-              <HistoryPlugin /> */}
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable className={classes.contentEditable} />
@@ -321,11 +315,17 @@ export type SerializedImageNode = Spread<
 
 export class ImageNode extends DecoratorNode<JSX.Element> {
   __src: string
+
   __altText: string
+
   __width: "inherit" | number
+
   __height: "inherit" | number
+
   __maxWidth: number
+
   __showCaption: boolean
+
   __caption: LexicalEditor
 
   static getType(): string {
