@@ -13,7 +13,8 @@
     "browser": true
   },
   "globals": {
-    "vi": true
+    "vi": true,
+    "JSX": true
   },
   "overrides": [
     {
