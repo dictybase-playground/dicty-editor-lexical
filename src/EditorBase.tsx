@@ -6,12 +6,9 @@ import { Container, Paper } from "@material-ui/core"
 import EditorComposer from "./EditorComposer"
 
 type EditorBaseProperties = {
-  // eslint-disable-next-line react/require-default-props
-  children?: React.ReactElement | React.ReactElement[]
-  // eslint-disable-next-line react/require-default-props
-  nodes?: Klass<LexicalNode>[]
-  // eslint-disable-next-line react/require-default-props
-  theme?: EditorThemeClasses
+  children: React.ReactElement | React.ReactElement[]
+  nodes: Klass<LexicalNode>[]
+  theme: EditorThemeClasses
 }
 
 const EditorBase = ({

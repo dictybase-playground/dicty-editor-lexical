@@ -231,7 +231,10 @@ const ImageComponent = ({
     })
   }
 
-  const onResizeEnd = (nextWidth, nextHeight) => {
+  const onResizeEnd = (
+    nextWidth: number | "inherit",
+    nextHeight: number | "inherit",
+  ) => {
     // Delay hiding the resize bars for click case
     setTimeout(() => {
       setIsResizing(false)

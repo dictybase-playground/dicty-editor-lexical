@@ -41,8 +41,7 @@ const useModal = (): [
 
   const showModal = useCallback(
     (
-      title,
-
+      title: string,
       getContent: (onClose: () => void) => JSX.Element,
       closeOnClickOutside = false,
     ) => {

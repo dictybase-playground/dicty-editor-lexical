@@ -27,7 +27,7 @@ const InsertDropdown: React.FC<IInsertDropdownProperties> = ({
         {enableImage && (
           <button
             onClick={() => {
-              // eslint-disable-next-line react/no-unstable-nested-components
+              // eslint-disable-next-line react/no-unstable-nested-components --- I believe this error is being raised because the function signature of showModal's second argument is the same as a React component's signature. However the function is not being called as a React component so I think it's safe to ignore
               showModal("Insert Image", (onClose) => (
                 <InsertImageDialog activeEditor={editor} onClose={onClose} />
               ))
