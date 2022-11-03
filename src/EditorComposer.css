@@ -99,3 +99,7 @@
 .icon.image {
   background-image: url(images/icons/file-image.svg);
 }
+
+.icon.font-family {
+  background-image: url(images/icons/font.svg);
+}
