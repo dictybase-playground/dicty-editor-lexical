@@ -11,21 +11,24 @@ import { useCallback, useMemo, useState } from "react"
 import Modal from "../ui/Modal"
 
 const useModal = (): [
-  JSX.Element,
+  JSX.Element | null,
   (title: string, showModal: (onClose: () => void) => JSX.Element) => void,
 ] => {
   const [modalContent, setModalContent] = useState<null | {
     closeOnClickOutside: boolean
     content: JSX.Element
     title: string
+    // eslint-disable-next-line unicorn/no-null
   }>(null)
 
   const onClose = useCallback(() => {
+    // eslint-disable-next-line unicorn/no-null
     setModalContent(null)
   }, [])
 
   const modal = useMemo(() => {
     if (modalContent === null) {
+      // eslint-disable-next-line unicorn/no-null
       return null
     }
     const { title, content, closeOnClickOutside } = modalContent
