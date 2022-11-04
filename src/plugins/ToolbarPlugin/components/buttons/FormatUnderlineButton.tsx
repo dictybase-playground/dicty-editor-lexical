@@ -1,22 +1,22 @@
-import { useContext } from "react"
 import { FORMAT_TEXT_COMMAND } from "lexical"
 import { IconButton } from "@material-ui/core"
 import { FormatUnderlined } from "@material-ui/icons"
-import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
+import { useAtom } from "jotai"
+import { isUnderlinedAtom } from "context/AtomConfigs"
 
 const FormatUnderlinedButton = () => {
   const [editor] = useLexicalComposerContext()
-  const { isUnderlined } = useContext(ToolbarContext) as IToolbarContext
+  const [isUnderlined] = useAtom(isUnderlinedAtom)
 
   return (
     <IconButton
       type="button"
       onClick={() => {
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")
       }}
       className={`toolbar-item spaced ${isUnderlined ? "active" : ""}`}
-      aria-label="Format Bold">
+      aria-label="Format Underlined">
       <FormatUnderlined fontSize="small" />
     </IconButton>
   )

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import {
   $getSelection,
   $isRangeSelection,
@@ -6,7 +6,8 @@ import {
 } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { mergeRegister } from "@lexical/utils"
-import ToolbarContext from "context/ToolbarContext"
+import { useAtom } from "jotai"
+import { isBoldAtom, isItalicAtom, isUnderlinedAtom } from "context/AtomConfigs"
 import Divider from "ui/Divider"
 import {
   FormatBoldButton,
@@ -16,20 +17,11 @@ import {
 
 const LowPriority = 1
 
-type ToolbarBaseProperties = {
-  children?: React.ReactElement | React.ReactElement[]
-  test?: string
-}
-
-const ToolbarV2 = ({ children = [] }: ToolbarBaseProperties) => {
+const ToolbarV2 = () => {
   const [editor] = useLexicalComposerContext()
-  const [isBold, setIsBold] = useState(false)
-  const [isItalic, setIsItalic] = useState(false)
-  const [isUnderlined, setIsUnderlined] = useState(false)
-  const contextValue = useMemo(
-    () => ({ editor, isBold, isItalic, isUnderlined }),
-    [editor, isBold, isItalic, isUnderlined],
-  )
+  const [, setIsBold] = useAtom(isBoldAtom)
+  const [, setIsItalic] = useAtom(isItalicAtom)
+  const [, setIsUnderlined] = useAtom(isUnderlinedAtom)
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -39,7 +31,7 @@ const ToolbarV2 = ({ children = [] }: ToolbarBaseProperties) => {
       setIsItalic(selection.hasFormat("italic"))
       setIsUnderlined(selection.hasFormat("underline"))
     }
-  }, [])
+  }, [setIsBold, setIsItalic, setIsUnderlined])
 
   useEffect(
     () =>
@@ -62,15 +54,12 @@ const ToolbarV2 = ({ children = [] }: ToolbarBaseProperties) => {
   )
 
   return (
-    <ToolbarContext.Provider value={contextValue}>
-      <div className="toolbar">
-        <Divider />
-        <FormatBoldButton />
-        <FormatItalicButton />
-        <FormatUnderlineButton />
-        {children}
-      </div>
-    </ToolbarContext.Provider>
+    <div className="toolbar">
+      <Divider />
+      <FormatBoldButton />
+      <FormatItalicButton />
+      <FormatUnderlineButton />
+    </div>
   )
 }
 
