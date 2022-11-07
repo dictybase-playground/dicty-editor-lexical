@@ -1,7 +1,8 @@
-import React, { useContext } from "react"
+import React from "react"
 import { Select, MenuItem } from "@material-ui/core"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
+import { useAtom } from "jotai"
+import { fontFamilyAtom } from "context/AtomConfigs"
 import type FontOptions from "types/FontOptions"
 import applyStyleText from "../utils/applyTextStyles"
 
@@ -15,14 +16,13 @@ const defaultFontFamilyOptions: FontOptions = [
 ]
 
 interface IFontFamilyDropdown {
-  // eslint-disable-next-line react/require-default-props
   fontOptions?: FontOptions
 }
 
 const FontFamilyDropdown = ({
   fontOptions = defaultFontFamilyOptions,
 }: IFontFamilyDropdown) => {
-  const { fontFamily } = useContext(ToolbarContext) as IToolbarContext
+  const [fontFamily] = useAtom(fontFamilyAtom)
   const [editor] = useLexicalComposerContext()
 
   const onFontFamilySelect = (

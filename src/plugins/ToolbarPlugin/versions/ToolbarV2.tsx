@@ -18,7 +18,6 @@ const LowPriority = 1
 
 type ToolbarBaseProperties = {
   children?: React.ReactElement | React.ReactElement[]
-  test?: string
 }
 
 const ToolbarV2 = ({ children = [] }: ToolbarBaseProperties) => {

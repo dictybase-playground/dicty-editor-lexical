@@ -1,14 +1,15 @@
-import { useContext } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
 import { UNDO_COMMAND } from "lexical"
 import { IconButton } from "@material-ui/core"
 import { Undo } from "@material-ui/icons"
+import { useAtom } from "jotai"
+import { canUndoAtom } from "context/AtomConfigs"
 import { IS_APPLE } from "shared/src/environment"
 
 const UndoButton = () => {
-  const { canUndo } = useContext(ToolbarContext) as IToolbarContext
   const [editor] = useLexicalComposerContext()
+  const [canUndo] = useAtom(canUndoAtom)
+
   return (
     <IconButton
       disabled={!canUndo}

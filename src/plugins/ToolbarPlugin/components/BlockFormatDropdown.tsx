@@ -1,5 +1,4 @@
 import {
-  INSERT_CHECK_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
@@ -11,10 +10,11 @@ import {
 } from "@lexical/rich-text"
 import { $wrapNodes } from "@lexical/selection"
 import { $createParagraphNode, $getSelection, $isRangeSelection } from "lexical"
-import { useContext, useMemo } from "react"
+import { useMemo } from "react"
 import Dropdown from "ui/Dropdown"
-import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
+import { useAtom } from "jotai"
+import { blockTypesAtom } from "context/AtomConfigs"
 
 const blockTypeToBlockName: Record<string, string> = {
   paragraph: "Normal",
@@ -23,14 +23,13 @@ const blockTypeToBlockName: Record<string, string> = {
   h3: "Heading 3",
   h4: "Heading 4",
   bullet: "Bulleted List",
-  // check: "Check List",
   number: "Numbered List",
   quote: "Quote",
 }
 
 const BlockFormatDropdown = () => {
   const [editor] = useLexicalComposerContext()
-  const { blockType } = useContext(ToolbarContext) as IToolbarContext
+  const [blockType] = useAtom(blockTypesAtom)
 
   const formatParagraph = () => {
     if (blockType !== "paragraph") {

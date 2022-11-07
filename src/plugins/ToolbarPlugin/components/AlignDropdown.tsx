@@ -1,4 +1,3 @@
-import { useContext } from "react"
 import Dropdown from "ui/Dropdown"
 import Divider from "ui/Divider"
 import {
@@ -7,12 +6,12 @@ import {
   OUTDENT_CONTENT_COMMAND,
 } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
+import { useAtom } from "jotai"
+import { isRTLAtom } from "context/AtomConfigs"
 
 const AlignDropdown = () => {
   const [editor] = useLexicalComposerContext()
-  const { isRTL } = useContext(ToolbarContext) as IToolbarContext
-
+  const [isRTL] = useAtom(isRTLAtom)
   return (
     <Dropdown
       buttonLabel="Align"

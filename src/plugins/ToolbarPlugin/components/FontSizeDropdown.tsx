@@ -1,7 +1,8 @@
-import React, { useCallback, useContext } from "react"
+import React, { useCallback } from "react"
 import { Select, MenuItem } from "@material-ui/core"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
+import { useAtom } from "jotai"
+import { fontSizeAtom } from "context/AtomConfigs"
 import type FontOptions from "types/FontOptions"
 import applyStyleText from "../utils/applyTextStyles"
 
@@ -20,7 +21,6 @@ const defaultFontSizeOptions: FontOptions = [
 ]
 
 interface IFontSizeDropdown {
-  // eslint-disable-next-line react/require-default-props
   fontSizeOptions?: FontOptions
 }
 
@@ -28,7 +28,7 @@ const FontSizeDropdown = ({
   fontSizeOptions = defaultFontSizeOptions,
 }: IFontSizeDropdown) => {
   const [editor] = useLexicalComposerContext()
-  const { fontSize } = useContext(ToolbarContext) as IToolbarContext
+  const [fontSize] = useAtom(fontSizeAtom)
 
   const onFontSizeSelect = useCallback(
     (

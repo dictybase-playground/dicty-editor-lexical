@@ -1,14 +1,15 @@
-import { useContext } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import ToolbarContext, { IToolbarContext } from "context/ToolbarContext"
 import { REDO_COMMAND } from "lexical"
 import { IconButton } from "@material-ui/core"
 import { Redo } from "@material-ui/icons"
+import { useAtom } from "jotai"
+import { canRedoAtom } from "context/AtomConfigs"
 import { IS_APPLE } from "shared/src/environment"
 
 const RedoButton = () => {
-  const { canRedo } = useContext(ToolbarContext) as IToolbarContext
+  const [canRedo] = useAtom(canRedoAtom)
   const [editor] = useLexicalComposerContext()
+
   return (
     <IconButton
       disabled={!canRedo}

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
   $getSelection,
   $isRangeSelection,
@@ -9,16 +9,22 @@ import {
 import { $getSelectionStyleValueForProperty } from "@lexical/selection"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { mergeRegister } from "@lexical/utils"
-import ToolbarContext from "context/ToolbarContext"
+import { useAtom } from "jotai"
+import {
+  canUndoAtom,
+  canRedoAtom,
+  isBoldAtom,
+  isItalicAtom,
+  isUnderlinedAtom,
+  fontSizeAtom,
+} from "context/AtomConfigs"
 import Divider from "ui/Divider"
 import { UndoButton, RedoButton } from "../components/buttons"
 
 const LowPriority = 1
 
 type ToolbarBaseProperties = {
-  // eslint-disable-next-line react/require-default-props
   children?: React.ReactElement | React.ReactElement[]
-  // eslint-disable-next-line react/require-default-props
   defaultFontSize?: string
 }
 
@@ -27,24 +33,12 @@ const ToolbarV4 = ({
   defaultFontSize = "15px",
 }: ToolbarBaseProperties) => {
   const [editor] = useLexicalComposerContext()
-  const [canUndo, setCanUndo] = useState(false)
-  const [canRedo, setCanRedo] = useState(false)
-  const [fontSize, setFontSize] = useState(defaultFontSize)
-  const [isBold, setIsBold] = useState(false)
-  const [isItalic, setIsItalic] = useState(false)
-  const [isUnderlined, setIsUnderlined] = useState(false)
-  const contextValue = useMemo(
-    () => ({
-      editor,
-      canUndo,
-      canRedo,
-      fontSize,
-      isBold,
-      isItalic,
-      isUnderlined,
-    }),
-    [editor, canUndo, canRedo, fontSize, isBold, isItalic, isUnderlined],
-  )
+  const [, setCanUndo] = useAtom(canUndoAtom)
+  const [, setCanRedo] = useAtom(canRedoAtom)
+  const [, setIsBold] = useAtom(isBoldAtom)
+  const [, setIsItalic] = useAtom(isItalicAtom)
+  const [, setIsUnderlined] = useAtom(isUnderlinedAtom)
+  const [, setFontSize] = useAtom(fontSizeAtom)
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -61,7 +55,7 @@ const ToolbarV4 = ({
         ),
       )
     }
-  }, [defaultFontSize])
+  }, [defaultFontSize, setFontSize, setIsBold, setIsItalic, setIsUnderlined])
 
   useEffect(
     () =>
@@ -96,18 +90,16 @@ const ToolbarV4 = ({
           LowPriority,
         ),
       ),
-    [editor, updateToolbar],
+    [editor, setCanRedo, setCanUndo, updateToolbar],
   )
 
   return (
-    <ToolbarContext.Provider value={contextValue}>
-      <div className="toolbar">
-        <UndoButton />
-        <RedoButton />
-        <Divider />
-        {children}
-      </div>
-    </ToolbarContext.Provider>
+    <div className="toolbar">
+      <UndoButton />
+      <RedoButton />
+      <Divider />
+      {children}
+    </div>
   )
 }
 
