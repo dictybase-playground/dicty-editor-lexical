@@ -5,9 +5,7 @@ import "./EditorComposer.css"
 
 type EditorComposerProperties = {
   children: React.ReactElement
-  // eslint-disable-next-line react/require-default-props
   nodes?: Klass<LexicalNode>[]
-  // eslint-disable-next-line react/require-default-props
   theme?: EditorThemeClasses
 }
 
