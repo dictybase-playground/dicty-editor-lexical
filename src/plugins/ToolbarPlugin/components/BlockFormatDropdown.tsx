@@ -14,9 +14,9 @@ import { useMemo } from "react"
 import Dropdown from "ui/Dropdown"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
-import { blockTypesAtom } from "context/AtomConfigs"
+import { BlockTypes, blockTypesAtom } from "context/AtomConfigs"
 
-const blockTypeToBlockName: Record<string, string> = {
+const blockTypeToBlockName = {
   paragraph: "Normal",
   h1: "Heading 1",
   h2: "Heading 2",
@@ -62,14 +62,6 @@ const BlockFormatDropdown = () => {
       editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
     }
   }
-
-  // const formatCheckList = () => {
-  //   if (blockType !== "check") {
-  //     editor.dispatchCommand(INSERT_CHECK_LIST_COMMAND, undefined)
-  //   } else {
-  //     editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
-  //   }
-  // }
 
   const formatNumberedList = () => {
     if (blockType !== "number") {
@@ -118,10 +110,12 @@ const BlockFormatDropdown = () => {
         <button
           key={blockName}
           className="item"
-          onClick={blockTypeToFormatFunction[blockName]}
+          onClick={blockTypeToFormatFunction[blockName as BlockTypes]}
           type="button">
           <span className={`icon ${blockName}`} />
-          <span className="text">{blockTypeToBlockName[blockName]}</span>
+          <span className="text">
+            {blockTypeToBlockName[blockName as BlockTypes]}
+          </span>
           {blockType === blockName && <span className="active" />}
         </button>
       ))}
