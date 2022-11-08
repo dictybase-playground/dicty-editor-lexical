@@ -36,7 +36,6 @@ const ToolbarV2 = () => {
     a function that removes the listeners they register, mergeRegister will 
     return a function that cleans up the listeners registered from a 
     previous render.
-    
   */
   useEffect(
     () =>

@@ -5,7 +5,6 @@ import {
   SELECTION_CHANGE_COMMAND,
 } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { mergeRegister } from "@lexical/utils"
 import { useAtom } from "jotai"
 import { isBoldAtom, isItalicAtom, isUnderlinedAtom } from "context/AtomConfigs"
 import Divider from "ui/Divider"
@@ -33,25 +32,28 @@ const ToolbarV2 = () => {
     }
   }, [setIsBold, setIsItalic, setIsUnderlined])
 
-  useEffect(
-    () =>
-      mergeRegister(
-        editor.registerUpdateListener(({ editorState }) => {
-          editorState.read(() => {
-            updateToolbar()
-          })
-        }),
-        editor.registerCommand(
-          SELECTION_CHANGE_COMMAND,
-          () => {
-            updateToolbar()
-            return false
-          },
-          LowPriority,
-        ),
-      ),
-    [editor, updateToolbar],
-  )
+  useEffect(() => {
+    const unregisterUpdateListener = editor.registerUpdateListener(
+      ({ editorState }) => {
+        editorState.read(() => {
+          updateToolbar()
+        })
+      },
+    )
+    const unregisterSelectionChangeCommand = editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      () => {
+        updateToolbar()
+        return false
+      },
+      LowPriority,
+    )
+
+    return function cleanup() {
+      unregisterUpdateListener()
+      unregisterSelectionChangeCommand()
+    }
+  }, [editor, updateToolbar])
 
   return (
     <div className="toolbar">

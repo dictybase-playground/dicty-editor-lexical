@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import {
   $getSelection,
   $isRangeSelection,
@@ -8,7 +8,6 @@ import {
 } from "lexical"
 import { $getSelectionStyleValueForProperty } from "@lexical/selection"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { mergeRegister } from "@lexical/utils"
 import { useAtom } from "jotai"
 import {
   canUndoAtom,
@@ -20,20 +19,27 @@ import {
   fontFamilyAtom,
   FontFamily,
 } from "context/AtomConfigs"
+import FontSizeDropdown from "plugins/ToolbarPlugin/components/FontSizeDropdown"
+import FontFamilyDropdown from "plugins/ToolbarPlugin/components/FontFamilyDropdown"
+import AlignDropdown from "plugins/ToolbarPlugin/components/AlignDropdown"
 import Divider from "ui/Divider"
-import { UndoButton, RedoButton } from "../components/buttons"
+import {
+  UndoButton,
+  RedoButton,
+  FormatBoldButton,
+  FormatItalicButton,
+  FormatUnderlineButton,
+} from "plugins/ToolbarPlugin/components/buttons"
 import "../ToolbarPlugin.css"
 
 const LowPriority = 1
 
 type ToolbarBaseProperties = {
-  children?: React.ReactElement | React.ReactElement[]
   defaultFontSize?: string
   defaultFontFamily?: string
 }
 
 const ToolbarV5 = ({
-  children = [],
   defaultFontSize = "15px",
   defaultFontFamily = "Arial",
 }: ToolbarBaseProperties) => {
@@ -78,48 +84,59 @@ const ToolbarV5 = ({
     setIsUnderlined,
   ])
 
-  useEffect(
-    () =>
-      mergeRegister(
-        editor.registerUpdateListener(({ editorState }) => {
-          editorState.read(() => {
-            updateToolbar()
-          })
-        }),
-        editor.registerCommand(
-          SELECTION_CHANGE_COMMAND,
-          () => {
-            updateToolbar()
-            return false
-          },
-          LowPriority,
-        ),
-        editor.registerCommand(
-          CAN_UNDO_COMMAND,
-          (payload) => {
-            setCanUndo(payload)
-            return false
-          },
-          LowPriority,
-        ),
-        editor.registerCommand(
-          CAN_REDO_COMMAND,
-          (payload) => {
-            setCanRedo(payload)
-            return false
-          },
-          LowPriority,
-        ),
-      ),
-    [editor, setCanRedo, setCanUndo, updateToolbar],
-  )
+  useEffect(() => {
+    const unregisterUpdateListener = editor.registerUpdateListener(
+      ({ editorState }) => {
+        editorState.read(() => {
+          updateToolbar()
+        })
+      },
+    )
+    const unregisterSelectionChangeCommand = editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      () => {
+        updateToolbar()
+        return false
+      },
+      LowPriority,
+    )
+    const unregisterCanUndoCommand = editor.registerCommand(
+      CAN_UNDO_COMMAND,
+      (payload) => {
+        setCanUndo(payload)
+        return false
+      },
+      LowPriority,
+    )
+    const unregisterCanRedoCommand = editor.registerCommand(
+      CAN_REDO_COMMAND,
+      (payload) => {
+        setCanRedo(payload)
+        return false
+      },
+      LowPriority,
+    )
+
+    return function cleanup() {
+      unregisterUpdateListener()
+      unregisterSelectionChangeCommand()
+      unregisterCanUndoCommand()
+      unregisterCanRedoCommand()
+    }
+  }, [editor, setCanRedo, setCanUndo, updateToolbar])
 
   return (
     <div className="toolbar">
       <UndoButton />
       <RedoButton />
       <Divider />
-      {children}
+      <FontSizeDropdown />
+      <FontFamilyDropdown />
+      <Divider />
+      <FormatBoldButton />
+      <FormatItalicButton />
+      <FormatUnderlineButton />
+      <AlignDropdown />
     </div>
   )
 }

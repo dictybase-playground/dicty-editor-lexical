@@ -2,20 +2,9 @@ import EditorBase from "EditorBase"
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import ToolbarV6 from "plugins/ToolbarPlugin/versions/ToolbarV6"
-import FontSizeDropdown from "plugins/ToolbarPlugin/components/FontSizeDropdown"
-import FontFamilyDropdown from "plugins/ToolbarPlugin/components/FontFamilyDropdown"
-import AlignDropdown from "plugins/ToolbarPlugin/components/AlignDropdown"
-import InsertDropdown from "plugins/ToolbarPlugin/components/InsertDropdown/InsertDropdownV1"
-import BlockFormatDropdown from "plugins/ToolbarPlugin/components/BlockFormatDropdown"
-import {
-  FormatBoldButton,
-  FormatItalicButton,
-  FormatUnderlineButton,
-} from "plugins/ToolbarPlugin/components/buttons"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { ImageNode } from "nodes/ImageNode"
-import Divider from "ui/Divider"
 
 const additonalThemes = {
   image: "editor-image",
@@ -38,19 +27,7 @@ const EditorV7 = () => (
     theme={additonalThemes}>
     <HistoryPlugin />
     <ListPlugin />
-    <ToolbarV6>
-      <BlockFormatDropdown />
-      <FontSizeDropdown />
-      <FontFamilyDropdown />
-      <Divider />
-      <FormatBoldButton />
-      <FormatItalicButton />
-      <FormatUnderlineButton />
-      <Divider />
-      <AlignDropdown />
-      <Divider />
-      <InsertDropdown />
-    </ToolbarV6>
+    <ToolbarV6 />
   </EditorBase>
 )
 

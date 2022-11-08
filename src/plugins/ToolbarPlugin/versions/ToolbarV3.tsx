@@ -27,11 +27,7 @@ import {
 
 const LowPriority = 1
 
-type ToolbarBaseProperties = {
-  children?: React.ReactElement | React.ReactElement[]
-}
-
-const ToolbarV3 = ({ children = [] }: ToolbarBaseProperties) => {
+const ToolbarV3 = () => {
   const [editor] = useLexicalComposerContext()
   const [, setCanUndo] = useAtom(canUndoAtom)
   const [, setCanRedo] = useAtom(canRedoAtom)
@@ -48,41 +44,46 @@ const ToolbarV3 = ({ children = [] }: ToolbarBaseProperties) => {
     }
   }, [setIsBold, setIsItalic, setIsUnderlined])
 
-  useEffect(
-    () =>
-      mergeRegister(
-        editor.registerUpdateListener(({ editorState }) => {
-          editorState.read(() => {
-            updateToolbar()
-          })
-        }),
-        editor.registerCommand(
-          SELECTION_CHANGE_COMMAND,
-          () => {
-            updateToolbar()
-            return false
-          },
-          LowPriority,
-        ),
-        editor.registerCommand(
-          CAN_UNDO_COMMAND,
-          (payload) => {
-            setCanUndo(payload)
-            return false
-          },
-          LowPriority,
-        ),
-        editor.registerCommand(
-          CAN_REDO_COMMAND,
-          (payload) => {
-            setCanRedo(payload)
-            return false
-          },
-          LowPriority,
-        ),
-      ),
-    [editor, setCanRedo, setCanUndo, updateToolbar],
-  )
+  useEffect(() => {
+    const unregisterUpdateListener = editor.registerUpdateListener(
+      ({ editorState }) => {
+        editorState.read(() => {
+          updateToolbar()
+        })
+      },
+    )
+    const unregisterSelectionChangeCommand = editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      () => {
+        updateToolbar()
+        return false
+      },
+      LowPriority,
+    )
+    const unregisterCanUndoCommand = editor.registerCommand(
+      CAN_UNDO_COMMAND,
+      (payload) => {
+        setCanUndo(payload)
+        return false
+      },
+      LowPriority,
+    )
+    const unregisterCanRedoCommand = editor.registerCommand(
+      CAN_REDO_COMMAND,
+      (payload) => {
+        setCanRedo(payload)
+        return false
+      },
+      LowPriority,
+    )
+
+    return function cleanup() {
+      unregisterUpdateListener()
+      unregisterSelectionChangeCommand()
+      unregisterCanUndoCommand()
+      unregisterCanRedoCommand()
+    }
+  }, [editor, setCanRedo, setCanUndo, updateToolbar])
 
   return (
     <div className="toolbar">
@@ -92,7 +93,6 @@ const ToolbarV3 = ({ children = [] }: ToolbarBaseProperties) => {
       <FormatBoldButton />
       <FormatItalicButton />
       <FormatUnderlineButton />
-      {children}
     </div>
   )
 }
