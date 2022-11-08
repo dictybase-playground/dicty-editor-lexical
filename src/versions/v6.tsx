@@ -1,6 +1,6 @@
 import EditorBase from "EditorBase"
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
-import ToolbarV5 from "plugins/ToolbarPlugin/versions/ToolbarV5"
+import ToolbarV6 from "plugins/ToolbarPlugin/versions/ToolbarV6"
 import { ImageNode } from "nodes/ImageNode"
 
 const imageTheme = {
@@ -10,7 +10,7 @@ const imageTheme = {
 const EditorV6 = () => (
   <EditorBase nodes={[ImageNode]} theme={imageTheme}>
     <HistoryPlugin />
-    <ToolbarV5 />
+    <ToolbarV6 />
   </EditorBase>
 )
 
