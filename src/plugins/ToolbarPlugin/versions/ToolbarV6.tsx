@@ -11,7 +11,7 @@ import { $getSelectionStyleValueForProperty } from "@lexical/selection"
 import { $isHeadingNode } from "@lexical/rich-text"
 import { $isListNode, ListNode } from "@lexical/list"
 import { $getNearestNodeOfType } from "@lexical/utils"
-import { useAtom } from "jotai"
+import { useUpdateAtom } from "jotai/utils"
 import {
   canUndoAtom,
   canRedoAtom,
@@ -49,14 +49,14 @@ const ToolbarV6 = ({
   defaultFontFamily = "Arial",
 }: ToolbarBaseProperties) => {
   const [editor] = useLexicalComposerContext()
-  const [, setCanUndo] = useAtom(canUndoAtom)
-  const [, setCanRedo] = useAtom(canRedoAtom)
-  const [, setIsBold] = useAtom(isBoldAtom)
-  const [, setIsItalic] = useAtom(isItalicAtom)
-  const [, setIsUnderlined] = useAtom(isUnderlinedAtom)
-  const [, setFontSize] = useAtom(fontSizeAtom)
-  const [, setFontFamily] = useAtom(fontFamilyAtom)
-  const [, setBlockType] = useAtom(blockTypesAtom)
+  const setCanUndo = useUpdateAtom(canUndoAtom)
+  const setCanRedo = useUpdateAtom(canRedoAtom)
+  const setIsBold = useUpdateAtom(isBoldAtom)
+  const setIsItalic = useUpdateAtom(isItalicAtom)
+  const setIsUnderlined = useUpdateAtom(isUnderlinedAtom)
+  const setFontSize = useUpdateAtom(fontSizeAtom)
+  const setFontFamily = useUpdateAtom(fontFamilyAtom)
+  const setBlockType = useUpdateAtom(blockTypesAtom)
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()

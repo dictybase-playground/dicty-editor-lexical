@@ -8,7 +8,7 @@ import {
 } from "lexical"
 import { $getSelectionStyleValueForProperty } from "@lexical/selection"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { useAtom } from "jotai"
+import { useUpdateAtom } from "jotai/utils"
 import {
   canUndoAtom,
   canRedoAtom,
@@ -35,12 +35,12 @@ type ToolbarBaseProperties = {
 
 const ToolbarV4 = ({ defaultFontSize = "15px" }: ToolbarBaseProperties) => {
   const [editor] = useLexicalComposerContext()
-  const [, setCanUndo] = useAtom(canUndoAtom)
-  const [, setCanRedo] = useAtom(canRedoAtom)
-  const [, setIsBold] = useAtom(isBoldAtom)
-  const [, setIsItalic] = useAtom(isItalicAtom)
-  const [, setIsUnderlined] = useAtom(isUnderlinedAtom)
-  const [, setFontSize] = useAtom(fontSizeAtom)
+  const setCanUndo = useUpdateAtom(canUndoAtom)
+  const setCanRedo = useUpdateAtom(canRedoAtom)
+  const setIsBold = useUpdateAtom(isBoldAtom)
+  const setIsItalic = useUpdateAtom(isItalicAtom)
+  const setIsUnderlined = useUpdateAtom(isUnderlinedAtom)
+  const setFontSize = useUpdateAtom(fontSizeAtom)
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()

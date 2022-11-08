@@ -7,8 +7,7 @@ import {
   CAN_UNDO_COMMAND,
 } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { mergeRegister } from "@lexical/utils"
-import { useAtom } from "jotai"
+import { useUpdateAtom } from "jotai/utils"
 import {
   canUndoAtom,
   canRedoAtom,
@@ -29,11 +28,11 @@ const LowPriority = 1
 
 const ToolbarV3 = () => {
   const [editor] = useLexicalComposerContext()
-  const [, setCanUndo] = useAtom(canUndoAtom)
-  const [, setCanRedo] = useAtom(canRedoAtom)
-  const [, setIsBold] = useAtom(isBoldAtom)
-  const [, setIsItalic] = useAtom(isItalicAtom)
-  const [, setIsUnderlined] = useAtom(isUnderlinedAtom)
+  const setCanUndo = useUpdateAtom(canUndoAtom)
+  const setCanRedo = useUpdateAtom(canRedoAtom)
+  const setIsBold = useUpdateAtom(isBoldAtom)
+  const setIsItalic = useUpdateAtom(isItalicAtom)
+  const setIsUnderlined = useUpdateAtom(isUnderlinedAtom)
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
 

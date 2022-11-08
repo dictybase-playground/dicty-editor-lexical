@@ -116,6 +116,7 @@ const BlockFormatDropdown = () => {
       buttonAriaLabel="Formatting options for text style">
       {blockTypes.map((blockName) => (
         <button
+          key={blockName}
           className="item"
           onClick={blockTypeToFormatFunction[blockName]}
           type="button">

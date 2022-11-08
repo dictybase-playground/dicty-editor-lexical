@@ -5,7 +5,7 @@ import {
   SELECTION_CHANGE_COMMAND,
 } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { useAtom } from "jotai"
+import { useUpdateAtom } from "jotai/utils"
 import { isBoldAtom, isItalicAtom } from "context/AtomConfigs"
 import Divider from "ui/Divider"
 import { FormatBoldButton, FormatItalicButton } from "../components/buttons"
@@ -14,8 +14,8 @@ const LowPriority = 1
 
 const ToolbarV2 = () => {
   const [editor] = useLexicalComposerContext()
-  const [, setIsBold] = useAtom(isBoldAtom)
-  const [, setIsItalic] = useAtom(isItalicAtom)
+  const setIsBold = useUpdateAtom(isBoldAtom)
+  const setIsItalic = useUpdateAtom(isItalicAtom)
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
