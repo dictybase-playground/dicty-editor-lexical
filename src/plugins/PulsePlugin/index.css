@@ -1,0 +1,17 @@
+@keyframes pulse {
+  0% {
+    color: white;
+  }
+  50% {
+    color: black;
+  }
+  100% {
+    color: white;
+  }
+}
+
+span.pulse {
+  animation-name: pulse;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+}
