@@ -6,9 +6,15 @@ import {
 } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useUpdateAtom } from "jotai/utils"
-import { isBoldAtom, isItalicAtom } from "context/AtomConfigs"
+import { isBoldAtom, isItalicAtom, isUnderlinedAtom } from "context/AtomConfigs"
+import TOGGLE_PULSE_COMMAND from "plugins/PulsePlugin/commands"
 import Divider from "ui/Divider"
-import { FormatBoldButton, FormatItalicButton } from "../components/buttons"
+import {
+  FormatBoldButton,
+  FormatItalicButton,
+  FormatUnderlineButton,
+  PulseButton,
+} from "../components/buttons"
 
 const LowPriority = 1
 
@@ -16,6 +22,7 @@ const ToolbarV2 = () => {
   const [editor] = useLexicalComposerContext()
   const setIsBold = useUpdateAtom(isBoldAtom)
   const setIsItalic = useUpdateAtom(isItalicAtom)
+  const setIsUnderlined = useUpdateAtom(isUnderlinedAtom)
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -23,8 +30,9 @@ const ToolbarV2 = () => {
     if ($isRangeSelection(selection)) {
       setIsBold(selection.hasFormat("bold"))
       setIsItalic(selection.hasFormat("italic"))
+      setIsUnderlined(selection.hasFormat("underline"))
     }
-  }, [setIsBold, setIsItalic])
+  }, [setIsBold, setIsItalic, setIsUnderlined])
 
   useEffect(() => {
     const unregisterUpdateListener = editor.registerUpdateListener(
@@ -42,11 +50,26 @@ const ToolbarV2 = () => {
       },
       LowPriority,
     )
+    // const unregisterTogglePulse = editor.registerCommand(
+    //   TOGGLE_PULSE_COMMAND,
+    //   () => {
+    //     const selection = $getSelection()
+    //     if ($isRangeSelection(selection)) {
+    //       selection.getNodes().forEach((node) => {
+    //         const { element } = node.exportDOM(editor)
+    //         element?.classList.add("pulse")
+    //       })
+    //     }
+
+    //     return true
+    //   },
+    //   1,
+    // )
 
     return function cleanup() {
-      console.log("clean up")
       unregisterUpdateListener()
       unregisterSelectionChangeCommand()
+      //   unregisterTogglePulse()
     }
   }, [editor, updateToolbar])
 
@@ -55,6 +78,8 @@ const ToolbarV2 = () => {
       <Divider />
       <FormatBoldButton />
       <FormatItalicButton />
+      <FormatUnderlineButton />
+      <PulseButton />
     </div>
   )
 }

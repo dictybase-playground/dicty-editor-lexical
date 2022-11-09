@@ -18,7 +18,13 @@ const PulsePlugin = () => {
           selection.getNodes().forEach((node) => {
             const nodeKey = node.getKey()
             const element = editor.getElementByKey(nodeKey)
-            element?.classList.add(PULSE_CLASSNAME)
+            const classes = element?.classList
+
+            if (classes && classes.contains(PULSE_CLASSNAME)) {
+              classes?.remove(PULSE_CLASSNAME)
+            } else {
+              classes?.add(PULSE_CLASSNAME)
+            }
           })
         }
 
