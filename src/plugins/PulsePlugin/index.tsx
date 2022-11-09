@@ -16,10 +16,9 @@ const PulsePlugin = () => {
         const selection = $getSelection()
         if ($isRangeSelection(selection)) {
           selection.getNodes().forEach((node) => {
-            console.log(node.exportDOM(editor).element)
-            const { element } = node.exportDOM(editor)
-            element.classList.add(PULSE_CLASSNAME)
-            node.updateDOM(node, element, editor)
+            const nodeKey = node.getKey()
+            const element = editor.getElementByKey(nodeKey)
+            element?.classList.add(PULSE_CLASSNAME)
           })
         }
 
