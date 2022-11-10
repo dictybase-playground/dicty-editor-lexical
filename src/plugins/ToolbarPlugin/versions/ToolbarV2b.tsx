@@ -1,30 +1,16 @@
-import { useCallback, useEffect } from "react"
-import {
-  $getSelection,
-  $isRangeSelection,
-  SELECTION_CHANGE_COMMAND,
-} from "lexical"
+import { useEffect } from "react"
+import { SELECTION_CHANGE_COMMAND } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { useUpdateAtom } from "jotai/utils"
-import { isBoldAtom, isItalicAtom } from "context/AtomConfigs"
 import Divider from "ui/Divider"
 import { FormatBoldButton, FormatItalicButton } from "../components/buttons"
+import useUpdateToolbar from "./useUpdateToolbar2b"
 
 const LowPriority = 1
 
 const ToolbarV2 = () => {
   const [editor] = useLexicalComposerContext()
-  const setIsBold = useUpdateAtom(isBoldAtom)
-  const setIsItalic = useUpdateAtom(isItalicAtom)
 
-  const updateToolbar = useCallback(() => {
-    const selection = $getSelection()
-
-    if ($isRangeSelection(selection)) {
-      setIsBold(selection.hasFormat("bold"))
-      setIsItalic(selection.hasFormat("italic"))
-    }
-  }, [setIsBold, setIsItalic])
+  const updateToolbar = useUpdateToolbar()
 
   useEffect(() => {
     const unregisterUpdateListener = editor.registerUpdateListener(
