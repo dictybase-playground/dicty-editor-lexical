@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core"
 
-const useStyles = makeStyles({
+const useToolbarButtonStyles = makeStyles({
   root: {
     border: "0",
     display: "flex",
@@ -34,4 +34,4 @@ const useStyles = makeStyles({
   },
 })
 
-export default useStyles
+export default useToolbarButtonStyles
