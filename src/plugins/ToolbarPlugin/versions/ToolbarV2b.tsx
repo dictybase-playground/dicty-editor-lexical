@@ -8,6 +8,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useUpdateAtom } from "jotai/utils"
 import { isBoldAtom, isItalicAtom } from "context/AtomConfigs"
 import Divider from "ui/Divider"
+import useToolbarStyles from "styles/ToolbarStyles"
 import { FormatBoldButton, FormatItalicButton } from "../components/buttons"
 
 const LowPriority = 1
@@ -16,6 +17,7 @@ const ToolbarV2 = () => {
   const [editor] = useLexicalComposerContext()
   const setIsBold = useUpdateAtom(isBoldAtom)
   const setIsItalic = useUpdateAtom(isItalicAtom)
+  const toolbarClasses = useToolbarStyles()
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -50,7 +52,7 @@ const ToolbarV2 = () => {
   }, [editor, updateToolbar])
 
   return (
-    <div className="toolbar">
+    <div className={toolbarClasses.root}>
       <Divider />
       <FormatBoldButton />
       <FormatItalicButton />

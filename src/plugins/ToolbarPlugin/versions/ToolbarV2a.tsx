@@ -9,6 +9,7 @@ import { mergeRegister } from "@lexical/utils"
 import { useUpdateAtom } from "jotai/utils"
 import { isBoldAtom } from "context/AtomConfigs"
 import Divider from "ui/Divider"
+import useToolbarStyles from "styles/ToolbarStyles"
 import { FormatBoldButton } from "../components/buttons"
 
 const LowPriority = 1
@@ -16,6 +17,7 @@ const LowPriority = 1
 const ToolbarV2 = () => {
   const [editor] = useLexicalComposerContext()
   const setIsBold = useUpdateAtom(isBoldAtom)
+  const toolbarClasses = useToolbarStyles()
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection()
@@ -58,7 +60,7 @@ const ToolbarV2 = () => {
   )
 
   return (
-    <div className="toolbar">
+    <div className={toolbarClasses.root}>
       <Divider />
       <FormatBoldButton />
     </div>
