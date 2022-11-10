@@ -4,7 +4,7 @@ import { FormatBold } from "@material-ui/icons"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtomValue } from "jotai"
 import { isBoldAtom } from "context/AtomConfigs"
-import useButtonStyles from "styles/ToolBarButton"
+import useButtonStyles from "styles/ToolBarButtonStyles"
 import joinClasses from "utils/joinClasses"
 
 const FormatBoldButton = () => {
