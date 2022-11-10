@@ -1,4 +1,4 @@
-/* .editor-shell span.editor-image {
+.editor-shell span.editor-image {
   cursor: default;
   display: inline-block;
   position: relative;
@@ -91,15 +91,3 @@
   left: -6px;
   cursor: nw-resize;
 }
-
-.icon.plus {
-  background-image: url(images/icons/plus.svg);
-}
-
-.icon.image {
-  background-image: url(images/icons/file-image.svg);
-}
-
-.icon.font-family {
-  background-image: url(images/icons/font.svg);
-} */
