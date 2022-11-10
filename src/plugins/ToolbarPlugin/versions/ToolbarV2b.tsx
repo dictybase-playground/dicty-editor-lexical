@@ -44,7 +44,6 @@ const ToolbarV2 = () => {
     )
 
     return function cleanup() {
-      console.log("clean up")
       unregisterUpdateListener()
       unregisterSelectionChangeCommand()
     }

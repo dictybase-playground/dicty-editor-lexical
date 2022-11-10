@@ -1,22 +1,15 @@
 import React from "react"
-import type { LexicalNode, Klass, EditorThemeClasses } from "lexical"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
 import { Container, Paper } from "@material-ui/core"
 import EditorComposer from "./EditorComposer"
 
 type EditorBaseProperties = {
-  children: React.ReactElement | React.ReactElement[]
-  nodes: Klass<LexicalNode>[]
-  theme: EditorThemeClasses
+  children?: React.ReactElement | React.ReactElement[]
 }
 
-const EditorBase = ({
-  children = [],
-  nodes = [],
-  theme = {},
-}: EditorBaseProperties) => (
-  <EditorComposer nodes={nodes} theme={theme}>
+const EditorBase = ({ children }: EditorBaseProperties) => (
+  <EditorComposer>
     <Container>
       {children}
       <Paper style={{ position: "relative" }}>

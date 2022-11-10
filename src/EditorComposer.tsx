@@ -1,12 +1,9 @@
 import React from "react"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
-import type { LexicalNode, Klass, EditorThemeClasses } from "lexical"
 import "./EditorComposer.css"
 
 type EditorComposerProperties = {
   children: React.ReactElement
-  nodes?: Klass<LexicalNode>[]
-  theme?: EditorThemeClasses
 }
 
 const baseTheme = {
@@ -23,16 +20,11 @@ const onError = (error: Error) => {
   console.error(error)
 }
 
-const EditorComposer = ({
-  children,
-  nodes = [],
-  theme = {},
-}: EditorComposerProperties) => {
+const EditorComposer = ({ children }: EditorComposerProperties) => {
   const initialConfig = {
     namespace: "DictyEditor",
-    theme: { ...baseTheme, ...theme },
+    theme: { ...baseTheme },
     onError,
-    nodes,
   }
 
   return (
