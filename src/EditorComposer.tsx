@@ -1,6 +1,5 @@
 import React from "react"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
-import "styles/EditorComposer.css"
 
 type EditorComposerProperties = {
   children: React.ReactElement
@@ -29,7 +28,7 @@ const EditorComposer = ({ children }: EditorComposerProperties) => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <div className="editor-shell">{children}</div>
+      <div>{children}</div>
     </LexicalComposer>
   )
 }

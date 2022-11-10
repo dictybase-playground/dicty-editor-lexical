@@ -3,6 +3,7 @@ import { SELECTION_CHANGE_COMMAND } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { mergeRegister } from "@lexical/utils"
 import Divider from "ui/Divider"
+import useToolbarStyles from "styles/ToolbarStyles"
 import { FormatBoldButton } from "../components/buttons"
 import useUpdateToolbar from "./useUpdateToolbar2a"
 
@@ -11,6 +12,7 @@ const LowPriority = 1
 const ToolbarV2 = () => {
   const [editor] = useLexicalComposerContext()
   const updateToolbar = useUpdateToolbar()
+  const toolbarClasses = useToolbarStyles()
   /*
     1. In a useEffect callback, the returned function is called after every
     render to cleanup the side effects of the previous render.
@@ -44,7 +46,7 @@ const ToolbarV2 = () => {
   )
 
   return (
-    <div className="toolbar">
+    <div className={toolbarClasses.root}>
       <Divider />
       <FormatBoldButton />
     </div>
