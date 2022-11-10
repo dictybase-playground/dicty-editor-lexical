@@ -4,7 +4,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { mergeRegister } from "@lexical/utils"
 import Divider from "ui/Divider"
 import { FormatBoldButton } from "../components/buttons"
-import useUpdateToolbar from "./callback2a"
+import useUpdateToolbar from "./useUpdateToolbar2a"
 
 const LowPriority = 1
 
