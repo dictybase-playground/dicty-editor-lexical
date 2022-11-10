@@ -1,6 +1,6 @@
 import React from "react"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
-import "./EditorComposer.css"
+import "styles/EditorComposer.css"
 
 type EditorComposerProperties = {
   children: React.ReactElement
