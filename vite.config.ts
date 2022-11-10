@@ -6,7 +6,4 @@ import { swcReactRefresh } from "vite-plugin-swc-react-refresh"
 export default defineConfig({
   plugins: [tsconfigPaths(), swcReactRefresh()],
   esbuild: { jsx: "automatic" },
-  server: {
-    port: 3000,
-  },
 })
