@@ -15,5 +15,5 @@ jobs:
         uses: repo-sync/pull-request@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          destination_branch: "main"
+          destination_branch: "develop"
           pr_title: Pulling ${{ steps.vars.outputs.branch }} into main
