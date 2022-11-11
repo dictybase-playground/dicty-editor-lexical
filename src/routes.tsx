@@ -5,12 +5,12 @@ type Exported = {
 }
 
 const ROUTES = import.meta.glob<boolean, string, Exported>(
-  "/src/versions/[a-z0-9[]*.tsx",
+  "/src/pages/[a-z0-9[]*.tsx",
   { eager: true },
 )
 
 const routes = Object.keys(ROUTES).map((route) => {
-  const path = route.replace(/\/src\/versions/g, "").replace(/\.tsx$/, "")
+  const path = route.replace(/\/src\/pages/g, "").replace(/\.tsx$/, "")
 
   return { path, component: ROUTES[route].default }
 })
