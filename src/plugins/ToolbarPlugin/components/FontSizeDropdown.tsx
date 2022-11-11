@@ -6,8 +6,8 @@ import { fontSizeAtom } from "context/AtomConfigs"
 import applyStyleText from "../utils/textStyles"
 
 type FontSizeDropdownProperties = {
-  start: number
-  end: number
+  start?: number
+  end?: number
 }
 
 type FontSizeSelectProperties = React.ChangeEvent<{
