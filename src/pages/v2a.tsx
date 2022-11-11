@@ -1,5 +1,5 @@
 import EditorBase from "EditorBase"
-import ToolbarV2a from "plugins/ToolbarPlugin/versions/ToolbarV2a"
+import ToolbarV2a from "plugins/ToolbarPlugin/ToolbarV2a"
 
 const EditorV2a = () => (
   <EditorBase>
