@@ -1,6 +1,6 @@
 import { Fragment } from "react"
 import { Routes, Route } from "react-router-dom"
-import EditorV1 from "versions/v1"
+import EditorV1 from "pages/v1"
 import routes from "./routes"
 
 const App = () => (

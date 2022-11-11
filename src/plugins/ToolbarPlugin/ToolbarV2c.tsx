@@ -7,13 +7,13 @@ import {
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useUpdateAtom } from "jotai/utils"
 import { isBoldAtom, isItalicAtom, isUnderlinedAtom } from "context/AtomConfigs"
-import Divider from "ui/Divider"
+import Divider from "components/Divider"
 import useToolbarStyles from "styles/ToolbarStyles"
 import {
   FormatBoldButton,
   FormatItalicButton,
   FormatUnderlineButton,
-} from "../components/buttons"
+} from "components"
 
 const LowPriority = 1
 
