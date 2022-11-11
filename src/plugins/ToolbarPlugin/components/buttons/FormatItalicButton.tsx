@@ -2,18 +2,12 @@ import { FORMAT_TEXT_COMMAND } from "lexical"
 import { IconButton } from "@material-ui/core"
 import { FormatItalic } from "@material-ui/icons"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { useAtomValue } from "jotai"
 import { isItalicAtom } from "context/AtomConfigs"
-import useButtonStyles from "styles/ToolBarButtonStyles"
-import joinClasses from "utils/joinClasses"
+import useActiveClass from "hooks/useActiveClass"
 
 const FormatItalicButton = () => {
   const [editor] = useLexicalComposerContext()
-  const isItalic = useAtomValue(isItalicAtom)
-  const classes = useButtonStyles()
-  const buttonClass = isItalic
-    ? joinClasses(classes.root, classes.active)
-    : classes.root
+  const buttonClass = useActiveClass(isItalicAtom)
 
   return (
     <IconButton
