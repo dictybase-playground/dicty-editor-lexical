@@ -3,7 +3,7 @@ import { Select, MenuItem } from "@material-ui/core"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
 import { fontSizeAtom } from "context/AtomConfigs"
-import applyStyleText from "../utils/textStyles"
+import applyStyleText from "utils/textStyles"
 
 type FontSizeDropdownProperties = {
   start?: number

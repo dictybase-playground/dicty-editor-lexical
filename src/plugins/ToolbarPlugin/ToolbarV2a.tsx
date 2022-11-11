@@ -2,9 +2,8 @@ import { useEffect } from "react"
 import { SELECTION_CHANGE_COMMAND } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { mergeRegister } from "@lexical/utils"
-import Divider from "components/Divider"
 import useToolbarStyles from "styles/ToolbarStyles"
-import { FormatBoldButton } from "components"
+import { Divider, FormatBoldButton } from "components"
 import useUpdateToolbar from "hooks/useUpdateToolbar2a"
 
 const LowPriority = 1

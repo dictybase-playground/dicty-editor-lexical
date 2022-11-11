@@ -1,11 +1,11 @@
-import Divider from "ui/Divider"
 import {
+  Divider,
   FormatBoldButton,
   FormatItalicButton,
   FormatUnderlineButton,
-} from "../components/buttons"
-import FontSizeDropdown from "../components/FontSizeDropdown"
-import useToolbarCleanup from "./useToolbarCleanupV2b"
+  FontSizeDropdown,
+} from "components"
+import useToolbarCleanup from "hooks/useToolbarCleanupV2b"
 
 const ToolbarV3a = () => {
   useToolbarCleanup()
