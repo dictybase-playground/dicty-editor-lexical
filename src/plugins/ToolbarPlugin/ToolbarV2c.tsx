@@ -1,6 +1,6 @@
-import Divider from "components/Divider"
 import useToolbarStyles from "styles/ToolbarStyles"
 import {
+  Divider,
   FormatBoldButton,
   FormatItalicButton,
   FormatUnderlineButton,
