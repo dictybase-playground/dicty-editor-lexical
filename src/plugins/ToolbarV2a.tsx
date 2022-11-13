@@ -1,4 +1,4 @@
-import useToolbarStyles from "styles/ToolbarStyles"
+import useToolbarStyles from "utils/ToolbarStyles"
 import { Divider, FormatBoldButton } from "components"
 import useToolbarCleanup from "hooks/useToolbarCleanupV2a"
 

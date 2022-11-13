@@ -1,4 +1,4 @@
-import EditorBase from "EditorBase"
+import EditorBase from "components/EditorBase"
 
 const EditorV1 = () => <EditorBase />
 
