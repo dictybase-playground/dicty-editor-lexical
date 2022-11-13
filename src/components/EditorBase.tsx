@@ -5,7 +5,7 @@ import { Container, Paper } from "@material-ui/core"
 import {
   useEditorInputStyles,
   useEditorPlaceholderStyles,
-} from "styles/EditorStyles"
+} from "utils/EditorStyles"
 import EditorComposer from "./EditorComposer"
 
 type EditorBaseProperties = {
