@@ -15,7 +15,7 @@ const ToolbarV3b = () => {
   const toolbarClasses = useToolbarStyles()
 
   return (
-    <ToolBar className={toolbarClasses.root}>
+    <ToolBar variant="dense" className={toolbarClasses.root}>
       <FormatBoldButton />
       <FormatItalicButton />
       <FormatUnderlineButton />
