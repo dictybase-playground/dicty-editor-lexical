@@ -6,7 +6,7 @@ import {
   FontSizeDropdown,
 } from "components"
 import FontFamilyDropdown from "components/FontFamilyDropdown"
-import useToolbarStyles from "utils/ToolbarStyles"
+import useToolbarStyles from "utils/ToolbarStylesV2"
 import ToolBar from "@material-ui/core/Toolbar"
 import useCleanup from "../hooks/useCleanup"
 
