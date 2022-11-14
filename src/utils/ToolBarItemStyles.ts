@@ -26,6 +26,10 @@ const useToolbarButtonStyles = makeStyles({
       opacity: "0.6",
     },
   },
+  spaced: {
+    marginRight: "7px",
+    marginLeft: "7px",
+  },
   active: {
     backgroundColor: "rgba(223, 232, 250, 0.3)",
     "& i": {

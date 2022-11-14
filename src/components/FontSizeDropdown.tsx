@@ -28,13 +28,14 @@ const FontSizeDropdown = ({
   const [editor] = useLexicalComposerContext()
   const [fontSize] = useAtom(fontSizeAtom)
   const classes = useToolbarItemStyles()
+  const joinedClasses = `${classes.root} ${classes.spaced}`
 
   const onFontSizeSelect = (event: FontSizeSelectProperties) => {
     applyStyleText(editor, { "font-size": event.target.value as string })
   }
   return (
     <Select
-      className={classes.root}
+      className={joinedClasses}
       onChange={onFontSizeSelect}
       value={fontSize}>
       {genFontSize(start, end).map(([option, size]) => (

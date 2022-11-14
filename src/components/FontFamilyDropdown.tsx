@@ -6,25 +6,23 @@ import { fontFamilyAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
 import useToolbarItemStyles from "utils/ToolBarItemStyles"
 
-type FontOptions = Array<[string, string]>
-
-type FontFamilyDropdownProperties = {
-  fontOptions?: FontOptions
-}
+const defaultFontFamilyOptions = [
+  "Arial",
+  "Courier New",
+  "Georgia",
+  "Times New Roman",
+  "Trebuchet MS",
+  "Verdana",
+]
 
 type FontFamilySelectProperties = React.ChangeEvent<{
   name?: string | undefined
   value: unknown
 }>
 
-const defaultFontFamilyOptions: FontOptions = [
-  ["Arial", "Arial"],
-  ["Courier New", "Courier New"],
-  ["Georgia", "Georgia"],
-  ["Times New Roman", "Times New Roman"],
-  ["Trebuchet MS", "Trebuchet MS"],
-  ["Verdana", "Verdana"],
-]
+type FontFamilyDropdownProperties = {
+  fontOptions?: typeof defaultFontFamilyOptions
+}
 
 const FontFamilyDropdown = ({
   fontOptions = defaultFontFamilyOptions,
@@ -32,7 +30,6 @@ const FontFamilyDropdown = ({
   const [fontFamily] = useAtom(fontFamilyAtom)
   const [editor] = useLexicalComposerContext()
   const classes = useToolbarItemStyles()
-
   const onFontFamilySelect = (event: FontFamilySelectProperties) => {
     applyStyleText(editor, { "font-family": event.target.value as string })
   }
@@ -43,9 +40,9 @@ const FontFamilyDropdown = ({
       className={classes.root}
       onChange={onFontFamilySelect}
       value={fontFamily}>
-      {fontOptions.map(([option, text]) => (
+      {fontOptions.map((option) => (
         <MenuItem key={option} value={option}>
-          {text}
+          {option}
         </MenuItem>
       ))}
     </Select>
