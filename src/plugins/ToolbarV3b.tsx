@@ -7,21 +7,22 @@ import {
   FontFamilyDropdown,
 } from "components"
 import useToolbarStyles from "utils/ToolbarStyles"
-import useToolbarCleanup from "hooks/useToolbarCleanupV2b"
+import ToolBar from "@material-ui/core/Toolbar"
+import useCleanup from "../hooks/useCleanup"
 
 const ToolbarV3b = () => {
-  useToolbarCleanup()
+  useCleanup()
   const toolbarClasses = useToolbarStyles()
 
   return (
-    <div className={toolbarClasses.root}>
+    <ToolBar className={toolbarClasses.root}>
       <FormatBoldButton />
       <FormatItalicButton />
       <FormatUnderlineButton />
       <Divider />
       <FontSizeDropdown />
       <FontFamilyDropdown />
-    </div>
+    </ToolBar>
   )
 }
 

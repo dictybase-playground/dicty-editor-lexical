@@ -4,6 +4,8 @@ import {
   isItalicAtom,
   isUnderlinedAtom,
   fontSizeAtom,
+  fontFamilyAtom,
+  FontFamily,
 } from "context/AtomConfigs"
 import { useCallback } from "react"
 import { $getSelection, $isRangeSelection } from "lexical"
@@ -14,6 +16,7 @@ const useFontProperties = () => {
   const setIsItalic = useUpdateAtom(isItalicAtom)
   const setIsUnderlined = useUpdateAtom(isUnderlinedAtom)
   const setFontSize = useUpdateAtom(fontSizeAtom)
+  const setFontFamily = useUpdateAtom(fontFamilyAtom)
   return useCallback(() => {
     const selection = $getSelection()
     if (!$isRangeSelection(selection)) return
@@ -23,7 +26,14 @@ const useFontProperties = () => {
     setFontSize(
       $getSelectionStyleValueForProperty(selection, "font-size", "15px"),
     )
-  }, [setIsBold, setIsItalic, setIsUnderlined, setFontSize])
+    setFontFamily(
+      $getSelectionStyleValueForProperty(
+        selection,
+        "font-family",
+        "Arial",
+      ) as FontFamily,
+    )
+  }, [setIsBold, setIsItalic, setIsUnderlined, setFontSize, setFontFamily])
 }
 
 export default useFontProperties
