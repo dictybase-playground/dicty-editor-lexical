@@ -5,11 +5,11 @@ import {
   FormatUnderlineButton,
   FontSizeDropdown,
 } from "components"
-import useToolbarCleanup from "hooks/useToolbarCleanupV2b"
 import ToolBar from "@material-ui/core/Toolbar"
+import useCleanup from "../hooks/useCleanup"
 
 const ToolbarV3a = () => {
-  useToolbarCleanup()
+  useCleanup()
   return (
     <ToolBar>
       <FormatBoldButton />
