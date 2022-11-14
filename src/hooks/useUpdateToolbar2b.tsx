@@ -16,15 +16,13 @@ const useUpdateToolbar = () => {
   const setFontSize = useUpdateAtom(fontSizeAtom)
   return useCallback(() => {
     const selection = $getSelection()
-
-    if ($isRangeSelection(selection)) {
-      setIsBold(selection.hasFormat("bold"))
-      setIsItalic(selection.hasFormat("italic"))
-      setIsUnderlined(selection.hasFormat("underline"))
-      setFontSize(
-        $getSelectionStyleValueForProperty(selection, "font-size", "15px"),
-      )
-    }
+    if (!$isRangeSelection(selection)) return
+    setIsBold(selection.hasFormat("bold"))
+    setIsItalic(selection.hasFormat("italic"))
+    setIsUnderlined(selection.hasFormat("underline"))
+    setFontSize(
+      $getSelectionStyleValueForProperty(selection, "font-size", "15px"),
+    )
   }, [setIsBold, setIsItalic, setIsUnderlined, setFontSize])
 }
 
