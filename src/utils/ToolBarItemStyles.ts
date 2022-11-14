@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core"
 
-const useToolbarButtonStyles = makeStyles({
+const useToolbarItemStyles = makeStyles({
   root: {
     border: "0",
     display: "flex",
@@ -10,7 +10,7 @@ const useToolbarButtonStyles = makeStyles({
     cursor: "pointer",
     verticalAlign: "middle",
     marginRight: "2px",
-    "&$disabled": {
+    "&:disabled": {
       cursor: "not-allowed",
       "& i": {
         opacity: "0.2",
@@ -34,4 +34,4 @@ const useToolbarButtonStyles = makeStyles({
   },
 })
 
-export default useToolbarButtonStyles
+export default useToolbarItemStyles
