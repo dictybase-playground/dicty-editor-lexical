@@ -6,17 +6,18 @@ import {
   FontSizeDropdown,
 } from "components"
 import useToolbarCleanup from "hooks/useToolbarCleanupV2b"
+import ToolBar from "@material-ui/core/Toolbar"
 
 const ToolbarV3a = () => {
   useToolbarCleanup()
   return (
-    <div className="toolbar">
+    <ToolBar>
       <FormatBoldButton />
       <FormatItalicButton />
       <FormatUnderlineButton />
       <Divider />
       <FontSizeDropdown />
-    </div>
+    </ToolBar>
   )
 }
 
