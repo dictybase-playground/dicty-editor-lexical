@@ -1,10 +1,10 @@
-import useToolbarStyles from "utils/ToolbarStyles"
 import {
   Divider,
   FormatBoldButton,
   FormatItalicButton,
   FormatUnderlineButton,
 } from "components"
+import useToolbarStyles from "utils/ToolbarStyles"
 import useToolbarCleanup from "hooks/useToolbarCleanupV2b"
 
 const ToolbarV2 = () => {
