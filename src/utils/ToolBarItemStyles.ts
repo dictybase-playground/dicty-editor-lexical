@@ -10,7 +10,7 @@ const useToolbarButtonStyles = makeStyles({
     cursor: "pointer",
     verticalAlign: "middle",
     marginRight: "2px",
-    "&$disabled": {
+    "&:disabled": {
       cursor: "not-allowed",
       "& i": {
         opacity: "0.2",
