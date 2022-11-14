@@ -4,6 +4,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useAtom } from "jotai"
 import { fontSizeAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
+import useToolbarItemStyles from "utils/ToolBarItemStyles"
 
 type FontSizeDropdownProperties = {
   start?: number
@@ -26,13 +27,14 @@ const FontSizeDropdown = ({
 }: FontSizeDropdownProperties) => {
   const [editor] = useLexicalComposerContext()
   const [fontSize] = useAtom(fontSizeAtom)
+  const classes = useToolbarItemStyles()
 
   const onFontSizeSelect = (event: FontSizeSelectProperties) => {
     applyStyleText(editor, { "font-size": event.target.value as string })
   }
   return (
     <Select
-      className="toolbar-item font-size"
+      className={classes.root}
       onChange={onFontSizeSelect}
       value={fontSize}>
       {genFontSize(start, end).map(([option, size]) => (
