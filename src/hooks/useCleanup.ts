@@ -1,13 +1,11 @@
 import { useEffect } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { SELECTION_CHANGE_COMMAND } from "lexical"
-import useFontProperties from "./useFontProperties"
-import useTextColorProperties from "./useTextColorProperties"
+import useEditorProperties from "./useEditorProperties"
 
 const LowPriority = 1
 const useCleanup = () => {
-  const updateFontProperties = useFontProperties()
-  const updateTextColorProperties = useTextColorProperties()
+  const updateEditorProperties = useEditorProperties()
   const [editor] = useLexicalComposerContext()
   /*
     1. In a useEffect callback, the returned function is called after every
@@ -25,16 +23,14 @@ const useCleanup = () => {
     const unregisterUpdateListener = editor.registerUpdateListener(
       ({ editorState }) => {
         editorState.read(() => {
-          updateFontProperties()
-          updateTextColorProperties()
+          updateEditorProperties()
         })
       },
     )
     const unregisterSelectionChangeCommand = editor.registerCommand(
       SELECTION_CHANGE_COMMAND,
       () => {
-        updateFontProperties()
-        updateTextColorProperties()
+        updateEditorProperties()
         return false
       },
       LowPriority,
@@ -43,7 +39,7 @@ const useCleanup = () => {
       unregisterUpdateListener()
       unregisterSelectionChangeCommand()
     }
-  }, [editor, updateFontProperties, updateTextColorProperties])
+  }, [editor, updateEditorProperties])
 }
 
 export default useCleanup
