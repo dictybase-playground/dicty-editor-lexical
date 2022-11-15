@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
 import { HexColorPicker } from "react-colorful"
@@ -15,9 +15,10 @@ const ColorPickerButton = () => {
   const buttonReference = useRef(null)
   const itemClass = useToolbarItemStyles()
 
-  useEffect(() => {
+  const onClose = () => {
     applyStyleText(editor, { color })
-  }, [editor, color])
+    setIsOpen(false)
+  }
 
   return (
     <>
@@ -25,7 +26,7 @@ const ColorPickerButton = () => {
         size="small"
         ref={buttonReference}
         className={itemClass.root}
-        id="color-picker"
+        aria-controls="color-picker"
         onClick={() => setIsOpen(!isOpen)}>
         <SvgIcon fontSize="small" htmlColor={color}>
           <FormatColorTextIcon />
@@ -36,7 +37,7 @@ const ColorPickerButton = () => {
         id="color-picker"
         anchorEl={buttonReference.current}
         open={isOpen}
-        onClose={() => setIsOpen(false)}>
+        onClose={onClose}>
         <HexColorPicker color={color} onChange={setColor} />
       </Menu>
     </>
