@@ -26,6 +26,7 @@ const ColorPicker = () => {
   const { dropdown } = useStyles()
 
   const onClose = () => {
+    if (!isOpen) return
     applyStyleText(editor, { color })
     setIsOpen(false)
   }
