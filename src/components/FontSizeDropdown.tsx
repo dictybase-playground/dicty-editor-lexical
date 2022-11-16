@@ -1,10 +1,11 @@
 import React from "react"
-import { Select, MenuItem, Tooltip } from "@material-ui/core"
+import { MenuItem } from "@material-ui/core"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
 import { fontSizeAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
 import useToolbarItemStyles from "utils/ToolBarItemStyles"
+import TooltipDropdown from "./TooltipDropdown"
 
 type FontSizeDropdownProperties = {
   start?: number
@@ -34,18 +35,17 @@ const FontSizeDropdown = ({
     applyStyleText(editor, { "font-size": event.target.value as string })
   }
   return (
-    <Tooltip arrow title="Font Size">
-      <Select
-        className={joinedClasses}
-        onChange={onFontSizeSelect}
-        value={fontSize}>
-        {genFontSize(start, end).map(([option, size]) => (
-          <MenuItem key={option} value={option}>
-            {size}
-          </MenuItem>
-        ))}
-      </Select>
-    </Tooltip>
+    <TooltipDropdown
+      title="Change Font Size"
+      className={joinedClasses}
+      onChange={onFontSizeSelect}
+      value={fontSize}>
+      {genFontSize(start, end).map(([option, size]) => (
+        <MenuItem key={option} value={option}>
+          {size}
+        </MenuItem>
+      ))}
+    </TooltipDropdown>
   )
 }
 

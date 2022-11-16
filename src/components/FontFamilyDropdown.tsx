@@ -1,10 +1,11 @@
 import React from "react"
-import { Select, MenuItem, Tooltip } from "@material-ui/core"
+import { MenuItem } from "@material-ui/core"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
 import { fontFamilyAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
 import useToolbarItemStyles from "utils/ToolBarItemStyles"
+import TooltipDropdown from "./TooltipDropdown"
 
 const defaultFontFamilyOptions = [
   "Arial",
@@ -30,24 +31,23 @@ const FontFamilyDropdown = ({
   const [fontFamily] = useAtom(fontFamilyAtom)
   const [editor] = useLexicalComposerContext()
   const classes = useToolbarItemStyles()
+  const joinedClasses = `${classes.root} ${classes.spaced}`
   const onFontFamilySelect = (event: FontFamilySelectProperties) => {
     applyStyleText(editor, { "font-family": event.target.value as string })
   }
 
   return (
-    <Tooltip arrow title="Font Family">
-      <Select
-        autoWidth
-        className={classes.root}
-        onChange={onFontFamilySelect}
-        value={fontFamily}>
-        {fontOptions.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </Select>
-    </Tooltip>
+    <TooltipDropdown
+      title="Change Font Family"
+      className={joinedClasses}
+      onChange={onFontFamilySelect}
+      value={fontFamily}>
+      {fontOptions.map((option) => (
+        <MenuItem key={option} value={option}>
+          {option}
+        </MenuItem>
+      ))}
+    </TooltipDropdown>
   )
 }
 
