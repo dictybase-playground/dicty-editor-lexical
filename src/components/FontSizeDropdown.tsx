@@ -36,7 +36,7 @@ const FontSizeDropdown = ({
   }
   return (
     <TooltipDropdown
-      title="Change Font Size"
+      title="Font Size"
       className={joinedClasses}
       onChange={onFontSizeSelect}
       value={fontSize}>

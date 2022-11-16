@@ -38,7 +38,7 @@ const FontFamilyDropdown = ({
 
   return (
     <TooltipDropdown
-      title="Change Font Family"
+      title="Font Family"
       className={joinedClasses}
       onChange={onFontFamilySelect}
       value={fontFamily}>
