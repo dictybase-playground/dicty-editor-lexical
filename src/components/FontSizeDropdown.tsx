@@ -20,7 +20,7 @@ type FontSizeSelectProperties = React.ChangeEvent<{
 const genFontSize = (start: number, end: number) =>
   [...new Array(end - start + 1).keys()]
     .map((x) => x + start)
-    .map((x) => [`${x}px`, `${x}px`])
+    .map((x) => [`${x}px`, `${x}`])
 
 const FontSizeDropdown = ({
   start = 10,
