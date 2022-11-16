@@ -5,10 +5,11 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { isBoldAtom } from "context/AtomConfigs"
 import useActiveClass from "hooks/useActiveClass"
 
+const title = "Format Bold"
+
 const FormatBoldButton = () => {
   const [editor] = useLexicalComposerContext()
   const buttonClass = useActiveClass(isBoldAtom)
-  const title = "Format Bold"
 
   return (
     <IconButton
