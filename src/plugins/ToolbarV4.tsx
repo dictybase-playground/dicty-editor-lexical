@@ -1,5 +1,4 @@
 import {
-  Divider,
   FormatBoldButton,
   FormatItalicButton,
   FormatUnderlineButton,
@@ -17,7 +16,6 @@ const ToolbarV4 = () => {
 
   return (
     <ToolBar variant="dense" className={toolbarClasses.root}>
-      <Divider />
       <FontSizeDropdown />
       <FontFamilyDropdown />
       <FormatBoldButton />

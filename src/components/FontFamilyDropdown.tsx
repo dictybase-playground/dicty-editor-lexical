@@ -1,5 +1,5 @@
 import React from "react"
-import { Select, MenuItem } from "@material-ui/core"
+import { Select, MenuItem, Tooltip } from "@material-ui/core"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
 import { fontFamilyAtom } from "context/AtomConfigs"
@@ -35,17 +35,19 @@ const FontFamilyDropdown = ({
   }
 
   return (
-    <Select
-      autoWidth
-      className={classes.root}
-      onChange={onFontFamilySelect}
-      value={fontFamily}>
-      {fontOptions.map((option) => (
-        <MenuItem key={option} value={option}>
-          {option}
-        </MenuItem>
-      ))}
-    </Select>
+    <Tooltip arrow title="Font Family">
+      <Select
+        autoWidth
+        className={classes.root}
+        onChange={onFontFamilySelect}
+        value={fontFamily}>
+        {fontOptions.map((option) => (
+          <MenuItem key={option} value={option}>
+            {option}
+          </MenuItem>
+        ))}
+      </Select>
+    </Tooltip>
   )
 }
 
