@@ -16,10 +16,12 @@ type FontSizeSelectProperties = React.ChangeEvent<{
   value: unknown
 }>
 
+const title = "Font Size"
+
 const genFontSize = (start: number, end: number) =>
   [...new Array(end - start + 1).keys()]
     .map((x) => x + start)
-    .map((x) => [`${x}px`, `${x}px`])
+    .map((x) => [`${x}px`, `${x}`])
 
 const FontSizeDropdown = ({
   start = 10,
@@ -35,6 +37,7 @@ const FontSizeDropdown = ({
   }
   return (
     <Select
+      title={title}
       className={joinedClasses}
       onChange={onFontSizeSelect}
       value={fontSize}>

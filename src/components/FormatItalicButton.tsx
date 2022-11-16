@@ -5,18 +5,20 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { isItalicAtom } from "context/AtomConfigs"
 import useActiveClass from "hooks/useActiveClass"
 
+const title = "Format Italic"
+
 const FormatItalicButton = () => {
   const [editor] = useLexicalComposerContext()
   const buttonClass = useActiveClass(isItalicAtom)
 
   return (
     <IconButton
-      type="button"
+      title={title}
+      aria-label={title}
       onClick={() => {
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic")
       }}
-      className={buttonClass}
-      aria-label="Format Bold">
+      className={buttonClass}>
       <FormatItalic fontSize="small" />
     </IconButton>
   )

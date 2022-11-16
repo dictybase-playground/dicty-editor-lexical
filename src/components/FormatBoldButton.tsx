@@ -8,15 +8,16 @@ import useActiveClass from "hooks/useActiveClass"
 const FormatBoldButton = () => {
   const [editor] = useLexicalComposerContext()
   const buttonClass = useActiveClass(isBoldAtom)
+  const title = "Format Bold"
 
   return (
     <IconButton
-      type="button"
+      title={title}
+      aria-label={title}
       onClick={() => {
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold")
       }}
-      className={buttonClass}
-      aria-label="Format Bold">
+      className={buttonClass}>
       <FormatBold fontSize="small" />
     </IconButton>
   )
