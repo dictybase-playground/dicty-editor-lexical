@@ -5,18 +5,20 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { isUnderlinedAtom } from "context/AtomConfigs"
 import useActiveClass from "hooks/useActiveClass"
 
+const title = "Format Underline"
+
 const FormatUnderlinedButton = () => {
   const [editor] = useLexicalComposerContext()
   const buttonClass = useActiveClass(isUnderlinedAtom)
 
   return (
     <IconButton
-      type="button"
+      title={title}
+      aria-label={title}
       onClick={() => {
         editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline")
       }}
-      className={buttonClass}
-      aria-label="Format Underlined">
+      className={buttonClass}>
       <FormatUnderlined fontSize="small" />
     </IconButton>
   )

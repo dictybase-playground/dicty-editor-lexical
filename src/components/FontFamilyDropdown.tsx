@@ -24,20 +24,24 @@ type FontFamilyDropdownProperties = {
   fontOptions?: typeof defaultFontFamilyOptions
 }
 
+const title = "Font Family"
+
 const FontFamilyDropdown = ({
   fontOptions = defaultFontFamilyOptions,
 }: FontFamilyDropdownProperties) => {
   const [fontFamily] = useAtom(fontFamilyAtom)
   const [editor] = useLexicalComposerContext()
   const classes = useToolbarItemStyles()
+  const joinedClasses = `${classes.root} ${classes.spaced}`
+
   const onFontFamilySelect = (event: FontFamilySelectProperties) => {
     applyStyleText(editor, { "font-family": event.target.value as string })
   }
 
   return (
     <Select
-      autoWidth
-      className={classes.root}
+      title={title}
+      className={joinedClasses}
       onChange={onFontFamilySelect}
       value={fontFamily}>
       {fontOptions.map((option) => (

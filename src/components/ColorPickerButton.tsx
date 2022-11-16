@@ -9,14 +9,16 @@ type ColorPickerButtonProperties = {
   onClick: React.MouseEventHandler<HTMLButtonElement>
 }
 
+const title = "Font Color"
+
 const ColorPickerButton = ({ onClick }: ColorPickerButtonProperties) => {
   const color = useAtomValue(textColorAtom)
   const itemClass = useToolbarItemStyles()
   return (
     <IconButton
-      size="small"
       className={itemClass.root}
-      aria-label="color-picker"
+      title={title}
+      aria-label={title}
       onClick={onClick}>
       <SvgIcon fontSize="small" htmlColor={color}>
         <FormatColorTextIcon />
