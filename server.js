@@ -1,8 +1,12 @@
-import fs from "node:fs"
+import { readFile, writeFile, mkdir } from "node:fs/promises"
+import { fileURLToPath } from "node:url"
+import path from "node:path"
 import { createServer } from "vite"
 import express from "express"
 
-const PORT = 3000
+const root = path.dirname(fileURLToPath(import.meta.url))
+const outputDirectory = path.join(root, "data")
+
 const app = express()
 const vite = await createServer({
   server: { middlewareMode: true },
@@ -11,35 +15,47 @@ const vite = await createServer({
 
 app.use(express.json())
 
-app.post("/:version/save", (request, response) => {
+app.post("/:version/save", async (request, response) => {
   const editorVersion = request.params.version
-  const fileName = `data/${editorVersion}.json`
+  const pathName = `${outputDirectory}/${editorVersion}.json`
   const data = JSON.stringify(request.body)
 
-  fs.writeFile(fileName, data, (error) => {
-    if (error) throw error
-    // eslint-disable-next-line no-console
-    console.log("Data written to file")
-  })
-  response.end()
+  try {
+    await writeFile(pathName, data)
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      try {
+        await mkdir(outputDirectory)
+        await writeFile(pathName, data)
+        response.sendStatus(201)
+      } catch (error_) {
+        // eslint-disable-next-line no-console
+        console.error(error_)
+      }
+    }
+  } finally {
+    response.end()
+  }
 })
 
-app.get("/:version/save", (request, response) => {
+app.get("/:version/save", async (request, response) => {
   const editorVersion = request.params.version
-  const fileName = `data/${editorVersion}.json`
+  const fileName = `${outputDirectory}/${editorVersion}.json`
 
-  fs.readFile(fileName, (error, data) => {
-    if (error) {
-      response.end()
-    } else {
-      response.send(JSON.parse(data))
-    }
-  })
+  try {
+    const fileData = await readFile(fileName)
+    response.send(JSON.parse(fileData))
+  } catch (error_) {
+    // eslint-disable-next-line no-console
+    console.error(`Could not get editor data: \n${error_}`)
+  } finally {
+    response.end()
+  }
 })
 
 app.use(vite.middlewares)
 
-app.listen(PORT, () => {
+app.listen(3000, () => {
   // eslint-disable-next-line no-console
-  console.log(`Starting Server on ${PORT}`)
+  console.log(`Starting Server on ${app.get("port")}`)
 })
