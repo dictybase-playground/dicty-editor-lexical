@@ -4,6 +4,7 @@ import path from "node:path"
 import { createServer } from "vite"
 import express from "express"
 
+const PORT = 3000
 const root = path.dirname(fileURLToPath(import.meta.url))
 const outputDirectory = path.join(root, "data")
 
@@ -55,7 +56,7 @@ app.get("/:version/save", async (request, response) => {
 
 app.use(vite.middlewares)
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Starting Server on ${app.get("port")}`)
+  console.log(`Starting Server on ${PORT}`)
 })
