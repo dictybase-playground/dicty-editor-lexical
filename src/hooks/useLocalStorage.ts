@@ -9,11 +9,11 @@ const useLocalStorage = () => {
   const saveLocalStorage = useCallback(() => {
     const editorState = editor.getEditorState()
     const editorStateString = JSON.stringify(editorState)
-    localStorage.setItem(`dicty-editor-${pathname}`, editorStateString)
+    localStorage.setItem(`dicty-editor${pathname}`, editorStateString)
   }, [editor, pathname])
 
   const retrieveLocalStorage = useCallback(() => {
-    const editorString = localStorage.getItem(`dicty-editor-${pathname}`)
+    const editorString = localStorage.getItem(`dicty-editor${pathname}`)
     if (editorString) {
       const editorState = editor.parseEditorState(editorString)
       editor.setEditorState(editorState)

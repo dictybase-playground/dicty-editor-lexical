@@ -7,15 +7,12 @@ const useServerStorage = () => {
   const [editor] = useLexicalComposerContext()
   const { pathname } = useLocation()
   const url = `${pathname}/save`
+
   const saveServerStorage = useCallback(async () => {
     const editorState = editor.getEditorState()
     const editorStateJSON = editorState.toJSON()
     try {
-      await axios({
-        method: "post",
-        url,
-        data: editorStateJSON,
-      })
+      await axios.post(url, editorStateJSON)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)
@@ -24,10 +21,7 @@ const useServerStorage = () => {
 
   const retrieveServerStorage = useCallback(async () => {
     try {
-      const { data } = await axios({
-        method: "get",
-        url,
-      })
+      const { data } = await axios.get(url)
       const editorState = editor.parseEditorState(data)
       editor.setEditorState(editorState)
     } catch (error) {

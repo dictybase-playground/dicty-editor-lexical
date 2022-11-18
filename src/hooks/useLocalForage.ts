@@ -12,7 +12,7 @@ const useLocalForage = () => {
     try {
       const editorState = editor.getEditorState()
       const editorStateJSON = editorState.toJSON()
-      await localForage.setItem(`dicty-editor-${pathname}`, editorStateJSON)
+      await localForage.setItem(`dicty-editor${pathname}`, editorStateJSON)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error)
@@ -22,7 +22,7 @@ const useLocalForage = () => {
   const retrieveLocalForage = useCallback(async () => {
     try {
       const SerializedState = await localForage.getItem<SerializedEditorState>(
-        `dicty-editor-${pathname}`,
+        `dicty-editor${pathname}`,
       )
       const editorState = editor.parseEditorState(SerializedState || "")
       editor.setEditorState(editorState)
