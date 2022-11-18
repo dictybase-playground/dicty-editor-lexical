@@ -18,7 +18,7 @@ const EditorBase = ({ children }: EditorBaseProperties) => {
 
   return (
     <EditorComposer>
-      <Container>
+      <Container style={{ position: "relative" }}>
         {children}
         <Paper style={{ position: "relative" }}>
           <RichTextPlugin
