@@ -15,7 +15,7 @@ const ColorPicker = () => {
   const { root } = useColorPickerStyles()
 
   const onClose = () => {
-    if (!isOpen) return
+    if (!isOpen || !color) return
     applyStyleText(editor, { color })
     setIsOpen(false)
   }
