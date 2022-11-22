@@ -1,62 +1,59 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
-import { createServer } from "vite"
-import express from "express"
+import mojo from "@mojojs/core"
 
-const PORT = 3000
 const root = path.dirname(fileURLToPath(import.meta.url))
 const outputDirectory = path.join(root, "data")
+const saveRoute = "/:version/save"
 
-const app = express()
-const vite = await createServer({
-  server: { middlewareMode: true },
-  appType: "spa",
+const app = mojo()
+
+app.addHelper("savePath", (context) => {
+  context.res.set("Access-Control-Allow-Origin", "*")
+  const editorVersion = context.stash.version
+  return `${outputDirectory}/${editorVersion}.json`
 })
 
-app.use(express.json())
+app.options(saveRoute, async (context) => {
+  context.res.set("Access-Control-Allow-Origin", "*")
+  context.res.set("Access-Control-Allow-Headers", "content-type")
+  context.res.send()
+})
 
-app.post("/:version/save", async (request, response) => {
-  const editorVersion = request.params.version
-  const pathName = `${outputDirectory}/${editorVersion}.json`
-  const data = JSON.stringify(request.body)
-
+app.post(saveRoute, async (context) => {
+  const pathName = context.savePath()
+  const data = await context.req.text()
   try {
     await writeFile(pathName, data)
+    context.res.status(201).send()
   } catch (error) {
-    if (error.code === "ENOENT") {
-      try {
+    try {
+      if (error.code === "ENOENT") {
         await mkdir(outputDirectory)
         await writeFile(pathName, data)
-        response.sendStatus(201)
-      } catch (error_) {
-        // eslint-disable-next-line no-console
-        console.error(error_)
+        context.res.status(201).send()
       }
+    } catch (error_) {
+      // eslint-disable-next-line no-console
+      console.error(error_)
+      await context.txtException(new Error("Server Error"))
     }
-  } finally {
-    response.end()
   }
 })
 
-app.get("/:version/save", async (request, response) => {
-  const editorVersion = request.params.version
-  const fileName = `${outputDirectory}/${editorVersion}.json`
+app.get(saveRoute, async (context) => {
+  const pathName = context.savePath()
 
   try {
-    const fileData = await readFile(fileName)
-    response.send(JSON.parse(fileData))
+    const fileData = await readFile(pathName)
+    const json = JSON.parse(fileData)
+    context.render({ json })
   } catch (error_) {
     // eslint-disable-next-line no-console
     console.error(`Could not get editor data: \n${error_}`)
-  } finally {
-    response.end()
+    await context.jsonNotFound()
   }
 })
 
-app.use(vite.middlewares)
-
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Starting Server on ${PORT}`)
-})
+app.start()

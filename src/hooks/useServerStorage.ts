@@ -6,7 +6,7 @@ import axios from "axios"
 const useServerStorage = () => {
   const [editor] = useLexicalComposerContext()
   const { pathname } = useLocation()
-  const url = `${pathname}/save`
+  const url = `http://localhost:3000${pathname}/save`
 
   const saveServerStorage = useCallback(async () => {
     const editorState = editor.getEditorState()
