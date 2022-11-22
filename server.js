@@ -10,7 +10,6 @@ const saveRoute = "/:version/save"
 const app = mojo()
 
 app.addHelper("savePath", (context) => {
-  context.res.set("Access-Control-Allow-Origin", "*")
   const editorVersion = context.stash.version
   return `${outputDirectory}/${editorVersion}.json`
 })
@@ -43,6 +42,7 @@ app.post(saveRoute, async (context) => {
 })
 
 app.get(saveRoute, async (context) => {
+  context.res.set("Access-Control-Allow-Origin", "*")
   const pathName = context.savePath()
 
   try {
