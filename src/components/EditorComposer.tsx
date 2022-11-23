@@ -1,5 +1,7 @@
 import React from "react"
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
+import { ListItemNode, ListNode } from "@lexical/list"
+import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 
 type EditorComposerProperties = {
   children: React.ReactElement
@@ -23,6 +25,7 @@ const EditorComposer = ({ children }: EditorComposerProperties) => {
   const initialConfig = {
     namespace: "DictyEditor",
     theme: { ...baseTheme },
+    nodes: [HeadingNode, QuoteNode, ListItemNode, ListNode],
     onError,
   }
 
