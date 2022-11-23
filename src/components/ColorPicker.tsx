@@ -27,11 +27,11 @@ const ColorPicker = () => {
       onClickAway={onClose}>
       <div style={{ position: "relative" }}>
         <ColorPickerButton onClick={() => setIsOpen(!isOpen)} />
-        {isOpen && (
+        {isOpen ? (
           <div className={root}>
             <HexColorPicker color={color} onChange={setColor} />
           </div>
-        )}
+        ) : undefined}
       </div>
     </ClickAwayListener>
   )
