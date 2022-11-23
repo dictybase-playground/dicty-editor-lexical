@@ -12,12 +12,12 @@ import {
 } from "@lexical/rich-text"
 import { $wrapNodes } from "@lexical/selection"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { blockTypesAtom } from "context/AtomConfigs"
+import { blockTypeAtom } from "context/AtomConfigs"
 import { useAtomValue } from "jotai/utils"
 
 const useBlockFormat = () => {
   const [editor] = useLexicalComposerContext()
-  const blockType = useAtomValue(blockTypesAtom)
+  const blockType = useAtomValue(blockTypeAtom)
 
   const formatParagraph = useCallback(() => {
     if (blockType !== "paragraph") {
