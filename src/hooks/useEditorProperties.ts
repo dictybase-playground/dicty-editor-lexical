@@ -1,15 +1,22 @@
 import { useCallback } from "react"
 import useFontProperties from "./useFontProperties"
-import useTextColorProperties from "./useTextColorProperties"
+import useFontColorProperties from "./useFontColorProperties"
+import useBlockTypeProperties from "./useBlockTypeProperties"
 
 const useEditorProperties = () => {
   const updateFontProperties = useFontProperties()
-  const updateTextColorProperties = useTextColorProperties()
+  const updateTextColorProperties = useFontColorProperties()
+  const updateBlockTypeProperties = useBlockTypeProperties()
 
   return useCallback(() => {
     updateFontProperties()
     updateTextColorProperties()
-  }, [updateFontProperties, updateTextColorProperties])
+    updateBlockTypeProperties()
+  }, [
+    updateBlockTypeProperties,
+    updateFontProperties,
+    updateTextColorProperties,
+  ])
 }
 
 export default useEditorProperties

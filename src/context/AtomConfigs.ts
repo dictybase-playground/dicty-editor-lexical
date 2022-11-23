@@ -59,9 +59,10 @@ export const fontSizeAtom = focusAtom(formatAtom, (optic) =>
   optic.prop("fontSize"),
 )
 
+export const blockTypeAtom = atom(BlockTypes.PARAGRAPH)
+
 export const canUndoAtom = atom(false)
 export const canRedoAtom = atom(false)
 export const isRTLAtom = atom(false)
-export const blockTypesAtom = atom(BlockTypes.PARAGRAPH)
 export const pulseAtom = atom(false)
 export const textColorAtom = atom("#000000")
