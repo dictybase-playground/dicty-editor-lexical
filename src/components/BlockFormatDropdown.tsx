@@ -1,7 +1,6 @@
-import React, { useCallback, useMemo } from "react"
+import React from "react"
 import { Select, MenuItem } from "@material-ui/core"
-import { useAtomValue } from "jotai/utils"
-import { blockTypeAtom } from "context/AtomConfigs"
+import { BlockTypes } from "context/AtomConfigs"
 import useToolbarButtonStyles from "utils/ToolBarItemStyles"
 import useBlockFormat from "hooks/useBlockFormat"
 
@@ -19,46 +18,15 @@ const blockTypeToBlockName = {
 const title = "Block Type"
 
 const BlockFormatDropdown = () => {
-  const blockType = useAtomValue(blockTypeAtom)
+  const [blockType, setBlockType] = useBlockFormat()
   const classes = useToolbarButtonStyles()
   const joinedClasses = `${classes.root} ${classes.spaced}`
 
-  const {
-    formatParagraph,
-    formatHeading,
-    formatBulletList,
-    formatNumberedList,
-    formatQuote,
-  } = useBlockFormat()
-
-  const functionMap = useMemo(
-    () => ({
-      paragraph: formatParagraph,
-      h1: () => formatHeading("h1"),
-      h2: () => formatHeading("h2"),
-      h3: () => formatHeading("h3"),
-      h4: () => formatHeading("h4"),
-      bullet: formatBulletList,
-      number: formatNumberedList,
-      quote: formatQuote,
-    }),
-    [
-      formatBulletList,
-      formatHeading,
-      formatNumberedList,
-      formatParagraph,
-      formatQuote,
-    ],
-  )
-
-  const onChange = useCallback(
-    (
-      event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>,
-    ) => {
-      functionMap[event.target.value as keyof typeof functionMap]()
-    },
-    [functionMap],
-  )
+  const onChange = (
+    event: React.ChangeEvent<{ name?: string | undefined; value: unknown }>,
+  ) => {
+    setBlockType(event.target.value as BlockTypes)
+  }
 
   return (
     <Select
