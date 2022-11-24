@@ -1,7 +1,7 @@
 import React from "react"
 import { Select, MenuItem } from "@material-ui/core"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { useAtom } from "jotai"
+import { useAtomValue } from "jotai/utils"
 import { fontSizeAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
 import useToolbarItemStyles from "utils/ToolBarItemStyles"
@@ -28,7 +28,7 @@ const FontSizeDropdown = ({
   end = 20,
 }: FontSizeDropdownProperties) => {
   const [editor] = useLexicalComposerContext()
-  const [fontSize] = useAtom(fontSizeAtom)
+  const fontSize = useAtomValue(fontSizeAtom)
   const classes = useToolbarItemStyles()
   const joinedClasses = `${classes.root} ${classes.spaced}`
 

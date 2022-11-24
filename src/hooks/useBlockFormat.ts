@@ -1,5 +1,10 @@
 import { useCallback } from "react"
-import { $createParagraphNode, $getSelection, $isRangeSelection } from "lexical"
+import {
+  $createParagraphNode,
+  $getSelection,
+  $isRangeSelection,
+  LexicalEditor,
+} from "lexical"
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
@@ -12,75 +17,96 @@ import {
 } from "@lexical/rich-text"
 import { $wrapNodes } from "@lexical/selection"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { blockTypeAtom } from "context/AtomConfigs"
+import { blockTypeAtom, BlockTypes } from "context/AtomConfigs"
 import { useAtomValue } from "jotai/utils"
 
-const useBlockFormat = () => {
+const formatParagraph = (
+  currentBlockType: BlockTypes,
+  editor: LexicalEditor,
+) => {
+  if (currentBlockType !== "paragraph") {
+    editor.update(() => {
+      const selection = $getSelection()
+
+      if ($isRangeSelection(selection)) {
+        $wrapNodes(selection, () => $createParagraphNode())
+      }
+    })
+  }
+}
+
+const formatHeading = (
+  headingSize: HeadingTagType,
+  currentBlockType: BlockTypes,
+  editor: LexicalEditor,
+) => {
+  if (currentBlockType !== headingSize) {
+    editor.update(() => {
+      const selection = $getSelection()
+
+      if ($isRangeSelection(selection)) {
+        $wrapNodes(selection, () => $createHeadingNode(headingSize))
+      }
+    })
+  }
+}
+
+const formatQuote = (currentBlockType: BlockTypes, editor: LexicalEditor) => {
+  if (currentBlockType !== "quote") {
+    editor.update(() => {
+      const selection = $getSelection()
+
+      if ($isRangeSelection(selection)) {
+        $wrapNodes(selection, () => $createQuoteNode())
+      }
+    })
+  }
+}
+
+const formatBulletList = (
+  currentBlockType: BlockTypes,
+  editor: LexicalEditor,
+) => {
+  if (currentBlockType !== "bullet") {
+    editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
+  } else {
+    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
+  }
+}
+
+const formatNumberedList = (
+  currentBlockType: BlockTypes,
+  editor: LexicalEditor,
+) => {
+  if (currentBlockType !== "number") {
+    editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
+  } else {
+    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
+  }
+}
+
+const useBlockFormat = (): [BlockTypes, (newBlockType: BlockTypes) => void] => {
   const [editor] = useLexicalComposerContext()
   const blockType = useAtomValue(blockTypeAtom)
 
-  const formatParagraph = useCallback(() => {
-    if (blockType !== "paragraph") {
-      editor.update(() => {
-        const selection = $getSelection()
-
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createParagraphNode())
-        }
-      })
-    }
-  }, [editor, blockType])
-
-  const formatHeading = useCallback(
-    (headingSize: HeadingTagType) => {
-      if (blockType !== headingSize) {
-        editor.update(() => {
-          const selection = $getSelection()
-
-          if ($isRangeSelection(selection)) {
-            $wrapNodes(selection, () => $createHeadingNode(headingSize))
-          }
-        })
+  const setBlockType = useCallback(
+    (newBlockType: BlockTypes) => {
+      const blockFormatFunctions = {
+        paragraph: () => formatParagraph(blockType, editor),
+        h1: () => formatHeading("h1", blockType, editor),
+        h2: () => formatHeading("h2", blockType, editor),
+        h3: () => formatHeading("h3", blockType, editor),
+        h4: () => formatHeading("h4", blockType, editor),
+        bullet: () => formatBulletList(blockType, editor),
+        number: () => formatNumberedList(blockType, editor),
+        quote: () => formatQuote(blockType, editor),
       }
+      blockFormatFunctions[newBlockType]()
     },
-    [editor, blockType],
+    [blockType, editor],
   )
 
-  const formatBulletList = useCallback(() => {
-    if (blockType !== "bullet") {
-      editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined)
-    } else {
-      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
-    }
-  }, [editor, blockType])
-
-  const formatNumberedList = useCallback(() => {
-    if (blockType !== "number") {
-      editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined)
-    } else {
-      editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined)
-    }
-  }, [editor, blockType])
-
-  const formatQuote = useCallback(() => {
-    if (blockType !== "quote") {
-      editor.update(() => {
-        const selection = $getSelection()
-
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createQuoteNode())
-        }
-      })
-    }
-  }, [editor, blockType])
-
-  return {
-    formatParagraph,
-    formatHeading,
-    formatBulletList,
-    formatNumberedList,
-    formatQuote,
-  }
+  return [blockType, setBlockType]
 }
 
 export default useBlockFormat
