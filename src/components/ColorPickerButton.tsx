@@ -3,7 +3,7 @@ import { useAtomValue } from "jotai/utils"
 import FormatColorTextIcon from "@material-ui/icons/FormatColorText"
 import { IconButton, SvgIcon } from "@material-ui/core"
 import { textColorAtom } from "context/AtomConfigs"
-import useToolbarItemStyles from "utils/ToolBarItemStyles"
+import useToolbarItemStyles from "utils/ToolbarItemStyles"
 
 type ColorPickerButtonProperties = {
   onClick: React.MouseEventHandler<HTMLButtonElement>
