@@ -4,7 +4,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useAtomValue } from "jotai/utils"
 import { fontSizeAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
-import useToolbarItemStyles from "utils/ToolbarItemStyles"
+import useToolbarItemStyles from "hooks/useToolbarItemStyles"
 
 type FontSizeDropdownProperties = {
   start?: number

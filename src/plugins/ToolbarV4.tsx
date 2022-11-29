@@ -7,9 +7,9 @@ import {
 } from "components"
 import FontFamilyDropdown from "components/FontFamilyDropdown"
 import ColorPicker from "components/ColorPicker"
-import useToolbarStyles from "utils/ToolbarStylesV2"
 import ToolBar from "@material-ui/core/Toolbar"
-import useCleanup from "../hooks/useCleanup"
+import useToolbarStyles from "hooks/useToolbarStylesV2"
+import useCleanup from "hooks/useCleanup"
 
 const ToolbarV4 = () => {
   useCleanup()

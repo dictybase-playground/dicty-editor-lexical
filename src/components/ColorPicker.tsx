@@ -5,7 +5,7 @@ import { HexColorPicker } from "react-colorful"
 import { ClickAwayListener } from "@material-ui/core"
 import { textColorAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
-import useColorPickerStyles from "utils/ColorPickerStyles"
+import useColorPickerStyles from "hooks/useColorPickerStyles"
 import ColorPickerButton from "./ColorPickerButton"
 
 const ColorPicker = () => {

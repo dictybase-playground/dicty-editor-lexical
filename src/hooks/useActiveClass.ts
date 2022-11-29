@@ -2,7 +2,7 @@ import joinClasses from "utils/joinClasses"
 import { useAtomValue } from "jotai"
 import type { WritableAtom } from "jotai"
 import type { SetStateAction } from "react"
-import useButtonStyles from "utils/ToolbarItemStyles"
+import useButtonStyles from "hooks/useToolbarItemStyles"
 
 const useActiveClass = (
   atomConfig: WritableAtom<boolean, SetStateAction<boolean>, void>,

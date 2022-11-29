@@ -7,13 +7,12 @@ import {
 } from "components"
 import FontFamilyDropdown from "components/FontFamilyDropdown"
 import BlockFormatDropdown from "components/BlockFormatDropdown"
-import ColorPicker from "components/ColorPicker"
-import useToolbarStyles from "utils/ToolbarStylesV2"
-import ToolBar from "@material-ui/core/Toolbar"
 import RedoButton from "components/RedoButton"
 import UndoButton from "components/UndoButton"
-
-import useCleanup from "../hooks/useCleanup"
+import ColorPicker from "components/ColorPicker"
+import useToolbarStyles from "hooks/useToolbarStylesV2"
+import useCleanup from "hooks/useCleanup"
+import ToolBar from "@material-ui/core/Toolbar"
 
 const ToolbarV6 = () => {
   useCleanup()
