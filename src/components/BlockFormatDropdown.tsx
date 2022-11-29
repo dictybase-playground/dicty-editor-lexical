@@ -1,7 +1,7 @@
 import React from "react"
 import { Select, MenuItem } from "@material-ui/core"
 import { BlockTypes } from "context/AtomConfigs"
-import useToolbarButtonStyles from "utils/ToolbarItemStyles"
+import useToolbarButtonStyles from "hooks/useToolbarItemStyles"
 import useBlockFormat from "hooks/useBlockFormat"
 
 const blockTypeToBlockName = {

@@ -2,7 +2,7 @@ import { IconButton } from "@material-ui/core"
 import { Undo } from "@material-ui/icons"
 import { useAtomValue } from "jotai/utils"
 import { canUndoAtom } from "context/AtomConfigs"
-import useToolbarItemStyles from "utils/ToolbarItemStyles"
+import useToolbarItemStyles from "hooks/useToolbarItemStyles"
 import useUndo from "hooks/useUndo"
 
 const UndoButton = () => {

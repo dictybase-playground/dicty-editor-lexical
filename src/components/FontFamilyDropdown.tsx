@@ -4,7 +4,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useAtom } from "jotai"
 import { fontFamilyAtom } from "context/AtomConfigs"
 import applyStyleText from "utils/textStyles"
-import useToolbarItemStyles from "utils/ToolbarItemStyles"
+import useToolbarItemStyles from "hooks/useToolbarItemStyles"
 
 const defaultFontFamilyOptions = [
   "Arial",
