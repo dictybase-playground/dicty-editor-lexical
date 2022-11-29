@@ -12,10 +12,13 @@ import { $getNearestNodeOfType } from "@lexical/utils"
 import { BlockTypes, blockTypeAtom } from "context/AtomConfigs"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 
-const getElement = (anchorNode: TextNode | ElementNode) =>
+const getElementFromAnchor = (anchorNode: TextNode | ElementNode) =>
   anchorNode.getKey() === "root"
     ? anchorNode
     : anchorNode.getTopLevelElementOrThrow()
+
+const getParentList = (anchorNode: TextNode | ElementNode) =>
+  $getNearestNodeOfType<ListNode>(anchorNode, ListNode)
 
 const useBlockTypeProperties = () => {
   const setBlockType = useUpdateAtom(blockTypeAtom)
@@ -25,16 +28,13 @@ const useBlockTypeProperties = () => {
     const selection = $getSelection()
     if ($isRangeSelection(selection)) {
       const anchorNode = selection.anchor.getNode()
-      const element = getElement(anchorNode)
+      const element = getElementFromAnchor(anchorNode)
       const elementKey = element.getKey()
       const elementDOM = editor.getElementByKey(elementKey)
 
       if (elementDOM) {
         if ($isListNode(element)) {
-          const parentList = $getNearestNodeOfType<ListNode>(
-            anchorNode,
-            ListNode,
-          )
+          const parentList = getParentList(anchorNode)
           const type = parentList
             ? parentList.getListType()
             : element.getListType()
