@@ -6,6 +6,7 @@ import {
   useEditorInputStyles,
   useEditorPlaceholderStyles,
 } from "utils/EditorStyles"
+import "styles/editor.css"
 import EditorComposer from "./EditorComposer"
 
 type EditorBaseProperties = {
