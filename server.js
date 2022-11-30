@@ -6,27 +6,6 @@ import mojo from "@mojojs/core"
 const root = path.dirname(fileURLToPath(import.meta.url))
 const outputDirectory = path.join(root, "data")
 const saveRoute = "/:version/save"
-const clearEditorData = {
-  root: {
-    children: [
-      {
-        children: [],
-        // eslint-disable-next-line unicorn/no-null
-        direction: null,
-        format: "",
-        indent: 0,
-        type: "paragraph",
-        version: 1,
-      },
-    ],
-    // eslint-disable-next-line unicorn/no-null
-    direction: null,
-    format: "",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-}
 
 const app = mojo()
 
@@ -88,8 +67,7 @@ app.delete(saveRoute, async (context) => {
 
   try {
     await rm(pathName)
-    context.res.status(202)
-    context.render({ json: clearEditorData })
+    context.res.status(202).send()
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error)

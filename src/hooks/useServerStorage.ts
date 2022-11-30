@@ -32,14 +32,12 @@ const useServerStorage = () => {
 
   const deleteServerStorage = useCallback(async () => {
     try {
-      const { data } = await axios.delete(url)
-      const editorState = editor.parseEditorState(data)
-      editor.setEditorState(editorState)
+      await axios.delete(url)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error)
     }
-  }, [editor, url])
+  }, [url])
 
   return { saveServerStorage, retrieveServerStorage, deleteServerStorage }
 }
