@@ -7,32 +7,44 @@ import localForage from "localforage"
 const useLocalForage = () => {
   const [editor] = useLexicalComposerContext()
   const { pathname } = useLocation()
+  const localForageKey = `dicty-editor${pathname}`
 
   const saveLocalForage = useCallback(async () => {
     try {
       const editorState = editor.getEditorState()
       const editorStateJSON = editorState.toJSON()
-      await localForage.setItem(`dicty-editor${pathname}`, editorStateJSON)
+      await localForage.setItem(localForageKey, editorStateJSON)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error)
     }
-  }, [editor, pathname])
+  }, [editor, localForageKey])
 
   const retrieveLocalForage = useCallback(async () => {
     try {
       const SerializedState = await localForage.getItem<SerializedEditorState>(
-        `dicty-editor${pathname}`,
+        localForageKey,
       )
-      const editorState = editor.parseEditorState(SerializedState || "")
-      editor.setEditorState(editorState)
+      if (SerializedState) {
+        const editorState = editor.parseEditorState(SerializedState)
+        editor.setEditorState(editorState)
+      }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error)
     }
-  }, [editor, pathname])
+  }, [editor, localForageKey])
 
-  return { saveLocalForage, retrieveLocalForage }
+  const deleteLocalForage = useCallback(async () => {
+    try {
+      await localForage.removeItem(localForageKey)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+  }, [localForageKey])
+
+  return { saveLocalForage, retrieveLocalForage, deleteLocalForage }
 }
 
 export default useLocalForage
