@@ -30,7 +30,18 @@ const useServerStorage = () => {
     }
   }, [editor, url])
 
-  return { saveServerStorage, retrieveServerStorage }
+  const deleteServerStorage = useCallback(async () => {
+    try {
+      const { data } = await axios.delete(url)
+      const editorState = editor.parseEditorState(data)
+      editor.setEditorState(editorState)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+  }, [editor, url])
+
+  return { saveServerStorage, retrieveServerStorage, deleteServerStorage }
 }
 
 export default useServerStorage

@@ -1,5 +1,11 @@
 import { makeStyles, IconButton } from "@material-ui/core"
-import { SaveAlt, OpenInBrowser, GetApp, Publish } from "@material-ui/icons"
+import {
+  SaveAlt,
+  OpenInBrowser,
+  GetApp,
+  Publish,
+  Delete,
+} from "@material-ui/icons"
 import useLocalStorage from "hooks/useLocalStorage"
 import useServerStorage from "hooks/useServerStorage"
 
@@ -16,7 +22,8 @@ const useActionStyles = makeStyles({
 const Actions = () => {
   const classes = useActionStyles()
   const { saveLocalStorage, retrieveLocalStorage } = useLocalStorage()
-  const { saveServerStorage, retrieveServerStorage } = useServerStorage()
+  const { saveServerStorage, retrieveServerStorage, deleteServerStorage } =
+    useServerStorage()
 
   return (
     <div className={classes.root}>
@@ -31,6 +38,9 @@ const Actions = () => {
       </IconButton>
       <IconButton title="Load from Server" onClick={retrieveServerStorage}>
         <Publish />
+      </IconButton>
+      <IconButton title="Delete from Server" onClick={deleteServerStorage}>
+        <Delete />
       </IconButton>
     </div>
   )
