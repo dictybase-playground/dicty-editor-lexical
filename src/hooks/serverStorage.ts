@@ -8,7 +8,7 @@ const useUrl = () => {
   return `http://localhost:3000${pathname}/save`
 }
 
-export const useSaveLocalStorage = () => {
+export const useSaveServerStorage = () => {
   const [editor] = useLexicalComposerContext()
   const url = useUrl()
 
@@ -24,7 +24,7 @@ export const useSaveLocalStorage = () => {
   }, [editor, url])
 }
 
-export const useRetrieveLocalStorage = () => {
+export const useRetrieveServerStorage = () => {
   const [editor] = useLexicalComposerContext()
   const url = useUrl()
 
@@ -39,7 +39,7 @@ export const useRetrieveLocalStorage = () => {
     }
   }, [editor, url])
 }
-export const useDeleteLocalStorage = () => {
+export const useDeleteServerStorage = () => {
   const url = useUrl()
 
   return useCallback(async () => {

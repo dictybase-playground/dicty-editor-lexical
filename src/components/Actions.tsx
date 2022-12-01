@@ -7,7 +7,11 @@ import {
   Delete,
 } from "@material-ui/icons"
 import useLocalStorage from "hooks/useLocalStorage"
-import useServerStorage from "hooks/useServerStorage"
+import {
+  useSaveServerStorage,
+  useRetrieveServerStorage,
+  useDeleteServerStorage,
+} from "hooks/serverStorage"
 
 const useActionStyles = makeStyles({
   root: {
@@ -22,8 +26,9 @@ const useActionStyles = makeStyles({
 const Actions = () => {
   const classes = useActionStyles()
   const { saveLocalStorage, retrieveLocalStorage } = useLocalStorage()
-  const { saveServerStorage, retrieveServerStorage, deleteServerStorage } =
-    useServerStorage()
+  const saveServerStorage = useSaveServerStorage()
+  const retrieveServerStorage = useRetrieveServerStorage()
+  const deleteServerStorage = useDeleteServerStorage()
 
   return (
     <div className={classes.root}>
