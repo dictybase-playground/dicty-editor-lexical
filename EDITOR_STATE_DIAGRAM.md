@@ -1,4 +1,7 @@
 ```mermaid
-flowchart
-    TOOLBAR[TOOLBAR] -- updates --> EDITORSTATE[EDITORSTATE]
+sequenceDiagram
+    participant Toolbar
+    participant Editor State
+    participant Atoms
+    Toolbar---> Editor State: Dispatches Commands / Creates Nodes / Applies Styles
 ```
