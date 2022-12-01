@@ -5,7 +5,7 @@ import useUpdateToolbar from "./useUpdateToolbar"
 
 const LowPriority = 1
 const useCleanup = () => {
-  const updateToolbarProperties = useUpdateToolbar()
+  const updateToolbar = useUpdateToolbar()
   const [editor] = useLexicalComposerContext()
   /*
     1. In a useEffect callback, the returned function is called after every
@@ -23,14 +23,14 @@ const useCleanup = () => {
     const unregisterUpdateListener = editor.registerUpdateListener(
       ({ editorState }) => {
         editorState.read(() => {
-          updateToolbarProperties()
+          updateToolbar()
         })
       },
     )
     const unregisterSelectionChangeCommand = editor.registerCommand(
       SELECTION_CHANGE_COMMAND,
       () => {
-        updateToolbarProperties()
+        updateToolbar()
         return false
       },
       LowPriority,
@@ -39,7 +39,7 @@ const useCleanup = () => {
       unregisterUpdateListener()
       unregisterSelectionChangeCommand()
     }
-  }, [editor, updateToolbarProperties])
+  }, [editor, updateToolbar])
 }
 
 export default useCleanup
