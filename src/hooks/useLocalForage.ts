@@ -4,12 +4,16 @@ import { SerializedEditorState } from "lexical"
 import { useLocation } from "react-router-dom"
 import localForage from "localforage"
 
-const useLocalForage = () => {
-  const [editor] = useLexicalComposerContext()
+const useLocalForageKey = () => {
   const { pathname } = useLocation()
-  const localForageKey = `dicty-editor${pathname}`
+  return `dicty-editor${pathname}`
+}
 
-  const saveLocalForage = useCallback(async () => {
+export const useSaveLocalForage = () => {
+  const [editor] = useLexicalComposerContext()
+  const localForageKey = useLocalForageKey()
+
+  return useCallback(async () => {
     try {
       const editorState = editor.getEditorState()
       const editorStateJSON = editorState.toJSON()
@@ -19,8 +23,13 @@ const useLocalForage = () => {
       console.log(error)
     }
   }, [editor, localForageKey])
+}
 
-  const retrieveLocalForage = useCallback(async () => {
+export const useRetrieveLocalForage = () => {
+  const [editor] = useLexicalComposerContext()
+  const localForageKey = useLocalForageKey()
+
+  return useCallback(async () => {
     try {
       const SerializedState = await localForage.getItem<SerializedEditorState>(
         localForageKey,
@@ -34,8 +43,12 @@ const useLocalForage = () => {
       console.log(error)
     }
   }, [editor, localForageKey])
+}
 
-  const deleteLocalForage = useCallback(async () => {
+export const useDeleteLocalForage = () => {
+  const localForageKey = useLocalForageKey()
+
+  return useCallback(async () => {
     try {
       await localForage.removeItem(localForageKey)
     } catch (error) {
@@ -43,8 +56,4 @@ const useLocalForage = () => {
       console.log(error)
     }
   }, [localForageKey])
-
-  return { saveLocalForage, retrieveLocalForage, deleteLocalForage }
 }
-
-export default useLocalForage
