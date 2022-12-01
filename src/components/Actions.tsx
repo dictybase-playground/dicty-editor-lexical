@@ -10,12 +10,12 @@ import {
   useSaveLocalStorage,
   useRetrieveLocalStorage,
   useDeleteLocalStorage,
-} from "hooks/localStorage"
+} from "hooks/useLocalStorage"
 import {
   useSaveServerStorage,
   useRetrieveServerStorage,
   useDeleteServerStorage,
-} from "hooks/serverStorage"
+} from "hooks/useServerStorage"
 
 const useActionStyles = makeStyles({
   root: {
