@@ -3,7 +3,7 @@ import useFontProperties from "./useFontProperties"
 import useFontColorProperties from "./useFontColorProperties"
 import useBlockTypeProperties from "./useBlockTypeProperties"
 
-const useEditorProperties = () => {
+const useUpdateToolbar = () => {
   const updateFontProperties = useFontProperties()
   const updateTextColorProperties = useFontColorProperties()
   const updateBlockTypeProperties = useBlockTypeProperties()
@@ -19,4 +19,4 @@ const useEditorProperties = () => {
   ])
 }
 
-export default useEditorProperties
+export default useUpdateToolbar
