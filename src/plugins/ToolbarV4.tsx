@@ -6,7 +6,7 @@ import {
   FontSizeDropdown,
 } from "components"
 import FontFamilyDropdown from "components/FontFamilyDropdown"
-import ColorPicker from "components/ColorPicker"
+import ColorPickerButton from "components/ColorPickerButton"
 import ToolBar from "@material-ui/core/Toolbar"
 import useToolbarStyles from "hooks/useToolbarStylesV2"
 import useCleanup from "hooks/useCleanup"
@@ -23,7 +23,7 @@ const ToolbarV4 = () => {
       <FormatBoldButton />
       <FormatItalicButton />
       <FormatUnderlineButton />
-      <ColorPicker />
+      <ColorPickerButton />
     </ToolBar>
   )
 }
