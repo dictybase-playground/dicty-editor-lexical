@@ -1,17 +1,17 @@
 import React, { useState } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import { useAtomValue } from "jotai/utils"
+import { useAtom } from "jotai"
 import FormatColorTextIcon from "@material-ui/icons/FormatColorText"
-import { IconButton, SvgIcon } from "@material-ui/core"
+import { IconButton, SvgIcon, Popover } from "@material-ui/core"
+import { HexColorPicker } from "react-colorful"
 import { textColorAtom } from "context/AtomConfigs"
 import useToolbarItemStyles from "hooks/useToolbarItemStyles"
 import applyStyleText from "utils/textStyles"
-import ColorPickerPopover from "./ColorPickerPopover"
 
 const title = "Font Color"
 
 const ColorPickerButton = () => {
-  const color = useAtomValue(textColorAtom)
+  const [color, setColor] = useAtom(textColorAtom)
   const [editor] = useLexicalComposerContext()
   const { root } = useToolbarItemStyles()
   const [anchorElement, setAnchorElement] = useState<HTMLElement | undefined>(
@@ -38,11 +38,20 @@ const ColorPickerButton = () => {
           <FormatColorTextIcon />
         </SvgIcon>
       </IconButton>
-      <ColorPickerPopover
+      <Popover
         open={!!anchorElement}
-        anchorElement={anchorElement}
+        anchorEl={anchorElement}
         onClose={onClose}
-      />
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}>
+        <HexColorPicker color={color} onChange={setColor} />
+      </Popover>
     </>
   )
 }
