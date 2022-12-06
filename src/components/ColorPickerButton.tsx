@@ -14,6 +14,7 @@ const title = "Font Color"
 const ColorPickerButton = ({ onClick }: ColorPickerButtonProperties) => {
   const color = useAtomValue(textColorAtom)
   const itemClass = useToolbarItemStyles()
+
   return (
     <IconButton
       className={itemClass.root}
