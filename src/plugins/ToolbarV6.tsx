@@ -9,7 +9,7 @@ import FontFamilyDropdown from "components/FontFamilyDropdown"
 import BlockFormatDropdown from "components/BlockFormatDropdown"
 import RedoButton from "components/RedoButton"
 import UndoButton from "components/UndoButton"
-import ColorPicker from "components/ColorPicker"
+import ColorPickerButton from "components/ColorPickerButton"
 import useToolbarStyles from "hooks/useToolbarStylesV2"
 import useCleanup from "hooks/useCleanup"
 import ToolBar from "@material-ui/core/Toolbar"
@@ -29,7 +29,7 @@ const ToolbarV6 = () => {
       <FormatBoldButton />
       <FormatItalicButton />
       <FormatUnderlineButton />
-      <ColorPicker />
+      <ColorPickerButton />
     </ToolBar>
   )
 }
