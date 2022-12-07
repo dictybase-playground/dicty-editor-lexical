@@ -2,25 +2,39 @@ import { useCallback } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useLocation } from "react-router-dom"
 
-const useLocalStorage = () => {
-  const [editor] = useLexicalComposerContext()
+const useLocalStorageKey = () => {
   const { pathname } = useLocation()
+  return `dicty-editor${pathname}`
+}
 
-  const saveLocalStorage = useCallback(() => {
+export const useSaveLocalStorage = () => {
+  const [editor] = useLexicalComposerContext()
+  const localStorageKey = useLocalStorageKey()
+
+  return useCallback(() => {
     const editorState = editor.getEditorState()
     const editorStateString = JSON.stringify(editorState)
-    localStorage.setItem(`dicty-editor${pathname}`, editorStateString)
-  }, [editor, pathname])
+    localStorage.setItem(localStorageKey, editorStateString)
+  }, [editor, localStorageKey])
+}
 
-  const retrieveLocalStorage = useCallback(() => {
-    const editorString = localStorage.getItem(`dicty-editor${pathname}`)
+export const useRetrieveLocalStorage = () => {
+  const [editor] = useLexicalComposerContext()
+  const localStorageKey = useLocalStorageKey()
+
+  return useCallback(() => {
+    const editorString = localStorage.getItem(localStorageKey)
     if (editorString) {
       const editorState = editor.parseEditorState(editorString)
       editor.setEditorState(editorState)
     }
-  }, [editor, pathname])
-
-  return { saveLocalStorage, retrieveLocalStorage }
+  }, [editor, localStorageKey])
 }
 
-export default useLocalStorage
+export const useDeleteLocalStorage = () => {
+  const localStorageKey = useLocalStorageKey()
+
+  return useCallback(() => {
+    localStorage.removeItem(localStorageKey)
+  }, [localStorageKey])
+}

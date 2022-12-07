@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises"
+import { readFile, writeFile, mkdir, rm } from "node:fs/promises"
 import { fileURLToPath } from "node:url"
 import path from "node:path"
 import mojo from "@mojojs/core"
@@ -14,13 +14,33 @@ app.addHelper("savePath", (context) => {
   return `${outputDirectory}/${editorVersion}.json`
 })
 
-app.options(saveRoute, async (context) => {
+app.addHelper("allowAllOrigins", (context) => {
   context.res.set("Access-Control-Allow-Origin", "*")
+})
+
+app.options(saveRoute, async (context) => {
+  context.allowAllOrigins()
   context.res.set("Access-Control-Allow-Headers", "content-type")
   context.res.send()
 })
 
+app.get(saveRoute, async (context) => {
+  context.allowAllOrigins()
+  const pathName = context.savePath()
+
+  try {
+    const fileData = await readFile(pathName)
+    const json = JSON.parse(fileData)
+    context.render({ json })
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(`Could not get editor data: \n${error.message}`)
+    await context.jsonNotFound()
+  }
+})
+
 app.post(saveRoute, async (context) => {
+  context.allowAllOrigins()
   const pathName = context.savePath()
   const data = await context.req.text()
   try {
@@ -41,18 +61,17 @@ app.post(saveRoute, async (context) => {
   }
 })
 
-app.get(saveRoute, async (context) => {
+app.delete(saveRoute, async (context) => {
   context.res.set("Access-Control-Allow-Origin", "*")
   const pathName = context.savePath()
 
   try {
-    const fileData = await readFile(pathName)
-    const json = JSON.parse(fileData)
-    context.render({ json })
-  } catch (error_) {
+    await rm(pathName)
+    context.res.status(202).send()
+  } catch (error) {
     // eslint-disable-next-line no-console
-    console.error(`Could not get editor data: \n${error_}`)
-    await context.jsonNotFound()
+    console.error(error)
+    await context.txtException(new Error("Server Error"))
   }
 })
 

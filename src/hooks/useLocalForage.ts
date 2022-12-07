@@ -4,35 +4,56 @@ import { SerializedEditorState } from "lexical"
 import { useLocation } from "react-router-dom"
 import localForage from "localforage"
 
-const useLocalForage = () => {
-  const [editor] = useLexicalComposerContext()
+const useLocalForageKey = () => {
   const { pathname } = useLocation()
+  return `dicty-editor${pathname}`
+}
 
-  const saveLocalForage = useCallback(async () => {
+export const useSaveLocalForage = () => {
+  const [editor] = useLexicalComposerContext()
+  const localForageKey = useLocalForageKey()
+
+  return useCallback(async () => {
     try {
       const editorState = editor.getEditorState()
       const editorStateJSON = editorState.toJSON()
-      await localForage.setItem(`dicty-editor${pathname}`, editorStateJSON)
+      await localForage.setItem(localForageKey, editorStateJSON)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log(error)
     }
-  }, [editor, pathname])
-
-  const retrieveLocalForage = useCallback(async () => {
-    try {
-      const SerializedState = await localForage.getItem<SerializedEditorState>(
-        `dicty-editor${pathname}`,
-      )
-      const editorState = editor.parseEditorState(SerializedState || "")
-      editor.setEditorState(editorState)
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
-    }
-  }, [editor, pathname])
-
-  return { saveLocalForage, retrieveLocalForage }
+  }, [editor, localForageKey])
 }
 
-export default useLocalForage
+export const useRetrieveLocalForage = () => {
+  const [editor] = useLexicalComposerContext()
+  const localForageKey = useLocalForageKey()
+
+  return useCallback(async () => {
+    try {
+      const SerializedState = await localForage.getItem<SerializedEditorState>(
+        localForageKey,
+      )
+      if (SerializedState) {
+        const editorState = editor.parseEditorState(SerializedState)
+        editor.setEditorState(editorState)
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+  }, [editor, localForageKey])
+}
+
+export const useDeleteLocalForage = () => {
+  const localForageKey = useLocalForageKey()
+
+  return useCallback(async () => {
+    try {
+      await localForage.removeItem(localForageKey)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error)
+    }
+  }, [localForageKey])
+}
