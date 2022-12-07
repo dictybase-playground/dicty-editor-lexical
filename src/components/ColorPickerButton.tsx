@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import { useState, useRef } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
 import FormatColorTextIcon from "@material-ui/icons/FormatColorText"
@@ -12,9 +12,9 @@ const title = "Font Color"
 
 const ColorPickerButton = () => {
   const [color, setColor] = useAtom(textColorAtom)
+  const [isOpen, setIsOpen] = useState(false)
   const [editor] = useLexicalComposerContext()
   const { root } = useToolbarItemStyles()
-  const [isOpen, setIsOpen] = useState(false)
   const buttonReference = useRef(null)
 
   const onClick = () => {
