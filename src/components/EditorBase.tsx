@@ -7,6 +7,7 @@ import {
   useEditorPlaceholderStyles,
 } from "hooks/useEditorStyles"
 import "styles/editor.css"
+import Actions from "components/Actions"
 import EditorComposer from "./EditorComposer"
 
 type EditorBaseProperties = {
@@ -29,6 +30,7 @@ const EditorBase = ({ children }: EditorBaseProperties) => {
             }
           />
         </Paper>
+        <Actions />
       </Container>
     </EditorComposer>
   )
