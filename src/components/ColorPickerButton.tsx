@@ -14,7 +14,7 @@ const ColorPickerButton = () => {
   const [color, setColor] = useAtom(textColorAtom)
   const [isOpen, setIsOpen] = useState(false)
   const [editor] = useLexicalComposerContext()
-  const { root } = useToolbarItemStyles()
+  const classes = useToolbarItemStyles()
   const buttonReference = useRef(null)
 
   const onClick = () => {
@@ -30,7 +30,7 @@ const ColorPickerButton = () => {
     <>
       <IconButton
         ref={buttonReference}
-        className={root}
+        className={classes.root}
         title={title}
         aria-label={title}
         onClick={onClick}>
