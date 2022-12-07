@@ -15,10 +15,6 @@ const ColorPickerButton = () => {
   const classes = useToolbarItemStyles()
   const buttonReference = useRef(null)
 
-  const onClick = () => {
-    setIsOpen(true)
-  }
-
   const onClose = () => {
     applyStyleText(editor, { color })
     setIsOpen(false)
@@ -31,7 +27,9 @@ const ColorPickerButton = () => {
         className={classes.root}
         title={title}
         aria-label={title}
-        onClick={onClick}>
+        onClick={() => {
+          setIsOpen(true)
+        }}>
         <SvgIcon fontSize="small" htmlColor={color}>
           <FormatColorTextIcon />
         </SvgIcon>
