@@ -8,9 +8,10 @@ import useToggle from "hooks/useToogle"
 import applyStyleText from "utils/textStyles"
 
 const title = "Font Color"
+const defaultColor = "#000000"
 
 const ColorPickerButton = () => {
-  const [color, setColor] = useState("#000000")
+  const [color, setColor] = useState(defaultColor)
   const [isOpen, toggleOpen, setValue] = useToggle()
   const [editor] = useLexicalComposerContext()
   const classes = useToolbarItemStyles()
