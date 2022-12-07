@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { useAtom } from "jotai"
 import FormatColorTextIcon from "@material-ui/icons/FormatColorText"
@@ -14,22 +14,22 @@ const ColorPickerButton = () => {
   const [color, setColor] = useAtom(textColorAtom)
   const [editor] = useLexicalComposerContext()
   const { root } = useToolbarItemStyles()
-  const [anchorElement, setAnchorElement] = useState<HTMLElement | undefined>(
-    undefined,
-  )
+  const [isOpen, setIsOpen] = useState(false)
+  const buttonReference = useRef(null)
 
-  const onClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElement(event.currentTarget)
+  const onClick = () => {
+    setIsOpen(true)
   }
 
   const onClose = () => {
     applyStyleText(editor, { color })
-    setAnchorElement(undefined)
+    setIsOpen(false)
   }
 
   return (
     <>
       <IconButton
+        ref={buttonReference}
         className={root}
         title={title}
         aria-label={title}
@@ -39,8 +39,8 @@ const ColorPickerButton = () => {
         </SvgIcon>
       </IconButton>
       <Popover
-        open={!!anchorElement}
-        anchorEl={anchorElement}
+        open={isOpen}
+        anchorEl={buttonReference.current}
         onClose={onClose}
         anchorOrigin={{
           vertical: "bottom",
