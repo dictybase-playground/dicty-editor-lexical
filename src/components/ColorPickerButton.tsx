@@ -4,20 +4,21 @@ import FormatColorTextIcon from "@material-ui/icons/FormatColorText"
 import { IconButton, SvgIcon, Popover } from "@material-ui/core"
 import { HexColorPicker } from "react-colorful"
 import useToolbarItemStyles from "hooks/useToolbarItemStyles"
+import useToggle from "hooks/useToogle"
 import applyStyleText from "utils/textStyles"
 
 const title = "Font Color"
 
 const ColorPickerButton = () => {
   const [color, setColor] = useState("#000000")
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, toggleOpen, setValue] = useToggle()
   const [editor] = useLexicalComposerContext()
   const classes = useToolbarItemStyles()
   const buttonReference = useRef(null)
 
   const onClose = () => {
     applyStyleText(editor, { color })
-    setIsOpen(false)
+    setValue(false)
   }
 
   return (
@@ -27,9 +28,7 @@ const ColorPickerButton = () => {
         className={classes.root}
         title={title}
         aria-label={title}
-        onClick={() => {
-          setIsOpen(true)
-        }}>
+        onClick={toggleOpen}>
         <SvgIcon fontSize="small" htmlColor={color}>
           <FormatColorTextIcon />
         </SvgIcon>
