@@ -3,7 +3,7 @@ import { SaveAlt, OpenInBrowser, GetApp, Publish } from "@material-ui/icons"
 import useLocalStorage from "hooks/useLocalStorage"
 import useServerStorage from "hooks/useServerStorage"
 
-const Actions = () => {
+const PersistencePlugin = () => {
   const { saveLocalStorage, retrieveLocalStorage } = useLocalStorage()
   const { saveServerStorage, retrieveServerStorage } = useServerStorage()
 
@@ -25,4 +25,4 @@ const Actions = () => {
   )
 }
 
-export default Actions
+export default PersistencePlugin

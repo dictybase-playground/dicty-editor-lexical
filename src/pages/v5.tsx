@@ -1,10 +1,10 @@
 import EditorBase from "components/EditorBase"
 import ToolbarV4 from "plugins/ToolbarV4"
-import Actions from "components/Actions"
+import PersistencePlugin from "components/PersistencePlugin"
 
 const EditorV5 = () => (
   <EditorBase>
-    <Actions />
+    <PersistencePlugin />
     <ToolbarV4 />
   </EditorBase>
 )
