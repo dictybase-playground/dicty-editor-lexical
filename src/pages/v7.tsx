@@ -5,14 +5,20 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
-import { Container, Paper } from "@material-ui/core"
+import { Container, Paper, makeStyles } from "@material-ui/core"
 import ToolbarV6Plugin from "plugins/ToolbarV6"
-import Actions from "components/Actions"
+import PersistencePlugin from "components/PersistencePlugin"
 import {
   useEditorInputStyles,
   useEditorPlaceholderStyles,
 } from "hooks/useEditorStyles"
 import "styles/editor.css"
+
+const usePaperStyles = makeStyles({
+  root: {
+    position: "relative",
+  },
+})
 
 const editorTheme = {
   paragraph: "editor-paragraph",
@@ -38,6 +44,7 @@ const initialConfig = {
 const EditorV7 = () => {
   const inputClasses = useEditorInputStyles()
   const placeholderClasses = useEditorPlaceholderStyles()
+  const paperClasses = usePaperStyles()
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
@@ -45,7 +52,7 @@ const EditorV7 = () => {
         <HistoryPlugin />
         <ListPlugin />
         <ToolbarV6Plugin />
-        <Paper style={{ position: "relative" }}>
+        <Paper className={paperClasses.root}>
           <RichTextPlugin
             contentEditable={<ContentEditable className={inputClasses.root} />}
             placeholder={
@@ -53,7 +60,7 @@ const EditorV7 = () => {
             }
           />
         </Paper>
-        <Actions />
+        <PersistencePlugin />
       </Container>
     </LexicalComposer>
   )
