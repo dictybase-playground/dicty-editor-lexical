@@ -53,8 +53,8 @@ const EditorV7 = () => {
             }
           />
         </Paper>
+        <Actions />
       </Container>
-      <Actions />
     </LexicalComposer>
   )
 }
