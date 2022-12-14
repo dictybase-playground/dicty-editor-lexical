@@ -7,7 +7,7 @@ import { ListItemNode, ListNode } from "@lexical/list"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import { Grid, Paper, makeStyles } from "@material-ui/core"
 import ToolbarV6Plugin from "plugins/ToolbarV6"
-import PersistencePlugin from "components/PersistencePlugin"
+import LocalPersistencePlugin from "components/LocalPersistencePlugin"
 import {
   useEditorInputStyles,
   useEditorPlaceholderStyles,
@@ -18,6 +18,10 @@ const usePaperStyles = makeStyles({
   root: {
     position: "relative",
   },
+})
+
+const usePersistencePluginLayoutStyles = makeStyles({
+  root: { marginTop: "0.25rem", alignSelf: "flex-end" },
 })
 
 const editorTheme = {
@@ -44,6 +48,7 @@ const initialConfig = {
 const EditorV7 = () => {
   const inputClasses = useEditorInputStyles()
   const placeholderClasses = useEditorPlaceholderStyles()
+  const persistencePluginLayoutClasses = usePersistencePluginLayoutStyles()
   const paperClasses = usePaperStyles()
 
   return (
@@ -68,8 +73,8 @@ const EditorV7 = () => {
             />
           </Paper>
         </Grid>
-        <Grid item>
-          <PersistencePlugin />
+        <Grid item className={persistencePluginLayoutClasses.root}>
+          <LocalPersistencePlugin />
         </Grid>
       </Grid>
     </LexicalComposer>
