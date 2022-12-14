@@ -1,6 +1,8 @@
 import { atom } from "jotai"
 import { focusAtom } from "jotai/optics"
 
+export type ButtonStates = "NORMAL" | "LOADING" | "DONE" | "ERROR"
+
 export enum FontFamily {
   ARIAL = "Arial",
   COURIER_NEW = "Courier New",
@@ -50,19 +52,16 @@ export const isItalicAtom = focusAtom(formatAtom, (optic) =>
 export const isUnderlinedAtom = focusAtom(formatAtom, (optic) =>
   optic.prop("isUnderlined"),
 )
-
 export const fontFamilyAtom = focusAtom(formatAtom, (optic) =>
   optic.prop("fontFamily"),
 )
-
 export const fontSizeAtom = focusAtom(formatAtom, (optic) =>
   optic.prop("fontSize"),
 )
-
 export const blockTypeAtom = atom(BlockTypes.PARAGRAPH)
-
 export const canUndoAtom = atom(false)
 export const canRedoAtom = atom(false)
 export const isRTLAtom = atom(false)
 export const pulseAtom = atom(false)
 export const textColorAtom = atom("#000000")
+export const ButtonStateAtom = atom<ButtonStates>("NORMAL")
