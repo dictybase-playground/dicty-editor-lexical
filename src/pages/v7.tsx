@@ -1,11 +1,11 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
-import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
+import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
-import { Container, Paper, makeStyles } from "@material-ui/core"
+import { Grid, Paper, makeStyles } from "@material-ui/core"
 import ToolbarV6Plugin from "plugins/ToolbarV6"
 import PersistencePlugin from "components/PersistencePlugin"
 import {
@@ -48,20 +48,30 @@ const EditorV7 = () => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <Container>
-        <HistoryPlugin />
-        <ListPlugin />
-        <ToolbarV6Plugin />
-        <Paper className={paperClasses.root}>
-          <RichTextPlugin
-            contentEditable={<ContentEditable className={inputClasses.root} />}
-            placeholder={
-              <div className={placeholderClasses.root}>Enter some text...</div>
-            }
-          />
-        </Paper>
-        <PersistencePlugin />
-      </Container>
+      <HistoryPlugin />
+      <ListPlugin />
+      <Grid container direction="column">
+        <Grid item>
+          <ToolbarV6Plugin />
+        </Grid>
+        <Grid item>
+          <Paper className={paperClasses.root}>
+            <RichTextPlugin
+              contentEditable={
+                <ContentEditable className={inputClasses.root} />
+              }
+              placeholder={
+                <div className={placeholderClasses.root}>
+                  Enter some text...
+                </div>
+              }
+            />
+          </Paper>
+        </Grid>
+        <Grid item>
+          <PersistencePlugin />
+        </Grid>
+      </Grid>
     </LexicalComposer>
   )
 }
