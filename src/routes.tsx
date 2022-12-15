@@ -1,17 +1,8 @@
-import type { Component } from "react"
-
-type Exported = {
-  default: Component
-}
-
-const ROUTES = import.meta.glob<boolean, string, Exported>(
-  "/src/pages/[a-z0-9[]*.tsx",
-  { eager: true },
-)
+const ROUTES = import.meta.glob("/src/pages/[a-z0-9[]*.tsx", { eager: true })
 
 const routes = Object.keys(ROUTES).map((route) => {
   const path = route.replace(/\/src\/pages/g, "").replace(/\.tsx$/, "")
-
+  // @ts-ignore
   return { path, component: ROUTES[route].default }
 })
 
