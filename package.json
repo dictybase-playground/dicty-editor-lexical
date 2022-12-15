@@ -8,7 +8,7 @@
     "server": "nodemon server.js server -l http://*:3000",
     "start": "vite",
     "build": "tsc && vite build",
-    "build-github": "tsc && vite build --base /dicty-editor-lexical/",
+    "build-github": "tsc && vite build -c viteGithubConfig.ts",
     "lint": "eslint --ext .jsx,.js,.ts,.tsx src/",
     "preview": "vite preview"
   },
