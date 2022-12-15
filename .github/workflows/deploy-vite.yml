@@ -9,7 +9,7 @@ permissions:
   pages: write
   id-token: write
 jobs:
-  build:
+  buildDeploy:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -22,17 +22,8 @@ jobs:
         run: yarn
       - name: build the app
         run: yarn run build-github
-      - name: upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          path: ./dist
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: deploy to github pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          publish_dir: ./dist
