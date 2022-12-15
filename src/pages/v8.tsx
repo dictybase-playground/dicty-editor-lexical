@@ -33,6 +33,8 @@ const editorTheme = {
     italic: "editor-text-italic",
     underline: "editor-text-underline",
   },
+  table: "editor-table",
+  tableCell: "editor-tablecell",
 }
 
 const onError = (error: Error) => {
@@ -55,7 +57,7 @@ const initialConfig = {
   onError,
 }
 
-const EditorV7 = () => {
+const EditorV8 = () => {
   const inputClasses = useEditorInputStyles()
   const placeholderClasses = useEditorPlaceholderStyles()
   const persistencePluginLayoutClasses = usePersistencePluginLayoutStyles()
@@ -92,4 +94,4 @@ const EditorV7 = () => {
   )
 }
 
-export default EditorV7
+export default EditorV8
