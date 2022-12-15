@@ -1,9 +1,11 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Vite React",
-  "extends": "@tsconfig/vite-react/tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": "./src"
-  },
-  "include": ["src"]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"display": "Vite React",
+	"extends": "@tsconfig/vite-react/tsconfig.json",
+	"compilerOptions": {
+		"baseUrl": "./src"
+	},
+	"include": [
+		"src"
+	]
 }
