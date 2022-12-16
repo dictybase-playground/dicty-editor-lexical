@@ -8,6 +8,7 @@
     "server": "nodemon server.js server -l http://*:3000",
     "start": "vite",
     "build": "tsc && vite build",
+    "build-github": "tsc && vite build -c viteGithubConfig.ts",
     "lint": "eslint --ext .jsx,.js,.ts,.tsx src/",
     "preview": "vite preview"
   },
@@ -16,7 +17,7 @@
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
     "axios": "^1.1.3",
-    "framer-motion": "^7.9.1",
+    "framer-motion": "^6.5.1",
     "jotai": "^1.9.1",
     "jotai-optics": "^0.2.0",
     "lexical": "^0.5.0",
@@ -30,8 +31,8 @@
   "devDependencies": {
     "@mojojs/core": "^1.12.1",
     "@tsconfig/vite-react": "^1.0.1",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
+    "@types/react": "17.0.52",
+    "@types/react-dom": "17.0.18",
     "@vitejs/plugin-react": "^2.2.0",
     "eslint": "^8.25.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -53,5 +54,8 @@
     "vite": "^3.1.0",
     "vite-plugin-swc-react-refresh": "^2.2.1",
     "vite-tsconfig-paths": "^3.5.2"
+  },
+  "resolutions": {
+    "@types/react": "17.0.52"
   }
 }

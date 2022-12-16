@@ -1,0 +1,29 @@
+name: deploy vite app to github pages
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+jobs:
+  buildDeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: install dependencies
+        run: yarn
+      - name: build the app
+        run: yarn run build-github
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          publish_dir: ./dist

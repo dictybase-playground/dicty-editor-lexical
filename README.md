@@ -1,3 +1,2 @@
-# Editor Demo
-
-[![Open loading button in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/dictybase-playground/dicty-editor-lexical/tree/refactor/editor?file=src%2Fpages%2Fv7.tsx)
+# dictyBase Rich text editor
+[![Editor](https://badgen.net/badge/Demo/dictyBase%20%20Editor/orange?scale=1.5)](https://cozy-semolina-95c004.netlify.app)
