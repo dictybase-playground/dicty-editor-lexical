@@ -1,7 +1,7 @@
 import React from "react"
 import { Select, MenuItem } from "@material-ui/core"
 import { BlockTypes } from "context/AtomConfigs"
-import useToolbarButtonStyles from "hooks/useToolbarItemStyles"
+import useToolbarItemStyles from "hooks/useToolbarItemStyles"
 import useBlockFormat from "hooks/useBlockFormat"
 
 const blockTypeToBlockName = {
@@ -19,7 +19,7 @@ const title = "Block Type"
 
 const BlockFormatDropdown = () => {
   const [blockType, setBlockType] = useBlockFormat()
-  const classes = useToolbarButtonStyles()
+  const classes = useToolbarItemStyles()
   const joinedClasses = `${classes.root} ${classes.spaced}`
 
   const onChange = (
