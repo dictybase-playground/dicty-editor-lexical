@@ -34,12 +34,12 @@
 }
 
 .editor-table {
-  width: 500px;
+  width: 100%;
   table-layout: fixed;
 }
 
 .editor-tablecell-head {
-  background-color: #004080;
+  font-weight: normal;
 }
 
 .editor-tablecell {

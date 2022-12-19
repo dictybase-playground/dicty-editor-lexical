@@ -35,7 +35,7 @@ const editorTheme = {
   },
   table: "editor-table",
   tableCell: "editor-tablecell",
-  tableCellHead: "editor-tablecell-head",
+  tableCellHeader: "editor-tablecell-head",
 }
 
 const onError = (error: Error) => {
