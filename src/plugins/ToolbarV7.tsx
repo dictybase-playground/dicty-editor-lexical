@@ -7,7 +7,7 @@ import {
 } from "components"
 import FontFamilyDropdown from "components/FontFamilyDropdown"
 import BlockFormatDropdown from "components/BlockFormatDropdown"
-import InsertDropdown from "components/InsertDropdown"
+import InsertTableButton from "components/InsertTableButton"
 import RedoButton from "components/RedoButton"
 import UndoButton from "components/UndoButton"
 import ColorPickerButton from "components/ColorPickerButton"
@@ -31,7 +31,7 @@ const ToolbarV7 = () => {
       <FormatItalicButton />
       <FormatUnderlineButton />
       <ColorPickerButton />
-      <InsertDropdown />
+      <InsertTableButton />
     </ToolBar>
   )
 }
