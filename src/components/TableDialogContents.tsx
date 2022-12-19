@@ -16,8 +16,8 @@ import { dialogOpenAtom } from "context/AtomConfigs"
 const TableDialogContents = () => {
   const setIsDialogOpen = useSetAtom(dialogOpenAtom)
   const [editor] = useLexicalComposerContext()
-  const [rows, setRows] = useState("5")
-  const [columns, setColumns] = useState("5")
+  const [rows, setRows] = useState("3")
+  const [columns, setColumns] = useState("3")
 
   const handleChangeRows = (event: ChangeEvent<HTMLInputElement>) => {
     setRows(event.target.value)

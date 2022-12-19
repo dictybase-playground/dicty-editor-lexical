@@ -33,22 +33,27 @@
   margin-bottom: 0;
 }
 
-.editor-table,
-.editor-tablecell {
-  border: 1px solid black;
-  border-collapse: collapse;
+.editor-table {
+  width: 500px;
+  table-layout: fixed;
 }
 
-.editor-table {
-  table-layout: fixed;
+.editor-tablecell-head {
+  background-color: #004080;
 }
 
 .editor-tablecell {
   text-align: center;
-  min-width: 2rem;
+  min-width: 4rem;
 }
 
 .editor-tablecell p {
   margin-left: 0.125rem;
   margin-right: 0.125rem;
+}
+
+.editor-table,
+.editor-tablecell {
+  border: 1px solid rgb(156, 156, 156);
+  border-collapse: collapse;
 }
