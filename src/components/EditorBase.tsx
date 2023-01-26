@@ -1,6 +1,7 @@
 import React from "react"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary"
 import { Container, Paper } from "@material-ui/core"
 import {
   useEditorInputStyles,
@@ -27,6 +28,7 @@ const EditorBase = ({ children }: EditorBaseProperties) => {
             placeholder={
               <div className={placeholderClasses.root}>Enter some text...</div>
             }
+            ErrorBoundary={LexicalErrorBoundary}
           />
         </Paper>
       </Container>

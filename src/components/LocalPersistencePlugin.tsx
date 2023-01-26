@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import SaveButton from "components/SaveButton"
 import useLocalStorage from "hooks/useLocalStorage"
 
-const PersistencePlugin = () => {
+const LocalPersistencePlugin = () => {
   const { retrieveLocalStorage, saveLocalStorage } = useLocalStorage()
 
   useEffect(() => {
@@ -12,4 +12,4 @@ const PersistencePlugin = () => {
   return <SaveButton save={saveLocalStorage} />
 }
 
-export default PersistencePlugin
+export default LocalPersistencePlugin

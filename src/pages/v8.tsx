@@ -4,10 +4,13 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
+import { TableCellNode, TableRowNode } from "@lexical/table"
+import CustomTableNode from "nodes/CustomTableNode"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import { Grid, Paper, makeStyles } from "@material-ui/core"
-import ToolbarV6Plugin from "plugins/ToolbarV6"
+import CustomTablePlugin from "plugins/CustomTablePlugin"
+import ToolbarV7Plugin from "plugins/ToolbarV7"
 import LocalPersistencePlugin from "components/LocalPersistencePlugin"
 import {
   useEditorInputStyles,
@@ -32,6 +35,9 @@ const editorTheme = {
     italic: "editor-text-italic",
     underline: "editor-text-underline",
   },
+  table: "editor-table",
+  tableCell: "editor-tablecell",
+  tableCellHeader: "editor-tablecell-head",
 }
 
 const onError = (error: Error) => {
@@ -42,11 +48,19 @@ const onError = (error: Error) => {
 const initialConfig = {
   namespace: "DictyEditor",
   theme: { ...editorTheme },
-  nodes: [HeadingNode, QuoteNode, ListItemNode, ListNode],
+  nodes: [
+    HeadingNode,
+    QuoteNode,
+    ListItemNode,
+    ListNode,
+    CustomTableNode,
+    TableCellNode,
+    TableRowNode,
+  ],
   onError,
 }
 
-const EditorV7 = () => {
+const EditorV8 = () => {
   const inputClasses = useEditorInputStyles()
   const placeholderClasses = useEditorPlaceholderStyles()
   const persistencePluginLayoutClasses = usePersistencePluginLayoutStyles()
@@ -54,11 +68,12 @@ const EditorV7 = () => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
+      <CustomTablePlugin />
       <HistoryPlugin />
       <ListPlugin />
       <Grid container direction="column">
         <Grid item>
-          <ToolbarV6Plugin />
+          <ToolbarV7Plugin />
         </Grid>
         <Grid item>
           <Paper className={paperClasses.root}>
@@ -83,4 +98,4 @@ const EditorV7 = () => {
   )
 }
 
-export default EditorV7
+export default EditorV8
