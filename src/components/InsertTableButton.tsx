@@ -5,8 +5,6 @@ import { useAtom } from "jotai"
 import { dialogOpenAtom } from "context/AtomConfigs"
 import TableDialogContents from "./TableDialogContents"
 
-// When we make dialogs for inserting other things, they will be added here
-
 const InsertTableButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useAtom(dialogOpenAtom)
   const { spaced } = useToolbarItemStyles()

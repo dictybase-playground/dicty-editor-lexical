@@ -15,6 +15,7 @@ import ColorPickerButton from "components/ColorPickerButton"
 import useToolbarStyles from "hooks/useToolbarStylesV2"
 import useCleanup from "hooks/useCleanup"
 import ToolBar from "@material-ui/core/Toolbar"
+import { Provider } from "jotai"
 
 const ToolbarV8 = () => {
   useCleanup()
@@ -32,8 +33,12 @@ const ToolbarV8 = () => {
       <FormatItalicButton />
       <FormatUnderlineButton />
       <ColorPickerButton />
-      <InsertTableButton />
-      <InsertImageButton />
+      <Provider>
+        <InsertTableButton />
+      </Provider>
+      <Provider>
+        <InsertImageButton />
+      </Provider>
     </ToolBar>
   )
 }
