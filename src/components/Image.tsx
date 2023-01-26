@@ -35,8 +35,8 @@ const Image = ({
   onResizeEnd,
 }: ImageProperties) => {
   const [dimensions, setDimensions] = useState({
-    width: initialHeight,
-    height: initialWidth,
+    width: initialWidth,
+    height: initialHeight,
   })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
