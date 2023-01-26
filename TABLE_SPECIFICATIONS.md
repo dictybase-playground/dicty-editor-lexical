@@ -6,13 +6,21 @@ We must import TablePlugin from `@lexical/react/LexicalTablePlugin` and add it a
 
 A table can be creating by calling `editor.dispatchCommand(INSERT_TABLE_COMMAND, { rows: _, columns: _ })`.
 
-From the user perspective,
+## Table Headers
 
-## Initial Table Width
+The top row of cells will serve as the header cells for the table.
 
-Initially, the table width will be set to 100% of its container size. This property will be set in `editor.css` under the selector `.editor-table`
+By default, Lexical Table Plugin's creates tables with the first row and the first column as headers, to achieve our desired table, we could register a command
 
-The user will be able to drag the borders of the table to resize it, applying a style attribute to the element with the appropriate width.
+## Table Width
+
+Table width changes depending on # of columns.
+
+Potential Approaches:
+
+## Row Restriction
+
+A table must have >= 2 rows. This can be controlled using MUI's Textfield validation.
 
 ## Table Layout - Fixed
 
@@ -26,13 +34,7 @@ The main reason for this is because since we will be implementing a drag control
 
 ## Features
 
-### Resizing
-
-What happens if a columns size is constrained, there are multiple lines of text in a cell of that column, and the user attempts to resize that cell's row to be smaller than the minimum content height?
-
-    Overflow?
-    Not allowed?
-    Allowed but let that conflict be resolved by the table's own internal algorithm? What would it do? --> Use the height of the contents
+### Alignment
 
 ### Text Wrapping
 

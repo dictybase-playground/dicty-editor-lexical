@@ -1,4 +1,5 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary"
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
@@ -62,6 +63,7 @@ const EditorV7 = () => {
         <Grid item>
           <Paper className={paperClasses.root}>
             <RichTextPlugin
+              ErrorBoundary={LexicalErrorBoundary}
               contentEditable={
                 <ContentEditable className={inputClasses.root} />
               }

@@ -6,11 +6,13 @@ import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
 import { TableCellNode, TableRowNode } from "@lexical/table"
 import CustomTableNode from "nodes/CustomTableNode"
+import ImageNode from "nodes/ImageNode"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import { Grid, Paper, makeStyles } from "@material-ui/core"
 import CustomTablePlugin from "plugins/CustomTablePlugin"
-import ToolbarV7Plugin from "plugins/ToolbarV7"
+import ImagePlugin from "plugins/ImagePlugin"
+import ToolbarV8Plugin from "plugins/ToolbarV8"
 import LocalPersistencePlugin from "components/LocalPersistencePlugin"
 import {
   useEditorInputStyles,
@@ -56,11 +58,12 @@ const initialConfig = {
     CustomTableNode,
     TableCellNode,
     TableRowNode,
+    ImageNode,
   ],
   onError,
 }
 
-const EditorV8 = () => {
+const EditorV9 = () => {
   const inputClasses = useEditorInputStyles()
   const placeholderClasses = useEditorPlaceholderStyles()
   const persistencePluginLayoutClasses = usePersistencePluginLayoutStyles()
@@ -68,12 +71,13 @@ const EditorV8 = () => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
+      <ImagePlugin />
       <CustomTablePlugin />
       <HistoryPlugin />
       <ListPlugin />
       <Grid container direction="column">
         <Grid item>
-          <ToolbarV7Plugin />
+          <ToolbarV8Plugin />
         </Grid>
         <Grid item>
           <Paper className={paperClasses.root}>
@@ -98,4 +102,4 @@ const EditorV8 = () => {
   )
 }
 
-export default EditorV8
+export default EditorV9
