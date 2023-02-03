@@ -1,15 +1,19 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer"
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin"
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin"
-import { TablePlugin } from "@lexical/react/LexicalTablePlugin"
+import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary"
 import { ListPlugin } from "@lexical/react/LexicalListPlugin"
 import { ContentEditable } from "@lexical/react/LexicalContentEditable"
-import { TableNode, TableCellNode, TableRowNode } from "@lexical/table"
+import { TableCellNode, TableRowNode } from "@lexical/table"
 import { ListItemNode, ListNode } from "@lexical/list"
 import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import { Grid, Paper, makeStyles } from "@material-ui/core"
+import CustomTableNode from "nodes/CustomTableNode"
+import CustomTablePlugin from "plugins/CustomTablePlugin"
+import TableActionMenuPlugin from "plugins/TableActionMenuPlugin"
 import ToolbarV7Plugin from "plugins/ToolbarV7"
 import LocalPersistencePlugin from "components/LocalPersistencePlugin"
+import TreeViewPlugin from "plugins/TreeViewPlugin"
 import {
   useEditorInputStyles,
   useEditorPlaceholderStyles,
@@ -51,7 +55,7 @@ const initialConfig = {
     QuoteNode,
     ListItemNode,
     ListNode,
-    TableNode,
+    CustomTableNode,
     TableCellNode,
     TableRowNode,
   ],
@@ -66,7 +70,8 @@ const EditorV8 = () => {
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <TablePlugin />
+      <CustomTablePlugin />
+      <TableActionMenuPlugin />
       <HistoryPlugin />
       <ListPlugin />
       <Grid container direction="column">
@@ -76,6 +81,7 @@ const EditorV8 = () => {
         <Grid item>
           <Paper className={paperClasses.root}>
             <RichTextPlugin
+              ErrorBoundary={LexicalErrorBoundary}
               contentEditable={
                 <ContentEditable className={inputClasses.root} />
               }
@@ -91,6 +97,7 @@ const EditorV8 = () => {
           <LocalPersistencePlugin />
         </Grid>
       </Grid>
+      <TreeViewPlugin />
     </LexicalComposer>
   )
 }
