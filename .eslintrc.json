@@ -32,6 +32,7 @@
     }
   },
   "rules": {
+    "no-underscore-dangle": "off",
     "import/no-unresolved": "error",
     "quotes": ["off", "single"],
     "semi": ["error", "never"],
@@ -68,9 +69,13 @@
     ],
     "filenames/match-regex": "off",
     "github/array-foreach": "off",
+    "unicorn/consistent-function-scoping": "off",
+    "unicorn/no-array-callback-reference": "off",
     "unicorn/no-array-for-each": "off",
+    "unicorn/no-array-reduce": "off",
     "unicorn/no-for-of": "off",
     "unicorn/no-useless-undefined": "off",
+    "unicorn/no-null": "off",
     "unicorn/filename-case": [
       "error",
       {
