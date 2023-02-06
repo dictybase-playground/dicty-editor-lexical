@@ -18,6 +18,9 @@ import {
 import {
   $getTableNodeFromLexicalNodeOrThrow,
   $getTableCellNodeFromLexicalNode,
+  $getTableRowIndexFromTableCellNode,
+  $getElementGridForTableNode,
+  $insertTableRow,
   TableCellNode,
 } from "@lexical/table"
 
@@ -59,9 +62,8 @@ type TableMenuButtonProperties = {
 
 const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
   const [editor] = useLexicalComposerContext()
-  const tableCellAnchorElement = tableCellNode
-    ? editor.getElementByKey(tableCellNode.getKey())
-    : null
+  const tableCellAnchorElement = editor.getElementByKey(tableCellNode.getKey())
+
   const [isOpen, setIsOpen] = useState(false)
   const menuButtonReference = usePositionMenuButton(tableCellAnchorElement)
   const { root } = useTableMenuButtonStyles()
@@ -71,6 +73,18 @@ const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       if (!tableNode) return
       tableNode.remove()
+    })
+    setIsOpen(false)
+  }
+
+  const insertRow = (insertAfter: boolean) => {
+    editor.update(() => {
+      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      if (!tableNode) return
+
+      const tableRowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
+      const grid = $getElementGridForTableNode(editor, tableNode)
+      $insertTableRow(tableNode, tableRowIndex, insertAfter, 1, grid)
     })
     setIsOpen(false)
   }
@@ -94,8 +108,8 @@ const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
           horizontal: "right",
         }}
         onClose={() => setIsOpen(false)}>
-        <MenuItem onClick={() => setIsOpen(false)}> Insert Row Above </MenuItem>
-        <MenuItem onClick={() => setIsOpen(false)}> Insert Row Below </MenuItem>
+        <MenuItem onClick={() => insertRow(false)}>Insert Row Above</MenuItem>
+        <MenuItem onClick={() => insertRow(true)}> Insert Row Below</MenuItem>
         <Divider />
         <MenuItem onClick={() => setIsOpen(false)}>
           Insert Column Above
@@ -120,7 +134,7 @@ const TableActionMenuPlugin = () => {
 
   useEffect(() => {
     // register a listener for selection command,
-    // if the selection is inside a table cell, get the current DOM element for that cell
+    // if the selection is inside a table cell, get the current table cell node for that cell
     // and store it in state, which is used by TableMenuButton for positioning
     const unregisterSelectionChange = editor.registerCommand(
       // lexical's demo uses registerUpdateListener, maybe that's the right choice, look into later
