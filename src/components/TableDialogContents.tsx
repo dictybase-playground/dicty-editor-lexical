@@ -13,7 +13,7 @@ import {
 import { useSetAtom } from "jotai"
 import { dialogOpenAtom } from "context/AtomConfigs"
 
-const calculateWidth = (columns: number) => Math.log(columns) * 500
+const calculateWidth = (columns: number) => 250 + Math.log(columns) * 500
 
 const TableDialogContents = () => {
   const setIsDialogOpen = useSetAtom(dialogOpenAtom)
