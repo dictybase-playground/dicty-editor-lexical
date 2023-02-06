@@ -14,13 +14,17 @@ import {
   $isRangeSelection,
   SELECTION_CHANGE_COMMAND,
   COMMAND_PRIORITY_LOW,
+  $getRoot,
 } from "lexical"
 import {
   $getTableNodeFromLexicalNodeOrThrow,
   $getTableCellNodeFromLexicalNode,
+  $getTableColumnIndexFromTableCellNode,
   $getTableRowIndexFromTableCellNode,
   $getElementGridForTableNode,
   $insertTableRow,
+  $insertTableColumn,
+  $removeTableRowAtIndex,
   TableCellNode,
 } from "@lexical/table"
 
@@ -31,26 +35,34 @@ const useTableMenuButtonStyles = makeStyles({
   //   maybe change the hover styles too?
 })
 
+const positionMenuButton = (
+  menuButtonDOM: HTMLElement | null,
+  anchorElement: HTMLElement | null,
+) => {
+  if (!anchorElement) return
+  if (!menuButtonDOM) return
+
+  const menuButtonRectangle = menuButtonDOM.getBoundingClientRect()
+  const anchorElementRectangle = anchorElement.getBoundingClientRect()
+
+  // eslint-disable-next-line no-param-reassign
+  menuButtonDOM.style.left = `${
+    anchorElementRectangle.right - menuButtonRectangle.width + window.scrollX
+  }px`
+  // eslint-disable-next-line no-param-reassign
+  menuButtonDOM.style.top = `${
+    anchorElementRectangle.top +
+    10 -
+    menuButtonRectangle.height / 2 +
+    window.scrollY
+  }px`
+}
+
 const usePositionMenuButton = (anchorElement: HTMLElement | null) => {
   const menuButtonReference = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    const menuButtonDOM = menuButtonReference.current
-    if (!anchorElement) return
-    if (!menuButtonDOM) return
-
-    const menuButtonRectangle = menuButtonDOM.getBoundingClientRect()
-    const anchorElementRectangle = anchorElement.getBoundingClientRect()
-
-    menuButtonDOM.style.left = `${
-      anchorElementRectangle.right - menuButtonRectangle.width + window.scrollX
-    }px`
-    menuButtonDOM.style.top = `${
-      anchorElementRectangle.top +
-      10 -
-      menuButtonRectangle.height / 2 +
-      window.scrollY
-    }px`
+    positionMenuButton(menuButtonReference.current, anchorElement)
   }, [anchorElement])
 
   return menuButtonReference
@@ -63,15 +75,21 @@ type TableMenuButtonProperties = {
 const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
   const [editor] = useLexicalComposerContext()
   const tableCellAnchorElement = editor.getElementByKey(tableCellNode.getKey())
-
   const [isOpen, setIsOpen] = useState(false)
   const menuButtonReference = usePositionMenuButton(tableCellAnchorElement)
   const { root } = useTableMenuButtonStyles()
 
+  const clearTableSelection = () => {
+    if (tableCellNode.isAttached()) return
+    editor.update(() => {
+      const rootNode = $getRoot()
+      rootNode.selectStart()
+    })
+  }
+
   const deleteTable = () => {
     editor.update(() => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      if (!tableNode) return
       tableNode.remove()
     })
     setIsOpen(false)
@@ -80,11 +98,29 @@ const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
   const insertRow = (insertAfter: boolean) => {
     editor.update(() => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      if (!tableNode) return
-
-      const tableRowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
+      const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
       const grid = $getElementGridForTableNode(editor, tableNode)
-      $insertTableRow(tableNode, tableRowIndex, insertAfter, 1, grid)
+      $insertTableRow(tableNode, rowIndex, insertAfter, 1, grid)
+    })
+    setIsOpen(false)
+  }
+
+  const insertColumn = (insertAfter: boolean) => {
+    editor.update(() => {
+      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
+      const grid = $getElementGridForTableNode(editor, tableNode)
+      $insertTableColumn(tableNode, columnIndex, insertAfter, 1, grid)
+    })
+    setIsOpen(false)
+  }
+
+  const deleteRow = () => {
+    editor.update(() => {
+      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
+      $removeTableRowAtIndex(tableNode, rowIndex)
+      clearTableSelection()
     })
     setIsOpen(false)
   }
@@ -111,14 +147,14 @@ const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
         <MenuItem onClick={() => insertRow(false)}>Insert Row Above</MenuItem>
         <MenuItem onClick={() => insertRow(true)}> Insert Row Below</MenuItem>
         <Divider />
-        <MenuItem onClick={() => setIsOpen(false)}>
-          Insert Column Above
+        <MenuItem onClick={() => insertColumn(false)}>
+          Insert Column Left
         </MenuItem>
-        <MenuItem onClick={() => setIsOpen(false)}>
-          Insert Column Below
+        <MenuItem onClick={() => insertColumn(true)}>
+          Insert Column Right
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => setIsOpen(false)}> Delete Row </MenuItem>
+        <MenuItem onClick={deleteRow}> Delete Row </MenuItem>
         <MenuItem onClick={() => setIsOpen(false)}> Delete Column </MenuItem>
         <MenuItem onClick={deleteTable}> Delete Table </MenuItem>
       </Menu>
