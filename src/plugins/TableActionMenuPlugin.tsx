@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   Divider,
   IconButton,
@@ -25,6 +25,7 @@ import {
   $insertTableRow,
   $insertTableColumn,
   $removeTableRowAtIndex,
+  $deleteTableColumn,
   TableCellNode,
 } from "@lexical/table"
 
@@ -35,49 +36,35 @@ const useTableMenuButtonStyles = makeStyles({
   //   maybe change the hover styles too?
 })
 
-const positionMenuButton = (
-  menuButtonDOM: HTMLElement | null,
-  anchorElement: HTMLElement | null,
-) => {
-  if (!anchorElement) return
-  if (!menuButtonDOM) return
-
-  const menuButtonRectangle = menuButtonDOM.getBoundingClientRect()
-  const anchorElementRectangle = anchorElement.getBoundingClientRect()
-
-  // eslint-disable-next-line no-param-reassign
-  menuButtonDOM.style.left = `${
-    anchorElementRectangle.right - menuButtonRectangle.width + window.scrollX
-  }px`
-  // eslint-disable-next-line no-param-reassign
-  menuButtonDOM.style.top = `${
-    anchorElementRectangle.top +
-    10 -
-    menuButtonRectangle.height / 2 +
-    window.scrollY
-  }px`
-}
-
 const usePositionMenuButton = (anchorElement: HTMLElement | null) => {
   const menuButtonReference = useRef<HTMLButtonElement>(null)
-
   useEffect(() => {
-    positionMenuButton(menuButtonReference.current, anchorElement)
+    const menuButtonDOM = menuButtonReference.current
+    if (!anchorElement) return
+    if (!menuButtonDOM) return
+
+    const menuButtonRectangle = menuButtonDOM.getBoundingClientRect()
+    const anchorElementRectangle = anchorElement.getBoundingClientRect()
+
+    menuButtonDOM.style.left = `${
+      anchorElementRectangle.right - menuButtonRectangle.width + window.scrollX
+    }px`
+    menuButtonDOM.style.top = `${
+      anchorElementRectangle.top +
+      10 -
+      menuButtonRectangle.height / 2 +
+      window.scrollY
+    }px`
   }, [anchorElement])
 
   return menuButtonReference
 }
 
-type TableMenuButtonProperties = {
-  tableCellNode: TableCellNode
-}
-
-const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
+const useTableControls = (
+  tableCellNode: TableCellNode,
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
   const [editor] = useLexicalComposerContext()
-  const tableCellAnchorElement = editor.getElementByKey(tableCellNode.getKey())
-  const [isOpen, setIsOpen] = useState(false)
-  const menuButtonReference = usePositionMenuButton(tableCellAnchorElement)
-  const { root } = useTableMenuButtonStyles()
 
   const clearTableSelection = () => {
     if (tableCellNode.isAttached()) return
@@ -125,6 +112,32 @@ const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
     setIsOpen(false)
   }
 
+  const deleteColumn = () => {
+    editor.update(() => {
+      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
+      $deleteTableColumn(tableNode, columnIndex)
+      clearTableSelection()
+    })
+    setIsOpen(false)
+  }
+
+  return { insertColumn, insertRow, deleteColumn, deleteRow, deleteTable }
+}
+
+type TableMenuButtonProperties = {
+  tableCellNode: TableCellNode
+}
+
+const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const [editor] = useLexicalComposerContext()
+  const { root } = useTableMenuButtonStyles()
+  const { insertColumn, insertRow, deleteColumn, deleteRow, deleteTable } =
+    useTableControls(tableCellNode, setIsOpen)
+  const tableCellAnchorElement = editor.getElementByKey(tableCellNode.getKey())
+  const menuButtonReference = usePositionMenuButton(tableCellAnchorElement)
+
   return (
     <>
       <IconButton
@@ -155,7 +168,7 @@ const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
         </MenuItem>
         <Divider />
         <MenuItem onClick={deleteRow}> Delete Row </MenuItem>
-        <MenuItem onClick={() => setIsOpen(false)}> Delete Column </MenuItem>
+        <MenuItem onClick={deleteColumn}> Delete Column </MenuItem>
         <MenuItem onClick={deleteTable}> Delete Table </MenuItem>
       </Menu>
     </>
@@ -202,7 +215,6 @@ const TableActionMenuPlugin = () => {
 
   if (currentTableCellNode)
     return createPortal(
-      // maybe a popper or popover mui element here instead
       <TableMenuButton tableCellNode={currentTableCellNode} />,
       document.body,
     )
