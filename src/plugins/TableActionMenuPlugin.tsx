@@ -9,13 +9,7 @@ import {
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown"
 import { createPortal } from "react-dom"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
-import {
-  $getSelection,
-  $isRangeSelection,
-  SELECTION_CHANGE_COMMAND,
-  COMMAND_PRIORITY_LOW,
-  $getRoot,
-} from "lexical"
+import { $getSelection, $isRangeSelection, $getRoot } from "lexical"
 import {
   $getTableNodeFromLexicalNodeOrThrow,
   $getTableCellNodeFromLexicalNode,
@@ -33,18 +27,20 @@ const useTableMenuButtonStyles = makeStyles({
   root: {
     position: "absolute",
   },
-  //   maybe change the hover styles too?
 })
 
-const usePositionMenuButton = (anchorElement: HTMLElement | null) => {
+const usePositionMenuButton = (tableCellNode: TableCellNode) => {
+  const [editor] = useLexicalComposerContext()
   const menuButtonReference = useRef<HTMLButtonElement>(null)
+  const tableCellAnchorElement = editor.getElementByKey(tableCellNode.getKey())
   useEffect(() => {
     const menuButtonDOM = menuButtonReference.current
-    if (!anchorElement) return
+    if (!tableCellAnchorElement) return
     if (!menuButtonDOM) return
 
     const menuButtonRectangle = menuButtonDOM.getBoundingClientRect()
-    const anchorElementRectangle = anchorElement.getBoundingClientRect()
+    const anchorElementRectangle =
+      tableCellAnchorElement.getBoundingClientRect()
 
     menuButtonDOM.style.left = `${
       anchorElementRectangle.right - menuButtonRectangle.width + window.scrollX
@@ -55,7 +51,7 @@ const usePositionMenuButton = (anchorElement: HTMLElement | null) => {
       menuButtonRectangle.height / 2 +
       window.scrollY
     }px`
-  }, [anchorElement])
+  }, [tableCellNode, tableCellAnchorElement, editor, menuButtonReference])
 
   return menuButtonReference
 }
@@ -105,6 +101,11 @@ const useTableControls = (
   const deleteRow = () => {
     editor.update(() => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      const grid = $getElementGridForTableNode(editor, tableNode)
+      if (grid.rows === 1) {
+        tableNode.remove()
+        return
+      }
       const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
       $removeTableRowAtIndex(tableNode, rowIndex)
       clearTableSelection()
@@ -115,6 +116,12 @@ const useTableControls = (
   const deleteColumn = () => {
     editor.update(() => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      const grid = $getElementGridForTableNode(editor, tableNode)
+      if (grid.columns === 1) {
+        tableNode.remove()
+        return
+      }
+
       const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
       $deleteTableColumn(tableNode, columnIndex)
       clearTableSelection()
@@ -131,12 +138,10 @@ type TableMenuButtonProperties = {
 
 const TableMenuButton = ({ tableCellNode }: TableMenuButtonProperties) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [editor] = useLexicalComposerContext()
   const { root } = useTableMenuButtonStyles()
   const { insertColumn, insertRow, deleteColumn, deleteRow, deleteTable } =
     useTableControls(tableCellNode, setIsOpen)
-  const tableCellAnchorElement = editor.getElementByKey(tableCellNode.getKey())
-  const menuButtonReference = usePositionMenuButton(tableCellAnchorElement)
+  const menuButtonReference = usePositionMenuButton(tableCellNode)
 
   return (
     <>
@@ -185,27 +190,26 @@ const TableActionMenuPlugin = () => {
     // register a listener for selection command,
     // if the selection is inside a table cell, get the current table cell node for that cell
     // and store it in state, which is used by TableMenuButton for positioning
-    const unregisterSelectionChange = editor.registerCommand(
+    const unregisterSelectionChange = editor.registerUpdateListener(
       // lexical's demo uses registerUpdateListener, maybe that's the right choice, look into later
-      SELECTION_CHANGE_COMMAND,
       () => {
-        const selection = $getSelection()
+        editor.getEditorState().read(() => {
+          const selection = $getSelection()
 
-        if (!$isRangeSelection(selection)) return true
-        // lexical also has other non-null checks for other variables, that I don't think are necessary, but I will look closer
-        const tableCellNode = $getTableCellNodeFromLexicalNode(
-          selection.anchor.getNode(),
-        )
+          if (!$isRangeSelection(selection)) return
+          // lexical also has other non-null checks for other variables, that I don't think are necessary, but I will look closer
+          const tableCellNode = $getTableCellNodeFromLexicalNode(
+            selection.anchor.getNode(),
+          )
 
-        if (!tableCellNode) {
-          setCurrentTableCellNode(null)
-          return false
-        }
+          if (!tableCellNode) {
+            setCurrentTableCellNode(null)
+            return
+          }
 
-        setCurrentTableCellNode(tableCellNode)
-        return false
+          setCurrentTableCellNode(tableCellNode)
+        })
       },
-      COMMAND_PRIORITY_LOW,
     )
 
     return () => {
