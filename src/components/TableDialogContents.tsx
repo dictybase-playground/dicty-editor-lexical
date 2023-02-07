@@ -1,6 +1,3 @@
-import { useState, ChangeEvent } from "react"
-import { INSERT_CUSTOM_TABLE_COMMAND } from "plugins/CustomTablePlugin"
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import {
   Button,
   CardHeader,
@@ -10,34 +7,16 @@ import {
   CardActions,
   Grid,
 } from "@material-ui/core"
-import { useSetAtom } from "jotai"
-import { dialogOpenAtom } from "context/AtomConfigs"
-
-const calculateWidth = (columns: number) => 250 + Math.log(columns) * 500
+import useTableFormControls from "hooks/useTableFormControls"
 
 const TableDialogContents = () => {
-  const setIsDialogOpen = useSetAtom(dialogOpenAtom)
-  const [editor] = useLexicalComposerContext()
-  const [rows, setRows] = useState("3")
-  const [columns, setColumns] = useState("3")
-
-  const handleChangeRows = (event: ChangeEvent<HTMLInputElement>) => {
-    setRows(event.target.value)
-  }
-
-  const handleChangeColumns = (event: ChangeEvent<HTMLInputElement>) => {
-    setColumns(event.target.value)
-  }
-
-  const handleConfirm = () => {
-    editor.dispatchCommand(INSERT_CUSTOM_TABLE_COMMAND, {
-      rows,
-      columns,
-      width: calculateWidth(Number.parseInt(columns, 10)),
-    })
-    setIsDialogOpen(false)
-  }
-
+  const {
+    rows,
+    columns,
+    handleChangeRows,
+    handleChangeColumns,
+    handleConfirm,
+  } = useTableFormControls()
   return (
     <Card>
       <CardContent>

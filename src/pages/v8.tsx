@@ -10,7 +10,7 @@ import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import { Grid, Paper, makeStyles } from "@material-ui/core"
 import CustomTableNode from "nodes/CustomTableNode"
 import CustomTablePlugin from "plugins/CustomTablePlugin"
-import TableActionMenuPlugin from "plugins/TableActionMenuPlugin"
+import TableActionPlugin from "plugins/TableActionPlugin"
 import ToolbarV7Plugin from "plugins/ToolbarV7"
 import LocalPersistencePlugin from "components/LocalPersistencePlugin"
 import TreeViewPlugin from "plugins/TreeViewPlugin"
@@ -71,7 +71,7 @@ const EditorV8 = () => {
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <CustomTablePlugin />
-      <TableActionMenuPlugin />
+      <TableActionPlugin />
       <HistoryPlugin />
       <ListPlugin />
       <Grid container direction="column">
