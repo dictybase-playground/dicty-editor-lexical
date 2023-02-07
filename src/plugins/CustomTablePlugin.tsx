@@ -32,11 +32,11 @@ import {
 } from "lexical"
 import { useEffect } from "react"
 import { pipe, A, F, G } from "@mobily/ts-belt"
-import CustomTableNode from "../nodes/CustomTableNode"
+import CustomTableNode from "nodes/CustomTableNode"
 
 export const INSERT_CUSTOM_TABLE_COMMAND = createCommand<{
-  columns: string
-  rows: string
+  columns: number
+  rows: number
   width: number
 }>()
 
@@ -58,14 +58,14 @@ function $createCustomTableNodeWithDimensions(
       createParagraphWithTextNode(),
     )
 
-  const bodyCellsToAppend = (cells: number) => (row: TableRowNode) => {
-    Array.from({ length: cells }).forEach(() =>
+  const bodyCellsToAppend = (count: number) => (row: TableRowNode) => {
+    Array.from({ length: count }).forEach(() =>
       row.append(createCellWithParagraphNode()),
     )
   }
 
-  const headerCellsToAppend = (cells: number) => (row: TableRowNode) => {
-    Array.from({ length: cells }).forEach(() =>
+  const headerCellsToAppend = (count: number) => (row: TableRowNode) => {
+    Array.from({ length: count }).forEach(() =>
       row.append(createHeaderCellWithParagraphNode()),
     )
   }
@@ -116,8 +116,8 @@ const CustomTablePlugin = () => {
         if (!focusNode) return true
 
         const tableNode = $createCustomTableNodeWithDimensions(
-          Number(rows),
-          Number(columns),
+          Number(rows), // change to number
+          Number(columns), // change to numbers
           width,
         )
 

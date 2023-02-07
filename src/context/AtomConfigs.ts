@@ -1,5 +1,6 @@
 import { atom } from "jotai"
 import { focusAtom } from "jotai/optics"
+import { TableCellNode } from "@lexical/table"
 
 export type ButtonStates = "NORMAL" | "LOADING" | "DONE" | "ERROR"
 
@@ -63,6 +64,8 @@ export const canUndoAtom = atom(false)
 export const canRedoAtom = atom(false)
 export const isRTLAtom = atom(false)
 export const pulseAtom = atom(false)
-export const textColorAtom = atom("#000000")
-export const ButtonStateAtom = atom<ButtonStates>("NORMAL")
 export const dialogOpenAtom = atom(false)
+export const tableActionMenuOpenAtom = atom(false)
+export const textColorAtom = atom("#000000")
+export const buttonStateAtom = atom<ButtonStates>("NORMAL")
+export const selectedTableCellNode = atom<TableCellNode | null>(null)

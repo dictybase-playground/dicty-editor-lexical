@@ -5,7 +5,7 @@ import { Button, CircularProgress, PropTypes } from "@material-ui/core"
 import SaveIcon from "@material-ui/icons/Save"
 import DoneIcon from "@material-ui/icons/Done"
 import ErrorIcon from "@material-ui/icons/Error"
-import { ButtonStateAtom, ButtonStates } from "context/AtomConfigs"
+import { buttonStateAtom, ButtonStates } from "context/AtomConfigs"
 import useButtonStyles from "hooks/useButtonStyles"
 
 type TextSlideProperties = {
@@ -52,7 +52,7 @@ type SaveButtonProperties = {
 // uses the savebutton. If our savehook callback is asynchronous, then we'll want
 // to await that callback before proceeding to set the button state
 const SaveButton = ({ save }: SaveButtonProperties) => {
-  const [buttonState, setButtonState] = useAtom(ButtonStateAtom)
+  const [buttonState, setButtonState] = useAtom(buttonStateAtom)
   const { root } = useButtonStyles()
 
   const onClick = async () => {
