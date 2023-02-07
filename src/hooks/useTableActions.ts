@@ -20,6 +20,8 @@ const useTableActions = () => {
   const [editor] = useLexicalComposerContext()
   const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
   const tableCellNode = useAtomValue(selectedTableCellNode)
+  let deleteColumnDisabled = true
+  let deleteRowDisabled = true
 
   if (!tableCellNode) {
     // Since I am using an atom value for tableCellNode which may technically
@@ -34,8 +36,19 @@ const useTableActions = () => {
       deleteColumn: () => {},
       deleteRow: () => {},
       deleteTable: () => {},
+      deleteColumnDisabled,
+      deleteRowDisabled,
     }
   }
+
+  editor.getEditorState().read(() => {
+    const grid = $getElementGridForTableNode(
+      editor,
+      $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
+    )
+    deleteColumnDisabled = grid.columns === 1
+    deleteRowDisabled = grid.rows === 1
+  })
 
   const clearTableSelection = () => {
     if (tableCellNode && tableCellNode.isAttached()) return
@@ -108,11 +121,6 @@ const useTableActions = () => {
   const deleteRow = () => {
     editor.update(() => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      const grid = $getElementGridForTableNode(editor, tableNode)
-      if (grid.rows === 1) {
-        tableNode.remove()
-        return
-      }
       const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
       $removeTableRowAtIndex(tableNode, rowIndex)
       clearTableSelection()
@@ -123,12 +131,6 @@ const useTableActions = () => {
   const deleteColumn = () => {
     editor.update(() => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      const grid = $getElementGridForTableNode(editor, tableNode)
-      if (grid.columns === 1) {
-        tableNode.remove()
-        return
-      }
-
       const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
       $deleteTableColumn(tableNode, columnIndex)
       clearTableSelection()
@@ -144,6 +146,8 @@ const useTableActions = () => {
     deleteColumn,
     deleteRow,
     deleteTable,
+    deleteColumnDisabled,
+    deleteRowDisabled,
   }
 }
 

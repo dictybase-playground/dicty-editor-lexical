@@ -9,6 +9,7 @@ type TableActionMenuProperties = {
 
 const TableActionMenu = ({ anchorElement }: TableActionMenuProperties) => {
   const [isOpen, setIsOpen] = useAtom(tableActionMenuOpenAtom)
+
   const {
     insertRowAbove,
     insertRowBelow,
@@ -17,6 +18,8 @@ const TableActionMenu = ({ anchorElement }: TableActionMenuProperties) => {
     deleteColumn,
     deleteRow,
     deleteTable,
+    deleteColumnDisabled,
+    deleteRowDisabled,
   } = useTableActions()
 
   return (
@@ -36,8 +39,12 @@ const TableActionMenu = ({ anchorElement }: TableActionMenuProperties) => {
       <MenuItem onClick={insertColumnLeft}>Insert Column Left</MenuItem>
       <MenuItem onClick={insertColumnRight}>Insert Column Right</MenuItem>
       <Divider />
-      <MenuItem onClick={deleteRow}> Delete Row </MenuItem>
-      <MenuItem onClick={deleteColumn}> Delete Column </MenuItem>
+      <MenuItem onClick={deleteRow} disabled={deleteRowDisabled}>
+        Delete Row
+      </MenuItem>
+      <MenuItem onClick={deleteColumn} disabled={deleteColumnDisabled}>
+        Delete Column
+      </MenuItem>
       <MenuItem onClick={deleteTable}> Delete Table </MenuItem>
     </Menu>
   )
