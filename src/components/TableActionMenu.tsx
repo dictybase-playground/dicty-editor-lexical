@@ -9,7 +9,6 @@ type TableActionMenuProperties = {
 
 const TableActionMenu = ({ anchorElement }: TableActionMenuProperties) => {
   const [isOpen, setIsOpen] = useAtom(tableActionMenuOpenAtom)
-
   const {
     insertRowAbove,
     insertRowBelow,
