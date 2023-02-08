@@ -21,7 +21,6 @@ import {
 import {
   $getSelection,
   $isRangeSelection,
-  $isRootOrShadowRoot,
   $createParagraphNode,
   $createTextNode,
   $nodesOfType,
@@ -106,9 +105,7 @@ const CustomTablePlugin = () => {
       ({ columns, rows, width }) => {
         const selection = $getSelection()
 
-        if (!$isRangeSelection(selection)) {
-          return true
-        }
+        if (!$isRangeSelection(selection)) return true
 
         const { focus } = selection
         const focusNode = focus.getNode()
@@ -116,29 +113,13 @@ const CustomTablePlugin = () => {
         if (!focusNode) return true
 
         const tableNode = $createCustomTableNodeWithDimensions(
-          Number(rows), // change to number
-          Number(columns), // change to numbers
+          rows,
+          columns,
           width,
         )
 
-        // From lexical/Lexical.dev.js line 8015, under ElementNode:
-        // A shadow root is a Node that behaves like RootNode. The shadow root (and RootNode) mark the
-        // end of the hiercharchy, most implementations should treat it as if there's nothing (upwards)
-        // beyond this point. For example, node.getTopLevelElement(), when performed inside a TableCellNode
-        // will return the immediate first child underneath TableCellNode instead of RootNode.
-
-        if ($isRootOrShadowRoot(focusNode)) {
-          const target = focusNode.getChildAtIndex(focus.offset)
-          if (target) {
-            target.insertBefore(tableNode)
-          } else {
-            focusNode.append(tableNode)
-          }
-          tableNode.insertBefore($createParagraphNode())
-        } else {
-          const topLevelNode = focusNode.getTopLevelElementOrThrow()
-          topLevelNode.insertAfter(tableNode)
-        }
+        const topLevelNode = focusNode.getTopLevelElementOrThrow()
+        topLevelNode.insertAfter(tableNode)
 
         tableNode.insertAfter($createParagraphNode())
 
