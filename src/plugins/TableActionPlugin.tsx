@@ -3,9 +3,11 @@ import { createPortal } from "react-dom"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { $getSelection, $isRangeSelection } from "lexical"
 import { $getTableCellNodeFromLexicalNode } from "@lexical/table"
-import TableActionMenuButton from "components/TableActionMenuButton"
 import { useAtom } from "jotai"
 import { selectedTableCellNode } from "context/AtomConfigs"
+import usePositionMenuButton from "hooks/usePositionMenuButton"
+import TableActionMenuButton from "components/TableActionMenuButton"
+import TableActionMenu from "components/TableActionMenu"
 
 const TableActionPlugin = () => {
   const [editor] = useLexicalComposerContext()
@@ -13,6 +15,7 @@ const TableActionPlugin = () => {
   const [currentTableCellNode, setCurrentTableCellNode] = useAtom(
     selectedTableCellNode,
   )
+  const menuButtonReference = usePositionMenuButton()
 
   useEffect(() => {
     // register a listener for selection command,
@@ -45,7 +48,17 @@ const TableActionPlugin = () => {
   }, [editor, setCurrentTableCellNode])
 
   if (currentTableCellNode)
-    return createPortal(<TableActionMenuButton />, document.body)
+    return (
+      <>
+        {createPortal(
+          <TableActionMenuButton menuButtonReference={menuButtonReference} />,
+          document.body,
+        )}
+        {menuButtonReference.current ? (
+          <TableActionMenu anchorElement={menuButtonReference.current} />
+        ) : null}
+      </>
+    )
 
   return null
 }
