@@ -5,8 +5,14 @@ import {
   createParagraphWithTextNode,
   createCellWithParagraphNode,
   createHeaderCellWithParagraphNode,
+  bodyCellsToAppend,
+  headerCellsToAppend,
 } from "utils/$createWidthTable"
-import { TableCellNode, TableCellHeaderStates } from "@lexical/table"
+import {
+  TableCellNode,
+  TableRowNode,
+  TableCellHeaderStates,
+} from "@lexical/table"
 
 describe("CreateParagraphWithTextNode", () => {
   const testEditor = createEditor(testConfig)
@@ -85,5 +91,60 @@ describe("createHeaderCellWithParagraphNode", () => {
       headerState = createHeaderCellWithParagraphNode().getHeaderStyles()
     })
     expect(headerState).toEqual(TableCellHeaderStates.ROW)
+  })
+})
+
+describe("bodyCellsToAppend", () => {
+  const testEditor = createEditor({
+    ...testConfig,
+    nodes: [TableCellNode, TableRowNode],
+  })
+  it("returns a function that, when called, appends a specified number of body cells to a table row ", () => {
+    const cellCount = Math.floor(Math.random() * 10)
+
+    let tableRow
+    let cellsInRow
+    let firstCell
+    let firstCellHeaderState
+    const appendNCellsFunction = bodyCellsToAppend(cellCount)
+
+    testEditor.update(() => {
+      tableRow = new TableRowNode()
+      appendNCellsFunction(tableRow)
+      cellsInRow = tableRow.getChildrenSize()
+      firstCell = tableRow.getFirstChild()
+      firstCellHeaderState = firstCell ? firstCell.getHeaderStyles() : null
+    })
+
+    expect(firstCell).toBeInstanceOf(TableCellNode)
+    expect(firstCellHeaderState).toEqual(TableCellHeaderStates.NO_STATUS)
+    expect(cellsInRow).toEqual(cellCount)
+  })
+})
+
+describe("headerCellsToAppend", () => {
+  const testEditor = createEditor({
+    ...testConfig,
+    nodes: [TableCellNode, TableRowNode],
+  })
+  it("returns a function that, when called, appends a specified number of header cells to a table row ", () => {
+    const cellCount = Math.floor(Math.random() * 10)
+    let tableRow
+    let cellsInRow
+    let firstCell
+    let firstCellHeaderState
+    const appendNCellsFunction = headerCellsToAppend(cellCount)
+
+    testEditor.update(() => {
+      tableRow = new TableRowNode()
+      appendNCellsFunction(tableRow)
+      cellsInRow = tableRow.getChildrenSize()
+      firstCell = tableRow.getFirstChild()
+      firstCellHeaderState = firstCell ? firstCell.getHeaderStyles() : null
+    })
+
+    expect(firstCell).toBeInstanceOf(TableCellNode)
+    expect(firstCellHeaderState).toEqual(TableCellHeaderStates.ROW)
+    expect(cellsInRow).toEqual(cellCount)
   })
 })
