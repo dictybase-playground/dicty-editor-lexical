@@ -42,10 +42,11 @@ export const formatAtom = atom({
   isBold: false,
   isItalic: false,
   isUnderlined: false,
-  fontFamily: FontFamily.ARIAL,
   fontSize: FontSizes[5],
+  fontColor: "hsl(0, 0%, 0%)",
+  fontFamily: FontFamily.ARIAL,
+  blockType: BlockTypes.PARAGRAPH,
 })
-
 export const isBoldAtom = focusAtom(formatAtom, (optic) => optic.prop("isBold"))
 export const isItalicAtom = focusAtom(formatAtom, (optic) =>
   optic.prop("isItalic"),
@@ -59,13 +60,39 @@ export const fontFamilyAtom = focusAtom(formatAtom, (optic) =>
 export const fontSizeAtom = focusAtom(formatAtom, (optic) =>
   optic.prop("fontSize"),
 )
-export const blockTypeAtom = atom(BlockTypes.PARAGRAPH)
-export const canUndoAtom = atom(false)
-export const canRedoAtom = atom(false)
-export const isRTLAtom = atom(false)
-export const pulseAtom = atom(false)
-export const dialogOpenAtom = atom(false)
-export const tableActionMenuOpenAtom = atom(false)
-export const textColorAtom = atom("#000000")
+export const fontColorAtom = focusAtom(formatAtom, (optic) =>
+  optic.prop("fontColor"),
+)
+
+export const blockTypeAtom = focusAtom(formatAtom, (optic) =>
+  optic.prop("blockType"),
+)
+
+const historyAtom = atom({
+  canUndo: false,
+  canRedo: false,
+})
+export const canUndoAtom = focusAtom(historyAtom, (optic) =>
+  optic.prop("canUndo"),
+)
+export const canRedoAtom = focusAtom(historyAtom, (optic) =>
+  optic.prop("canRedo"),
+)
+
+export const openAtom = atom({
+  insertTable: false,
+  tableActions: false,
+  colorPicker: false,
+})
+export const insertTableOpenAtom = focusAtom(openAtom, (optic) =>
+  optic.prop("insertTable"),
+)
+export const tableActionMenuOpenAtom = focusAtom(openAtom, (optic) =>
+  optic.prop("tableActions"),
+)
+export const colorPickerOpenAtom = focusAtom(openAtom, (optic) =>
+  optic.prop("colorPicker"),
+)
+
 export const buttonStateAtom = atom<ButtonStates>("NORMAL")
 export const selectedTableCellNode = atom<TableCellNode | null>(null)

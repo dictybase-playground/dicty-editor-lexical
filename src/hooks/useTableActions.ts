@@ -25,7 +25,7 @@ const useTableActions = () => {
 
   if (!tableCellNode) {
     // Since I am using an atom value for tableCellNode which may technically
-    // be of type "null", I check for that and return an object with useless
+    // be of type null, I check for that and return an object with useless
     // functions here, instead of checking for a null value in every function
     // definition below.
     return {

@@ -1,14 +1,14 @@
 import { Button, Dialog } from "@material-ui/core"
-import AddIcon from "@material-ui/icons/Add"
+import TableChartOutlinedIcon from "@material-ui/icons/TableChartOutlined"
 import useToolbarItemStyles from "hooks/useToolbarItemStyles"
 import { useAtom } from "jotai"
-import { dialogOpenAtom } from "context/AtomConfigs"
+import { insertTableOpenAtom } from "context/AtomConfigs"
 import TableDialogContents from "./TableDialogContents"
 
 // When we make dialogs for inserting other things, they will be added here
 
 const InsertTableButton = () => {
-  const [isDialogOpen, setIsDialogOpen] = useAtom(dialogOpenAtom)
+  const [isDialogOpen, setIsDialogOpen] = useAtom(insertTableOpenAtom)
   const { spaced } = useToolbarItemStyles()
 
   return (
@@ -17,7 +17,7 @@ const InsertTableButton = () => {
         className={spaced}
         variant="text"
         onClick={() => setIsDialogOpen(true)}
-        startIcon={<AddIcon />}>
+        startIcon={<TableChartOutlinedIcon />}>
         Table
       </Button>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>

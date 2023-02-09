@@ -3,7 +3,7 @@ import { Button, Menu, MenuItem, Dialog } from "@material-ui/core"
 import AddIcon from "@material-ui/icons/Add"
 import useToolbarItemStyles from "hooks/useToolbarItemStyles"
 import { useAtom } from "jotai"
-import { dialogOpenAtom } from "context/AtomConfigs"
+import { insertTableOpenAtom } from "context/AtomConfigs"
 import TableDialogContents from "./TableDialogContents"
 
 type DialogStates = "TABLE"
@@ -15,7 +15,7 @@ const dialogStateComponents: Record<DialogStates, ReactNode> = {
 
 const InsertDropdown = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isDialogOpen, setIsDialogOpen] = useAtom(dialogOpenAtom)
+  const [isDialogOpen, setIsDialogOpen] = useAtom(insertTableOpenAtom)
   const [currentDialog, setCurrentDialog] = useState("TABLE")
   const buttonReference = useRef(null)
   const { spaced } = useToolbarItemStyles()

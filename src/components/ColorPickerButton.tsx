@@ -1,25 +1,34 @@
-import { useState, useRef } from "react"
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
+import { useRef } from "react"
 import FormatColorTextIcon from "@material-ui/icons/FormatColorText"
 import { IconButton, SvgIcon, Popover } from "@material-ui/core"
-import { HexColorPicker } from "react-colorful"
 import useToolbarItemStyles from "hooks/useToolbarItemStyles"
-import useToggle from "hooks/useToogle"
-import applyStyleText from "utils/textStyles"
+import { useAtomValue, useAtom } from "jotai"
+import { fontColorAtom, colorPickerOpenAtom } from "context/AtomConfigs"
+import ColorPicker from "./ColorPicker"
 
 const title = "Font Color"
-const defaultColor = "#000000"
+const COLOR_OPTIONS = [
+  "hsl(0, 0%, 0%)",
+  "hsl(210, 100%, 25.1%)",
+  "hsl(210, 100%, 45%)",
+  "hsl(209, 100%, 75%)",
+  "hsl(211, 100%, 95%)",
+  "hsl(0, 0%, 100%)",
+  "hsl(53, 100%, 60%)",
+]
 
 const ColorPickerButton = () => {
-  const [color, setColor] = useState(defaultColor)
-  const [isOpen, toggleOpen, setValue] = useToggle()
-  const [editor] = useLexicalComposerContext()
+  const color = useAtomValue(fontColorAtom)
+  const [isOpen, setOpen] = useAtom(colorPickerOpenAtom)
   const classes = useToolbarItemStyles()
   const buttonReference = useRef(null)
 
   const onClose = () => {
-    applyStyleText(editor, { color })
-    setValue(false)
+    setOpen(false)
+  }
+
+  const toggleOpen = () => {
+    setOpen(!isOpen)
   }
 
   return (
@@ -46,7 +55,7 @@ const ColorPickerButton = () => {
           vertical: "top",
           horizontal: "center",
         }}>
-        <HexColorPicker color={color} onChange={setColor} />
+        <ColorPicker colorOptions={COLOR_OPTIONS} />
       </Popover>
     </>
   )
