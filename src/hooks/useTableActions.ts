@@ -23,25 +23,8 @@ const useTableActions = () => {
   let deleteColumnDisabled = true
   let deleteRowDisabled = true
 
-  if (!tableCellNode) {
-    // Since I am using an atom value for tableCellNode which may technically
-    // be of type null, I check for that and return an object with useless
-    // functions here, instead of checking for a null value in every function
-    // definition below.
-    return {
-      insertColumnLeft: () => {},
-      insertColumnRight: () => {},
-      insertRowAbove: () => {},
-      insertRowBelow: () => {},
-      deleteColumn: () => {},
-      deleteRow: () => {},
-      deleteTable: () => {},
-      deleteColumnDisabled,
-      deleteRowDisabled,
-    }
-  }
-
   editor.getEditorState().read(() => {
+    if (!tableCellNode) return
     const grid = $getElementGridForTableNode(
       editor,
       $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
@@ -60,6 +43,7 @@ const useTableActions = () => {
 
   const deleteTable = () => {
     editor.update(() => {
+      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       tableNode.remove()
     })
@@ -68,6 +52,7 @@ const useTableActions = () => {
 
   const insertRowAbove = () => {
     editor.update(() => {
+      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       $insertTableRow(
         tableNode,
@@ -82,6 +67,7 @@ const useTableActions = () => {
 
   const insertRowBelow = () => {
     editor.update(() => {
+      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       $insertTableRow(
         tableNode,
@@ -96,6 +82,7 @@ const useTableActions = () => {
 
   const insertColumnLeft = () => {
     editor.update(() => {
+      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       $insertTableColumn(
         tableNode,
@@ -110,6 +97,7 @@ const useTableActions = () => {
 
   const insertColumnRight = () => {
     editor.update(() => {
+      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
       const grid = $getElementGridForTableNode(editor, tableNode)
@@ -120,6 +108,7 @@ const useTableActions = () => {
 
   const deleteRow = () => {
     editor.update(() => {
+      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
       $removeTableRowAtIndex(tableNode, rowIndex)
@@ -130,6 +119,7 @@ const useTableActions = () => {
 
   const deleteColumn = () => {
     editor.update(() => {
+      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
       $deleteTableColumn(tableNode, columnIndex)
