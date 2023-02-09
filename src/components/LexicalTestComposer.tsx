@@ -9,10 +9,10 @@ const onError = (error: Error) => {
   console.error(error)
 }
 
+export const testConfig = { namespace: "Testing", onError }
+
 const LexicalTestComposer = ({ children }: LexicalTestComposerProperties) => (
-  <LexicalComposer initialConfig={{ namespace: "Testing", onError }}>
-    {children}
-  </LexicalComposer>
+  <LexicalComposer initialConfig={testConfig}>{children}</LexicalComposer>
 )
 
 export default LexicalTestComposer

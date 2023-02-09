@@ -1,5 +1,5 @@
 import { $getSelection, $isRangeSelection, $createParagraphNode } from "lexical"
-import $createCustomTableNodeWithDimensions from "utils/createCustomTableNodeWithDimensions"
+import $createWidthTable from "utils/$createWidthTable"
 
 type InsertCustomTablePayload = {
   columns: number
@@ -21,7 +21,7 @@ const InsertCustomTable = ({
 
   if (!focusNode) return true
 
-  const tableNode = $createCustomTableNodeWithDimensions(rows, columns, width)
+  const tableNode = $createWidthTable(rows, columns, width)
 
   const topLevelNode = focusNode.getTopLevelElementOrThrow()
   topLevelNode.insertAfter(tableNode)
