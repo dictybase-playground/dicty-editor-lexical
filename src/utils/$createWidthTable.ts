@@ -9,32 +9,32 @@ import {
 } from "@lexical/table"
 import CustomTableNode from "nodes/CustomTableNode"
 
-const createParagraphWithTextNode = () =>
+export const createParagraphWithTextNode = () =>
   $createParagraphNode().append($createTextNode())
 
-const createCellWithParagraphNode = () =>
+export const createCellWithParagraphNode = () =>
   $createTableCellNode(TableCellHeaderStates.NO_STATUS).append(
     createParagraphWithTextNode(),
   )
 
-const createHeaderCellWithParagraphNode = () =>
+export const createHeaderCellWithParagraphNode = () =>
   $createTableCellNode(TableCellHeaderStates.ROW).append(
     createParagraphWithTextNode(),
   )
 
-const bodyCellsToAppend = (count: number) => (row: TableRowNode) => {
+export const bodyCellsToAppend = (count: number) => (row: TableRowNode) => {
   Array.from({ length: count }).forEach(() =>
     row.append(createCellWithParagraphNode()),
   )
 }
 
-const headerCellsToAppend = (count: number) => (row: TableRowNode) => {
+export const headerCellsToAppend = (count: number) => (row: TableRowNode) => {
   Array.from({ length: count }).forEach(() =>
     row.append(createHeaderCellWithParagraphNode()),
   )
 }
 
-const cellsToAppend = (cells: number) => (rows: TableRowNode[]) => {
+export const cellsToAppend = (cells: number) => (rows: TableRowNode[]) => {
   if (rows.length === 0) return
   const headerCellFunction = headerCellsToAppend(cells)
   const bodyCellFunction = bodyCellsToAppend(cells)
@@ -42,14 +42,14 @@ const cellsToAppend = (cells: number) => (rows: TableRowNode[]) => {
   pipe(rows, A.tailOrEmpty, A.tap(bodyCellFunction))
 }
 
-const createRows = (rows: number) =>
+export const createRows = (rows: number) =>
   Array.from({ length: rows }).map(() => $createTableRowNode())
 
-const rowToAppend = (table: TableNode) => (row: TableRowNode) => {
+export const rowToAppend = (table: TableNode) => (row: TableRowNode) => {
   table.append(row)
 }
 
-const $createCustomTableNodeWithDimensions = (
+const $createWidthTable = (
   rowCount: number,
   columnCount: number,
   width: number,
@@ -61,4 +61,4 @@ const $createCustomTableNodeWithDimensions = (
   return tableNode
 }
 
-export default $createCustomTableNodeWithDimensions
+export default $createWidthTable
