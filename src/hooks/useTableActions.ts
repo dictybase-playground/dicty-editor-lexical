@@ -15,7 +15,7 @@ import {
   selectedTableCellNode,
   tableActionMenuOpenAtom,
 } from "context/AtomConfigs"
-import { useAtomValue, useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom, SetStateAction } from "jotai"
 
 const clearTableSelection = (
   editor: LexicalEditor,
@@ -28,13 +28,21 @@ const clearTableSelection = (
   })
 }
 
+const useTableActionContext = (): [
+  LexicalEditor,
+  (update: SetStateAction<boolean>) => void,
+  TableCellNode | null,
+] => [
+  useLexicalComposerContext()[0],
+  useSetAtom(tableActionMenuOpenAtom),
+  useAtomValue(selectedTableCellNode),
+]
+
 export const useDeleteTable = () => {
-  const [editor] = useLexicalComposerContext()
-  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
-  const tableCellNode = useAtomValue(selectedTableCellNode)
+  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
   return () => {
+    if (!tableCellNode) return
     editor.update(() => {
-      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       tableNode.remove()
     })
@@ -43,9 +51,7 @@ export const useDeleteTable = () => {
 }
 
 export const useInsertRow = () => {
-  const [editor] = useLexicalComposerContext()
-  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
-  const tableCellNode = useAtomValue(selectedTableCellNode)
+  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
 
   const insertRowAbove = () => {
     if (!tableCellNode) return
@@ -73,9 +79,7 @@ export const useInsertRow = () => {
 }
 
 export const useInsertColumn = () => {
-  const [editor] = useLexicalComposerContext()
-  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
-  const tableCellNode = useAtomValue(selectedTableCellNode)
+  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
 
   const insertColumnLeft = () => {
     if (!tableCellNode) return
@@ -102,9 +106,7 @@ export const useInsertColumn = () => {
   return { insertColumnLeft, insertColumnRight }
 }
 export const useDeleteColumn = () => {
-  const [editor] = useLexicalComposerContext()
-  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
-  const tableCellNode = useAtomValue(selectedTableCellNode)
+  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
   let deleteColumnDisabled = true
 
   editor.getEditorState().read(() => {
@@ -117,8 +119,8 @@ export const useDeleteColumn = () => {
   })
 
   const deleteColumn = () => {
+    if (!tableCellNode) return
     editor.update(() => {
-      if (!tableCellNode) return
       $deleteTableColumn(
         $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
         $getTableColumnIndexFromTableCellNode(tableCellNode),
@@ -135,9 +137,7 @@ export const useDeleteColumn = () => {
 }
 
 export const useDeleteRow = () => {
-  const [editor] = useLexicalComposerContext()
-  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
-  const tableCellNode = useAtomValue(selectedTableCellNode)
+  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
   let deleteRowDisabled = true
 
   editor.getEditorState().read(() => {
