@@ -51,13 +51,9 @@ export const useInsertRow = () => {
     editor.update(() => {
       if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      $insertTableRow(
-        tableNode,
-        $getTableRowIndexFromTableCellNode(tableCellNode),
-        false,
-        1,
-        $getElementGridForTableNode(editor, tableNode),
-      )
+      const row = $getTableRowIndexFromTableCellNode(tableCellNode)
+      const grid = $getElementGridForTableNode(editor, tableNode)
+      $insertTableRow(tableNode, row, false, 1, grid)
     })
     setIsOpen(false)
   }
@@ -66,13 +62,9 @@ export const useInsertRow = () => {
     editor.update(() => {
       if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      $insertTableRow(
-        tableNode,
-        $getTableRowIndexFromTableCellNode(tableCellNode),
-        true,
-        1,
-        $getElementGridForTableNode(editor, tableNode),
-      )
+      const row = $getTableRowIndexFromTableCellNode(tableCellNode)
+      const grid = $getElementGridForTableNode(editor, tableNode)
+      $insertTableRow(tableNode, row, true, 1, grid)
     })
     setIsOpen(false)
   }
@@ -132,9 +124,10 @@ export const useDeleteColumn = () => {
   const deleteColumn = () => {
     editor.update(() => {
       if (!tableCellNode) return
-      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
-      $deleteTableColumn(tableNode, columnIndex)
+      $deleteTableColumn(
+        $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
+        $getTableColumnIndexFromTableCellNode(tableCellNode),
+      )
       clearTableSelection(editor, tableCellNode)
     })
     setIsOpen(false)
@@ -164,9 +157,10 @@ export const useDeleteRow = () => {
   const deleteRow = () => {
     editor.update(() => {
       if (!tableCellNode) return
-      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
-      $removeTableRowAtIndex(tableNode, rowIndex)
+      $removeTableRowAtIndex(
+        $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
+        $getTableRowIndexFromTableCellNode(tableCellNode),
+      )
       clearTableSelection(editor, tableCellNode)
     })
     setIsOpen(false)
