@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Provider } from "jotai"
 import { tableActionMenuOpenAtom } from "context/AtomConfigs"
-import useTableActions from "hooks/useTableActions"
+import { useInsertRow } from "hooks/useTableActions"
 import TableActionMenu from "./TableActionMenu"
 
 vi.mock("../hooks/useTableActions.ts", () => ({
@@ -13,7 +13,7 @@ vi.mock("../hooks/useTableActions.ts", () => ({
 }))
 
 it("fires the appropriate event handler when an option is clicked", async () => {
-  const { insertRowAbove } = useTableActions()
+  const { insertRowAbove } = useInsertRow()
   const insertRowAboveSpy = vi.fn(insertRowAbove)
   const anchorElement = document.createElement("div")
 
