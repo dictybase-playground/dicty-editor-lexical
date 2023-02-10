@@ -224,12 +224,4 @@ describe("createWidthTable", () => {
     })
     expect(tableNode).toBeInstanceOf(CustomTableNode)
   })
-
-  it("returns a tableNode", () => {
-    let tableNode
-    testEditor.update(() => {
-      tableNode = $createWidthTable(rowCount, columnCount, width)
-    })
-    expect(tableNode).toBeInstanceOf(CustomTableNode)
-  })
 })

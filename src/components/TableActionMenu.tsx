@@ -1,5 +1,11 @@
 import { Divider, Menu, MenuItem } from "@material-ui/core"
-import useTableActions from "hooks/useTableActions"
+import {
+  useInsertRow,
+  useInsertColumn,
+  useDeleteRow,
+  useDeleteColumn,
+  useDeleteTable,
+} from "hooks/useTableActions"
 import { tableActionMenuOpenAtom } from "context/AtomConfigs"
 import { useAtom } from "jotai"
 
@@ -9,17 +15,11 @@ type TableActionMenuProperties = {
 
 const TableActionMenu = ({ anchorElement }: TableActionMenuProperties) => {
   const [isOpen, setIsOpen] = useAtom(tableActionMenuOpenAtom)
-  const {
-    insertRowAbove,
-    insertRowBelow,
-    insertColumnLeft,
-    insertColumnRight,
-    deleteColumn,
-    deleteRow,
-    deleteTable,
-    deleteColumnDisabled,
-    deleteRowDisabled,
-  } = useTableActions()
+  const { insertRowAbove, insertRowBelow } = useInsertRow()
+  const { insertColumnLeft, insertColumnRight } = useInsertColumn()
+  const { deleteColumn, deleteColumnDisabled } = useDeleteColumn()
+  const { deleteRow, deleteRowDisabled } = useDeleteRow()
+  const deleteTable = useDeleteTable()
 
   return (
     <Menu

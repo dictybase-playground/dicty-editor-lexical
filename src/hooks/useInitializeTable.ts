@@ -11,6 +11,12 @@ import { $nodesOfType, $getNodeByKey, NodeMutation } from "lexical"
 import { pipe, A, G } from "@mobily/ts-belt"
 import CustomTableNode from "nodes/CustomTableNode"
 
+const isCreated = ([, mutation]: [string, NodeMutation]) =>
+  mutation === "created"
+
+const isDestroyed = ([, mutation]: [string, NodeMutation]) =>
+  mutation === "destroyed"
+
 const useInitializeTable = () => {
   const [editor] = useLexicalComposerContext()
   useEffect(() => {
@@ -45,8 +51,6 @@ const useInitializeTable = () => {
     const unregisterMutationListener = editor.registerMutationListener(
       CustomTableNode,
       (nodeMutations) => {
-        const isCreated = ([, mutation]: [string, NodeMutation]) =>
-          mutation === "created"
         const getNode = (nodeKey: string) =>
           editor.getEditorState().read(() => $getNodeByKey(nodeKey))
 
@@ -59,8 +63,6 @@ const useInitializeTable = () => {
           A.filter($isTableNode),
           A.tap(initializeTableNode),
         )
-        const isDestroyed = ([, mutation]: [string, NodeMutation]) =>
-          mutation === "destroyed"
 
         const getTableSelection = ([nodeKey]: [string, NodeMutation]): [
           string,
