@@ -7,11 +7,13 @@ import {
   createHeaderCellWithParagraphNode,
   bodyCellsToAppend,
   headerCellsToAppend,
+  cellsToAppend,
 } from "utils/$createWidthTable"
 import {
   TableCellNode,
   TableRowNode,
   TableCellHeaderStates,
+  $createTableRowNode,
 } from "@lexical/table"
 
 describe("CreateParagraphWithTextNode", () => {
@@ -146,5 +148,57 @@ describe("headerCellsToAppend", () => {
     expect(firstCell).toBeInstanceOf(TableCellNode)
     expect(firstCellHeaderState).toEqual(TableCellHeaderStates.ROW)
     expect(cellsInRow).toEqual(cellCount)
+  })
+})
+
+describe("cellsToAppend", () => {
+  const testEditor = createEditor({
+    ...testConfig,
+    nodes: [TableCellNode, TableRowNode],
+  })
+  const cellCount = 2
+  const appendThreeCellsToEachRow = cellsToAppend(cellCount)
+
+  it("returns a function that, when passed an array of table rows, appends header cells to the first row", () => {
+    let rowArray
+    let firstRowChildren
+    let firstCell
+    let firstCellHeaderState
+    let secondCell
+    let secondCellHeaderState
+    testEditor.update(() => {
+      rowArray = Array.from({ length: 3 }).map(() => $createTableRowNode())
+      appendThreeCellsToEachRow(rowArray)
+      firstRowChildren = rowArray[0].getChildren()
+      ;[firstCell, secondCell] = firstRowChildren
+      firstCellHeaderState = firstCell.getHeaderStyles()
+      secondCellHeaderState = secondCell.getHeaderStyles()
+    })
+    expect(firstRowChildren).toHaveLength(cellCount)
+    expect(firstCell).toBeInstanceOf(TableCellNode)
+    expect(secondCell).toBeInstanceOf(TableCellNode)
+    expect(firstCellHeaderState).toEqual(TableCellHeaderStates.ROW)
+    expect(secondCellHeaderState).toEqual(TableCellHeaderStates.ROW)
+  })
+  it("returns a function that, when passed an array of table rows, appends bodys cells to subsequent rows", () => {
+    let rowArray
+    let firstRowChildren
+    let firstCell
+    let firstCellHeaderState
+    let secondCell
+    let secondCellHeaderState
+    testEditor.update(() => {
+      rowArray = Array.from({ length: 3 }).map(() => $createTableRowNode())
+      appendThreeCellsToEachRow(rowArray)
+      firstRowChildren = rowArray[0].getChildren()
+      ;[firstCell, secondCell] = firstRowChildren
+      firstCellHeaderState = firstCell.getHeaderStyles()
+      secondCellHeaderState = secondCell.getHeaderStyles()
+    })
+    expect(firstRowChildren).toHaveLength(cellCount)
+    expect(firstCell).toBeInstanceOf(TableCellNode)
+    expect(secondCell).toBeInstanceOf(TableCellNode)
+    expect(firstCellHeaderState).toEqual(TableCellHeaderStates.ROW)
+    expect(secondCellHeaderState).toEqual(TableCellHeaderStates.ROW)
   })
 })
