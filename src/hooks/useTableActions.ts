@@ -1,6 +1,7 @@
-import { $getRoot } from "lexical"
+import { $getRoot, LexicalEditor } from "lexical"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import {
+  TableCellNode,
   $getTableNodeFromLexicalNodeOrThrow,
   $getTableColumnIndexFromTableCellNode,
   $getTableRowIndexFromTableCellNode,
@@ -16,32 +17,22 @@ import {
 } from "context/AtomConfigs"
 import { useAtomValue, useSetAtom } from "jotai"
 
-const useTableActions = () => {
+const clearTableSelection = (
+  editor: LexicalEditor,
+  tableCellNode: TableCellNode,
+) => {
+  if (tableCellNode && tableCellNode.isAttached()) return
+  editor.update(() => {
+    const rootNode = $getRoot()
+    rootNode.selectStart()
+  })
+}
+
+export const useDeleteTable = () => {
   const [editor] = useLexicalComposerContext()
   const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
   const tableCellNode = useAtomValue(selectedTableCellNode)
-  let deleteColumnDisabled = true
-  let deleteRowDisabled = true
-
-  editor.getEditorState().read(() => {
-    if (!tableCellNode) return
-    const grid = $getElementGridForTableNode(
-      editor,
-      $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
-    )
-    deleteColumnDisabled = grid.columns === 1
-    deleteRowDisabled = grid.rows === 1
-  })
-
-  const clearTableSelection = () => {
-    if (tableCellNode && tableCellNode.isAttached()) return
-    editor.update(() => {
-      const rootNode = $getRoot()
-      rootNode.selectStart()
-    })
-  }
-
-  const deleteTable = () => {
+  return () => {
     editor.update(() => {
       if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
@@ -49,6 +40,12 @@ const useTableActions = () => {
     })
     setIsOpen(false)
   }
+}
+
+export const useInsertRow = () => {
+  const [editor] = useLexicalComposerContext()
+  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
+  const tableCellNode = useAtomValue(selectedTableCellNode)
 
   const insertRowAbove = () => {
     editor.update(() => {
@@ -80,13 +77,22 @@ const useTableActions = () => {
     setIsOpen(false)
   }
 
+  return { insertRowAbove, insertRowBelow }
+}
+
+export const useInsertColumn = () => {
+  const [editor] = useLexicalComposerContext()
+  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
+  const tableCellNode = useAtomValue(selectedTableCellNode)
+
   const insertColumnLeft = () => {
     editor.update(() => {
       if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      const column = $getTableColumnIndexFromTableCellNode(tableCellNode)
       $insertTableColumn(
         tableNode,
-        $getTableColumnIndexFromTableCellNode(tableCellNode),
+        column,
         false,
         1,
         $getElementGridForTableNode(editor, tableNode),
@@ -106,16 +112,22 @@ const useTableActions = () => {
     setIsOpen(false)
   }
 
-  const deleteRow = () => {
-    editor.update(() => {
-      if (!tableCellNode) return
-      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
-      $removeTableRowAtIndex(tableNode, rowIndex)
-      clearTableSelection()
-    })
-    setIsOpen(false)
-  }
+  return { insertColumnLeft, insertColumnRight }
+}
+export const useDeleteColumn = () => {
+  const [editor] = useLexicalComposerContext()
+  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
+  const tableCellNode = useAtomValue(selectedTableCellNode)
+  let deleteColumnDisabled = true
+
+  editor.getEditorState().read(() => {
+    if (!tableCellNode) return
+    const grid = $getElementGridForTableNode(
+      editor,
+      $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
+    )
+    deleteColumnDisabled = grid.columns === 1
+  })
 
   const deleteColumn = () => {
     editor.update(() => {
@@ -123,22 +135,45 @@ const useTableActions = () => {
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
       $deleteTableColumn(tableNode, columnIndex)
-      clearTableSelection()
+      clearTableSelection(editor, tableCellNode)
     })
     setIsOpen(false)
   }
 
   return {
-    insertColumnLeft,
-    insertColumnRight,
-    insertRowAbove,
-    insertRowBelow,
     deleteColumn,
-    deleteRow,
-    deleteTable,
     deleteColumnDisabled,
-    deleteRowDisabled,
   }
 }
 
-export default useTableActions
+export const useDeleteRow = () => {
+  const [editor] = useLexicalComposerContext()
+  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
+  const tableCellNode = useAtomValue(selectedTableCellNode)
+  let deleteRowDisabled = true
+
+  editor.getEditorState().read(() => {
+    if (!tableCellNode) return
+    const grid = $getElementGridForTableNode(
+      editor,
+      $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
+    )
+    deleteRowDisabled = grid.rows === 1
+  })
+
+  const deleteRow = () => {
+    editor.update(() => {
+      if (!tableCellNode) return
+      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+      const rowIndex = $getTableRowIndexFromTableCellNode(tableCellNode)
+      $removeTableRowAtIndex(tableNode, rowIndex)
+      clearTableSelection(editor, tableCellNode)
+    })
+    setIsOpen(false)
+  }
+
+  return {
+    deleteRow,
+    deleteRowDisabled,
+  }
+}
