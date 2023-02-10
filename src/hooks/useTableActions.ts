@@ -48,8 +48,8 @@ export const useInsertRow = () => {
   const tableCellNode = useAtomValue(selectedTableCellNode)
 
   const insertRowAbove = () => {
+    if (!tableCellNode) return
     editor.update(() => {
-      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const row = $getTableRowIndexFromTableCellNode(tableCellNode)
       const grid = $getElementGridForTableNode(editor, tableNode)
@@ -59,8 +59,8 @@ export const useInsertRow = () => {
   }
 
   const insertRowBelow = () => {
+    if (!tableCellNode) return
     editor.update(() => {
-      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const row = $getTableRowIndexFromTableCellNode(tableCellNode)
       const grid = $getElementGridForTableNode(editor, tableNode)
@@ -78,24 +78,19 @@ export const useInsertColumn = () => {
   const tableCellNode = useAtomValue(selectedTableCellNode)
 
   const insertColumnLeft = () => {
+    if (!tableCellNode) return
     editor.update(() => {
-      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const column = $getTableColumnIndexFromTableCellNode(tableCellNode)
-      $insertTableColumn(
-        tableNode,
-        column,
-        false,
-        1,
-        $getElementGridForTableNode(editor, tableNode),
-      )
+      const grid = $getElementGridForTableNode(editor, tableNode)
+      $insertTableColumn(tableNode, column, false, 1, grid)
     })
     setIsOpen(false)
   }
 
   const insertColumnRight = () => {
+    if (!tableCellNode) return
     editor.update(() => {
-      if (!tableCellNode) return
       const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
       const columnIndex = $getTableColumnIndexFromTableCellNode(tableCellNode)
       const grid = $getElementGridForTableNode(editor, tableNode)
