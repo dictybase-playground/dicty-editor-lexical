@@ -28,7 +28,7 @@ class CustomTableNode extends TableNode {
     properties are private and their access should be avoided directly. We opted for __ instead of _
     because of the fact that some build tooling mangles and minifies single _ prefixed properties to improve
     code size. However, this breaks down if you're exposing a node to be extended outside of your build."
-
+    https://lexical.dev/docs/concepts/nodes#node-properties
     */
     this.__width = width
   }
