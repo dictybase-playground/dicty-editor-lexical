@@ -7,9 +7,7 @@ import { useInsertRow } from "hooks/useTableActions"
 import TableActionMenu from "./TableActionMenu"
 
 vi.mock("../hooks/useTableActions.ts", () => ({
-  default: () => ({
-    insertRowAbove: () => {},
-  }),
+  insertRowAbove: () => {},
 }))
 
 it.todo(
