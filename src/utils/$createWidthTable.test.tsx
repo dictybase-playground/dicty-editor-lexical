@@ -17,8 +17,14 @@ import {
 } from "@lexical/table"
 import CustomTableNode from "nodes/CustomTableNode"
 
+const initializeEditorWithTableNodes = () =>
+  createEditor({
+    ...testConfig,
+    nodes: [TableCellNode, TableRowNode],
+  })
+
 describe("CreateParagraphWithTextNode", () => {
-  const testEditor = createEditor(testConfig)
+  const testEditor = initializeEditorWithTableNodes()
 
   it("creates and returns a paragraph node", () => {
     let paragraphNode
@@ -40,8 +46,7 @@ describe("CreateParagraphWithTextNode", () => {
 })
 
 describe("createCellWithParagraphNode", () => {
-  const testEditor = createEditor({ ...testConfig, nodes: [TableCellNode] })
-
+  const testEditor = initializeEditorWithTableNodes()
   it("returns a table cell node", () => {
     let tableCellNode
     testEditor.update(() => {
@@ -70,8 +75,7 @@ describe("createCellWithParagraphNode", () => {
 })
 
 describe("createHeaderCellWithParagraphNode", () => {
-  const testEditor = createEditor({ ...testConfig, nodes: [TableCellNode] })
-
+  const testEditor = initializeEditorWithTableNodes()
   it("returns a table cell node", () => {
     let tableCellNode
     testEditor.update(() => {
@@ -100,10 +104,7 @@ describe("createHeaderCellWithParagraphNode", () => {
 })
 
 describe("bodyCellsToAppend", () => {
-  const testEditor = createEditor({
-    ...testConfig,
-    nodes: [TableCellNode, TableRowNode],
-  })
+  const testEditor = initializeEditorWithTableNodes()
 
   it("returns a function that, when called, appends a specified number of body cells to a table row ", () => {
     const cellCount = Math.floor(Math.random() * 10)
@@ -129,10 +130,7 @@ describe("bodyCellsToAppend", () => {
 })
 
 describe("headerCellsToAppend", () => {
-  const testEditor = createEditor({
-    ...testConfig,
-    nodes: [TableCellNode, TableRowNode],
-  })
+  const testEditor = initializeEditorWithTableNodes()
 
   it("returns a function that, when called, appends a specified number of header cells to a table row ", () => {
     const cellCount = Math.floor(Math.random() * 10)
@@ -157,10 +155,7 @@ describe("headerCellsToAppend", () => {
 })
 
 describe("cellsToAppend", () => {
-  const testEditor = createEditor({
-    ...testConfig,
-    nodes: [TableCellNode, TableRowNode],
-  })
+  const testEditor = initializeEditorWithTableNodes()
   const cellCount = 2
   const appendThreeCellsToEachRow = cellsToAppend(cellCount)
 
@@ -209,10 +204,7 @@ describe("cellsToAppend", () => {
 })
 
 describe("createWidthTable", () => {
-  const testEditor = createEditor({
-    ...testConfig,
-    nodes: [TableCellNode, TableRowNode],
-  })
+  const testEditor = initializeEditorWithTableNodes()
   const rowCount = Math.floor(Math.random() * 10)
   const columnCount = Math.floor(Math.random() * 10)
   const width = 500
