@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite -c viteConfigWithBabel.ts",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "server": "nodemon server.js server -l http://*:3000",
     "start": "vite",
     "build": "tsc && vite build",
@@ -41,6 +42,7 @@
     "@types/react": "17.0.52",
     "@types/react-dom": "17.0.18",
     "@vitejs/plugin-react": "^2.2.0",
+    "@vitest/coverage-c8": "^0.28.5",
     "eslint": "^8.25.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
