@@ -7,23 +7,26 @@ import {
   useDeleteTable,
 } from "hooks/useTableActions"
 import { tableActionMenuOpenAtom } from "context/AtomConfigs"
-import { useAtom } from "jotai"
+import { useSetAtom } from "jotai"
 
 type TableActionMenuProperties = {
   anchorElement: HTMLElement
+  isMenuOpen: boolean
 }
 
-const TableActionMenu = ({ anchorElement }: TableActionMenuProperties) => {
-  const [isOpen, setIsOpen] = useAtom(tableActionMenuOpenAtom)
+const TableActionMenu = ({
+  anchorElement,
+  isMenuOpen,
+}: TableActionMenuProperties) => {
+  const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
   const { insertRowAbove, insertRowBelow } = useInsertRow()
   const { insertColumnLeft, insertColumnRight } = useInsertColumn()
   const { deleteColumn, deleteColumnDisabled } = useDeleteColumn()
   const { deleteRow, deleteRowDisabled } = useDeleteRow()
   const deleteTable = useDeleteTable()
-
   return (
     <Menu
-      open={isOpen}
+      open={isMenuOpen}
       // getContentAnchorEl needs to be set to null for anchorOrigin.vertical to have affect
       getContentAnchorEl={null}
       anchorEl={anchorElement}

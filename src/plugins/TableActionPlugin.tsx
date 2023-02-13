@@ -3,8 +3,11 @@ import { createPortal } from "react-dom"
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { $getSelection, $isRangeSelection } from "lexical"
 import { $getTableCellNodeFromLexicalNode } from "@lexical/table"
-import { useAtom } from "jotai"
-import { selectedTableCellNode } from "context/AtomConfigs"
+import { useAtom, useAtomValue } from "jotai"
+import {
+  selectedTableCellNode,
+  tableActionMenuOpenAtom,
+} from "context/AtomConfigs"
 import usePositionMenuButton from "hooks/usePositionMenuButton"
 import TableActionMenuButton from "components/TableActionMenuButton"
 import TableActionMenu from "components/TableActionMenu"
@@ -15,6 +18,8 @@ const TableActionPlugin = () => {
   const [currentTableCellNode, setCurrentTableCellNode] = useAtom(
     selectedTableCellNode,
   )
+  const isMenuOpen = useAtomValue(tableActionMenuOpenAtom)
+  // console.log("isMenuOpen", isMenuOpen)
   const menuButtonReference = usePositionMenuButton()
 
   useEffect(() => {
@@ -26,7 +31,7 @@ const TableActionPlugin = () => {
       () => {
         editor.getEditorState().read(() => {
           const selection = $getSelection()
-
+          // console.log(currentTableCellNode)
           if (!$isRangeSelection(selection)) return
           // lexical also has other non-null checks for other variables, that I don't think are necessary, but I will look closer
           const tableCellNode = $getTableCellNodeFromLexicalNode(
@@ -55,7 +60,10 @@ const TableActionPlugin = () => {
           document.body,
         )}
         {menuButtonReference.current ? (
-          <TableActionMenu anchorElement={menuButtonReference.current} />
+          <TableActionMenu
+            anchorElement={menuButtonReference.current}
+            isMenuOpen={isMenuOpen}
+          />
         ) : null}
       </>
     )
