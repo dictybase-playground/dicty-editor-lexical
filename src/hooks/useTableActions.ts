@@ -53,29 +53,23 @@ export const useDeleteTable = () => {
 export const useInsertRow = () => {
   const [editor, setIsOpen, tableCellNode] = useTableActionContext()
 
-  const insertRowAbove = () => {
-    if (!tableCellNode) return
-    editor.update(() => {
-      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      const row = $getTableRowIndexFromTableCellNode(tableCellNode)
-      const grid = $getElementGridForTableNode(editor, tableNode)
-      $insertTableRow(tableNode, row, false, 1, grid)
-    })
-    setIsOpen(false)
-  }
+  const insertRow =
+    ({ insertAfter }: { insertAfter: boolean }) =>
+    () => {
+      if (!tableCellNode) return
+      editor.update(() => {
+        const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
+        const row = $getTableRowIndexFromTableCellNode(tableCellNode)
+        const grid = $getElementGridForTableNode(editor, tableNode)
+        $insertTableRow(tableNode, row, insertAfter, 1, grid)
+      })
+      setIsOpen(false)
+    }
 
-  const insertRowBelow = () => {
-    if (!tableCellNode) return
-    editor.update(() => {
-      const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-      const row = $getTableRowIndexFromTableCellNode(tableCellNode)
-      const grid = $getElementGridForTableNode(editor, tableNode)
-      $insertTableRow(tableNode, row, true, 1, grid)
-    })
-    setIsOpen(false)
+  return {
+    insertRowAbove: insertRow({ insertAfter: false }),
+    insertRowBelow: insertRow({ insertAfter: true }),
   }
-
-  return { insertRowAbove, insertRowBelow }
 }
 
 export const useInsertColumn = () => {
