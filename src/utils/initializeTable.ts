@@ -14,6 +14,19 @@ const isCreated = ([, mutation]: [string, NodeMutation]) =>
 const isDestroyed = ([, mutation]: [string, NodeMutation]) =>
   mutation === "destroyed"
 
+const getTableSelection =
+  (tableSelections: Map<string, TableSelection>) =>
+  ([nodeKey]: [string, NodeMutation]): [string, TableSelection | undefined] =>
+    [nodeKey, tableSelections.get(nodeKey)]
+
+const cleanUp =
+  (tableSelections: Map<string, TableSelection>) =>
+  ([nodeKey, tableSelection]: [string, TableSelection | undefined]) => {
+    if (!tableSelection) return
+    tableSelection.removeListeners()
+    tableSelections.delete(nodeKey)
+  }
+
 export const getInitializationFunction =
   (tableSelections: Map<string, TableSelection>, editor: LexicalEditor) =>
   (tableNode: TableNode) => {
@@ -44,24 +57,10 @@ export const getMutationHandler =
       A.tap(getInitializationFunction(tableSelections, editor)),
     )
 
-    const getTableSelection = ([nodeKey]: [string, NodeMutation]): [
-      string,
-      TableSelection | undefined,
-    ] => [nodeKey, tableSelections.get(nodeKey)]
-
-    const cleanUp = ([nodeKey, tableSelection]: [
-      string,
-      TableSelection | undefined,
-    ]) => {
-      if (!tableSelection) return
-      tableSelection.removeListeners()
-      tableSelections.delete(nodeKey)
-    }
-
     pipe(
       [...nodeMutations],
       A.filter(isDestroyed),
-      A.map(getTableSelection),
-      A.tap(cleanUp),
+      A.map(getTableSelection(tableSelections)),
+      A.tap(cleanUp(tableSelections)),
     )
   }
