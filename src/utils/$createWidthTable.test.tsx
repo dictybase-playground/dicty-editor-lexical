@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, afterEach } from "vitest"
 import { createEditor, ParagraphNode, TextNode } from "lexical"
 import { testConfig } from "components/LexicalTestComposer"
 import $createWidthTable, {
@@ -17,15 +17,22 @@ import {
 } from "@lexical/table"
 import CustomTableNode from "nodes/CustomTableNode"
 
-const initializeEditorWithTableNodes = () =>
-  createEditor({
-    ...testConfig,
-    nodes: [TableCellNode, TableRowNode],
-  })
+const testEditor = createEditor({
+  ...testConfig,
+  nodes: [TableCellNode, TableRowNode],
+})
+
+const initialEditorStateString =
+  '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+
+afterEach(() => {
+  const initialEditorState = testEditor.parseEditorState(
+    initialEditorStateString,
+  )
+  testEditor.setEditorState(initialEditorState)
+})
 
 describe("CreateParagraphWithTextNode", () => {
-  const testEditor = initializeEditorWithTableNodes()
-
   it("creates and returns a paragraph node", () => {
     let paragraphNode
     testEditor.update(() => {
@@ -46,7 +53,6 @@ describe("CreateParagraphWithTextNode", () => {
 })
 
 describe("createCellWithParagraphNode", () => {
-  const testEditor = initializeEditorWithTableNodes()
   it("returns a table cell node", () => {
     let tableCellNode
     testEditor.update(() => {
@@ -75,7 +81,6 @@ describe("createCellWithParagraphNode", () => {
 })
 
 describe("createHeaderCellWithParagraphNode", () => {
-  const testEditor = initializeEditorWithTableNodes()
   it("returns a table cell node", () => {
     let tableCellNode
     testEditor.update(() => {
@@ -104,8 +109,6 @@ describe("createHeaderCellWithParagraphNode", () => {
 })
 
 describe("bodyCellsToAppend", () => {
-  const testEditor = initializeEditorWithTableNodes()
-
   it("returns a function that, when called, appends a specified number of body cells to a table row ", () => {
     const cellCount = Math.floor(Math.random() * 10)
 
@@ -130,8 +133,6 @@ describe("bodyCellsToAppend", () => {
 })
 
 describe("headerCellsToAppend", () => {
-  const testEditor = initializeEditorWithTableNodes()
-
   it("returns a function that, when called, appends a specified number of header cells to a table row ", () => {
     const cellCount = Math.floor(Math.random() * 10)
     let tableRow
@@ -155,7 +156,6 @@ describe("headerCellsToAppend", () => {
 })
 
 describe("cellsToAppend", () => {
-  const testEditor = initializeEditorWithTableNodes()
   const cellCount = 2
   const appendThreeCellsToEachRow = cellsToAppend(cellCount)
 
@@ -204,7 +204,6 @@ describe("cellsToAppend", () => {
 })
 
 describe("createWidthTable", () => {
-  const testEditor = initializeEditorWithTableNodes()
   const rowCount = Math.floor(Math.random() * 10)
   const columnCount = Math.floor(Math.random() * 10)
   const width = 500
