@@ -5,6 +5,7 @@ import {
   useDeleteRow,
   useDeleteColumn,
   useDeleteTable,
+  useDisableFunctions,
 } from "hooks/useTableActions"
 import { tableActionMenuOpenAtom } from "context/AtomConfigs"
 import { useSetAtom } from "jotai"
@@ -21,8 +22,9 @@ const TableActionMenu = ({
   const setIsOpen = useSetAtom(tableActionMenuOpenAtom)
   const { insertRowAbove, insertRowBelow } = useInsertRow()
   const { insertColumnLeft, insertColumnRight } = useInsertColumn()
-  const { deleteColumn, deleteColumnDisabled } = useDeleteColumn()
-  const { deleteRow, deleteRowDisabled } = useDeleteRow()
+  const { deleteRowDisabled, deleteColumnDisabled } = useDisableFunctions()
+  const deleteColumn = useDeleteColumn()
+  const deleteRow = useDeleteRow()
   const deleteTable = useDeleteTable()
   return (
     <Menu

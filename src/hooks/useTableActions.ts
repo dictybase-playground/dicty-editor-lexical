@@ -6,7 +6,6 @@ import {
   $getTableColumnIndexFromTableCellNode,
   $getTableRowIndexFromTableCellNode,
   $getElementGridForTableNode,
-  $insertTableRow,
   $insertTableColumn,
   $removeTableRowAtIndex,
   $deleteTableColumn,
@@ -16,6 +15,7 @@ import {
   tableActionMenuOpenAtom,
 } from "context/AtomConfigs"
 import { useAtomValue, useSetAtom, SetStateAction } from "jotai"
+import { insertRow } from "utils/tableActions"
 
 const clearTableSelection = (
   editor: LexicalEditor,
@@ -30,16 +30,16 @@ const clearTableSelection = (
 
 const useTableActionContext = (): [
   LexicalEditor,
-  (update: SetStateAction<boolean>) => void,
   TableCellNode | null,
+  (update: SetStateAction<boolean>) => void,
 ] => [
   useLexicalComposerContext()[0],
-  useSetAtom(tableActionMenuOpenAtom),
   useAtomValue(selectedTableCellNode),
+  useSetAtom(tableActionMenuOpenAtom),
 ]
 
 export const useDeleteTable = () => {
-  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
+  const [editor, tableCellNode, setIsOpen] = useTableActionContext()
   return () => {
     if (!tableCellNode) return
     editor.update(() => {
@@ -51,29 +51,26 @@ export const useDeleteTable = () => {
 }
 
 export const useInsertRow = () => {
-  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
+  const [editor, tableCellNode, setIsOpen] = useTableActionContext()
 
-  const insertRow =
-    ({ insertAfter }: { insertAfter: boolean }) =>
-    () => {
-      if (!tableCellNode) return
-      editor.update(() => {
-        const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCellNode)
-        const row = $getTableRowIndexFromTableCellNode(tableCellNode)
-        const grid = $getElementGridForTableNode(editor, tableNode)
-        $insertTableRow(tableNode, row, insertAfter, 1, grid)
-      })
-      setIsOpen(false)
-    }
+  const insertRowAbove = () => {
+    insertRow(editor, tableCellNode, { insertAfter: false })
+    setIsOpen(false)
+  }
+
+  const insertRowBelow = () => {
+    insertRow(editor, tableCellNode, { insertAfter: true })
+    setIsOpen(false)
+  }
 
   return {
-    insertRowAbove: insertRow({ insertAfter: false }),
-    insertRowBelow: insertRow({ insertAfter: true }),
+    insertRowAbove,
+    insertRowBelow,
   }
 }
 
 export const useInsertColumn = () => {
-  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
+  const [editor, tableCellNode, setIsOpen] = useTableActionContext()
 
   const insertColumnLeft = () => {
     if (!tableCellNode) return
@@ -100,19 +97,9 @@ export const useInsertColumn = () => {
   return { insertColumnLeft, insertColumnRight }
 }
 export const useDeleteColumn = () => {
-  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
-  let deleteColumnDisabled = true
+  const [editor, tableCellNode, setIsOpen] = useTableActionContext()
 
-  editor.getEditorState().read(() => {
-    if (!tableCellNode) return
-    const grid = $getElementGridForTableNode(
-      editor,
-      $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
-    )
-    deleteColumnDisabled = grid.columns === 1
-  })
-
-  const deleteColumn = () => {
+  return () => {
     if (!tableCellNode) return
     editor.update(() => {
       $deleteTableColumn(
@@ -123,27 +110,12 @@ export const useDeleteColumn = () => {
     })
     setIsOpen(false)
   }
-
-  return {
-    deleteColumn,
-    deleteColumnDisabled,
-  }
 }
 
 export const useDeleteRow = () => {
-  const [editor, setIsOpen, tableCellNode] = useTableActionContext()
-  let deleteRowDisabled = true
+  const [editor, tableCellNode, setIsOpen] = useTableActionContext()
 
-  editor.getEditorState().read(() => {
-    if (!tableCellNode) return
-    const grid = $getElementGridForTableNode(
-      editor,
-      $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
-    )
-    deleteRowDisabled = grid.rows === 1
-  })
-
-  const deleteRow = () => {
+  return () => {
     editor.update(() => {
       if (!tableCellNode) return
       $removeTableRowAtIndex(
@@ -154,9 +126,25 @@ export const useDeleteRow = () => {
     })
     setIsOpen(false)
   }
+}
+
+export const useDisableFunctions = () => {
+  const [editor, tableCellNode] = useTableActionContext()
+  let deleteRowDisabled = true
+  let deleteColumnDisabled = true
+
+  editor.getEditorState().read(() => {
+    if (!tableCellNode) return
+    const grid = $getElementGridForTableNode(
+      editor,
+      $getTableNodeFromLexicalNodeOrThrow(tableCellNode),
+    )
+    deleteRowDisabled = grid.rows === 1
+    deleteColumnDisabled = grid.columns === 1
+  })
 
   return {
-    deleteRow,
     deleteRowDisabled,
+    deleteColumnDisabled,
   }
 }
