@@ -17,11 +17,6 @@ const useInitializeTable = () => {
     // Plugins might be loaded _after_ initial content is set, hence existing table nodes
     // won't be initialized from mutation[create] listener. Instead doing it here,
 
-    const unregisterMutationListener = editor.registerMutationListener(
-      CustomTableNode,
-      getMutationHandler(tableSelections, editor),
-    )
-
     editor.getEditorState().read(() => {
       const tableNodes = $nodesOfType(TableNode)
 
@@ -30,6 +25,11 @@ const useInitializeTable = () => {
         return tableNode
       })
     })
+
+    const unregisterMutationListener = editor.registerMutationListener(
+      CustomTableNode,
+      getMutationHandler(tableSelections, editor),
+    )
 
     return () => {
       unregisterMutationListener() // Hook might be called multiple times so cleaning up tables listeners as well,

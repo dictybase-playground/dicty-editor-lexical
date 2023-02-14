@@ -9,7 +9,7 @@ const onError = (error: Error) => {
   console.error(error)
 }
 
-export const testConfig = { namespace: "Testing", onError }
+export const testConfig = { namespace: "Testing", onError, theme: {} }
 
 const LexicalTestComposer = ({ children }: LexicalTestComposerProperties) => (
   <LexicalComposer initialConfig={testConfig}>{children}</LexicalComposer>
