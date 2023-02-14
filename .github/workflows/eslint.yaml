@@ -18,3 +18,4 @@ jobs:
         with:
           fail_on_error: true
           eslint_flags: "src/"
+          github_token: ${{ github.token }}
