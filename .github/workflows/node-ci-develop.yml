@@ -1,0 +1,23 @@
+name: Node CI Develop
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: set up node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: check out code
+        uses: actions/checkout@v3
+      - name: install
+        run: yarn install
+      - name: unit tests
+        run: yarn test-coverage
+        env:
+          CI: true
+      - name: upload test coverage to codecov
+        uses: codecov/codecov-action@v3
