@@ -13,7 +13,6 @@ import CustomTablePlugin from "plugins/CustomTablePlugin"
 import TableActionPlugin from "plugins/TableActionPlugin"
 import ToolbarV7Plugin from "plugins/ToolbarV7"
 import LocalPersistencePlugin from "components/LocalPersistencePlugin"
-import TreeViewPlugin from "plugins/TreeViewPlugin"
 import {
   useEditorInputStyles,
   useEditorPlaceholderStyles,
@@ -96,7 +95,6 @@ const EditorV8 = () => {
         <Grid item className={persistencePluginLayoutClasses.root}>
           <LocalPersistencePlugin />
         </Grid>
-        <TreeViewPlugin />
       </Grid>
     </LexicalComposer>
   )
