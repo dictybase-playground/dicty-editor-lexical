@@ -29,7 +29,16 @@ const useTableFormControls = () => {
     setIsDialogOpen(false)
   }
 
-  return { rows, columns, handleChangeRows, handleChangeColumns, handleConfirm }
+  const textFieldProperties: [
+    string,
+    number,
+    (event: ChangeEvent<HTMLInputElement>) => void,
+  ][] = [
+    ["Rows", rows, handleChangeRows],
+    ["Columns", columns, handleChangeColumns],
+  ]
+
+  return { rows, columns, textFieldProperties, handleConfirm }
 }
 
 export default useTableFormControls
