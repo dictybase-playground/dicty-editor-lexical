@@ -1,4 +1,4 @@
-import { describe, test, expect, afterEach } from "vitest"
+import { describe, test, expect } from "vitest"
 import { createEditor, ParagraphNode, TextNode } from "lexical"
 import { testConfig } from "components/LexicalTestComposer"
 import $createWidthTable, {
@@ -20,16 +20,6 @@ import CustomTableNode from "nodes/CustomTableNode"
 const testEditor = createEditor({
   ...testConfig,
   nodes: [TableCellNode, TableRowNode],
-})
-
-const initialEditorStateString =
-  '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
-
-afterEach(() => {
-  const initialEditorState = testEditor.parseEditorState(
-    initialEditorStateString,
-  )
-  testEditor.setEditorState(initialEditorState)
 })
 
 describe("CreateParagraphWithTextNode", () => {
