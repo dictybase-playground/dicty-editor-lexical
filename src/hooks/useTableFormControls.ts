@@ -4,6 +4,12 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useSetAtom } from "jotai"
 import { insertTableOpenAtom } from "context/AtomConfigs"
 
+type TextFieldProperties = [
+  string,
+  number,
+  (event: ChangeEvent<HTMLInputElement>) => void,
+][]
+
 const calculateWidth = (columns: number) => 250 + Math.log(columns) * 500
 
 const useTableFormControls = () => {
@@ -29,11 +35,7 @@ const useTableFormControls = () => {
     setIsDialogOpen(false)
   }
 
-  const textFieldProperties: [
-    string,
-    number,
-    (event: ChangeEvent<HTMLInputElement>) => void,
-  ][] = [
+  const textFieldProperties: TextFieldProperties = [
     ["Rows", rows, handleChangeRows],
     ["Columns", columns, handleChangeColumns],
   ]
