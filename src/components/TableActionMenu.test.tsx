@@ -1,4 +1,4 @@
-import { it, expect, vi } from "vitest"
+import { test, expect, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Provider } from "jotai"
@@ -10,7 +10,7 @@ vi.mock("../hooks/useTableActions.ts", () => ({
   insertRowAbove: () => {},
 }))
 
-it.todo(
+test.todo(
   "fires the appropriate event handler when an option is clicked",
   async () => {
     const { insertRowAbove } = useInsertRow()
