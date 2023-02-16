@@ -3,11 +3,11 @@ import {
   CardHeader,
   Card,
   CardContent,
-  TextField,
   CardActions,
   Grid,
 } from "@material-ui/core"
 import useTableFormControls from "hooks/useTableFormControls"
+import TableDialogTextFields from "./TableDialogTextFields"
 
 const TableDialogContents = () => {
   const { textFieldProperties, handleConfirm } = useTableFormControls()
@@ -17,16 +17,7 @@ const TableDialogContents = () => {
       <CardContent>
         <CardHeader title="Insert Table" />
         <Grid container direction="column" spacing={1}>
-          {textFieldProperties.map((property) => (
-            <Grid key={property[0]} item>
-              <TextField
-                fullWidth
-                label={property[0]}
-                value={property[1]}
-                onChange={property[2]}
-              />
-            </Grid>
-          ))}
+          <TableDialogTextFields textFieldProperties={textFieldProperties} />
         </Grid>
       </CardContent>
       <CardActions>
