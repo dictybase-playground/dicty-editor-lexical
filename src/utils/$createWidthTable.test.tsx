@@ -17,15 +17,14 @@ import {
 } from "@lexical/table"
 import CustomTableNode from "nodes/CustomTableNode"
 
-const testEditor = createEditor({
-  ...testConfig,
-  nodes: [TableCellNode, TableRowNode],
-})
-
 describe("CreateParagraphWithTextNode", () => {
   let paragraphNode: ParagraphNode
   let textNode: TextNode | null
   beforeAll(() => {
+    const testEditor = createEditor({
+      ...testConfig,
+      nodes: [TableCellNode, TableRowNode],
+    })
     testEditor.update(() => {
       paragraphNode = createParagraphWithTextNode()
       textNode = paragraphNode.getFirstChild()
@@ -48,6 +47,10 @@ describe("createCellWithParagraphNode & createHeaderCellwithParagraphNode", () =
   let bodyCellHeaderState: number
   let headerCellHeaderState: number
   beforeAll(() => {
+    const testEditor = createEditor({
+      ...testConfig,
+      nodes: [TableCellNode, TableRowNode],
+    })
     testEditor.update(() => {
       bodyCellNode = createCellWithParagraphNode()
       bodyCellParagraphNode = bodyCellNode.getFirstChild()
@@ -90,6 +93,10 @@ describe("bodyCellsToAppend & headerCellsToAppend", () => {
   const appendNHeaderCellsFunction = headerCellsToAppend(cellCount)
 
   beforeAll(() => {
+    const testEditor = createEditor({
+      ...testConfig,
+      nodes: [TableCellNode, TableRowNode],
+    })
     testEditor.update(() => {
       tableBodyRow = new TableRowNode()
       appendNBodyCellsFunction(tableBodyRow)
@@ -135,6 +142,10 @@ describe("cellsToAppend & headerCellsToAppend", () => {
   let firstCellRowTwoHeaderState: number
   let secondCellRowTwoHeaderState: number
   beforeAll(() => {
+    const testEditor = createEditor({
+      ...testConfig,
+      nodes: [TableCellNode, TableRowNode],
+    })
     testEditor.update(() => {
       rowArray = Array.from({ length: 2 }).map(() => $createTableRowNode())
       appendThreeCellsToEachRow(rowArray)
@@ -177,6 +188,10 @@ describe("createWidthTable", () => {
   let numberOfRows: number
   let numberOfColumns: number
   beforeAll(() => {
+    const testEditor = createEditor({
+      ...testConfig,
+      nodes: [TableCellNode, TableRowNode],
+    })
     testEditor.update(() => {
       tableNode = $createWidthTable(rowCount, columnCount, width)
       const rowNode = tableNode.getFirstChild() as TableRowNode
