@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest"
+import { describe, test, expect, beforeAll } from "vitest"
 import { createEditor, ParagraphNode, TextNode } from "lexical"
 import { testConfig } from "components/LexicalTestComposer"
 import $createWidthTable, {
@@ -25,9 +25,11 @@ const testEditor = createEditor({
 describe("CreateParagraphWithTextNode", () => {
   let paragraphNode: ParagraphNode
   let textNode: TextNode | null
-  testEditor.update(() => {
-    paragraphNode = createParagraphWithTextNode()
-    textNode = paragraphNode.getFirstChild()
+  beforeAll(() => {
+    testEditor.update(() => {
+      paragraphNode = createParagraphWithTextNode()
+      textNode = paragraphNode.getFirstChild()
+    })
   })
 
   test("creates and returns a paragraph node", () => {
@@ -45,14 +47,16 @@ describe("createCellWithParagraphNode & createHeaderCellwithParagraphNode", () =
   let headerCellParagraphNode: ParagraphNode | null
   let bodyCellHeaderState: number
   let headerCellHeaderState: number
-  testEditor.update(() => {
-    bodyCellNode = createCellWithParagraphNode()
-    bodyCellParagraphNode = bodyCellNode.getFirstChild()
-    bodyCellHeaderState = createCellWithParagraphNode().getHeaderStyles()
-    headerCellNode = createHeaderCellWithParagraphNode()
-    headerCellParagraphNode = headerCellNode.getFirstChild()
-    headerCellHeaderState =
-      createHeaderCellWithParagraphNode().getHeaderStyles()
+  beforeAll(() => {
+    testEditor.update(() => {
+      bodyCellNode = createCellWithParagraphNode()
+      bodyCellParagraphNode = bodyCellNode.getFirstChild()
+      bodyCellHeaderState = createCellWithParagraphNode().getHeaderStyles()
+      headerCellNode = createHeaderCellWithParagraphNode()
+      headerCellParagraphNode = headerCellNode.getFirstChild()
+      headerCellHeaderState =
+        createHeaderCellWithParagraphNode().getHeaderStyles()
+    })
   })
   test("returns a table cell node", () => {
     expect(bodyCellNode).toBeInstanceOf(TableCellNode)
@@ -85,22 +89,24 @@ describe("bodyCellsToAppend & headerCellsToAppend", () => {
   let firstHeaderCellHeaderState: number | null
   const appendNHeaderCellsFunction = headerCellsToAppend(cellCount)
 
-  testEditor.update(() => {
-    tableBodyRow = new TableRowNode()
-    appendNBodyCellsFunction(tableBodyRow)
-    bodyCellsInRow = tableBodyRow.getChildrenSize()
-    firstBodyCell = tableBodyRow.getFirstChild()
-    firstBodyCellHeaderState = firstBodyCell
-      ? firstBodyCell.getHeaderStyles()
-      : null
+  beforeAll(() => {
+    testEditor.update(() => {
+      tableBodyRow = new TableRowNode()
+      appendNBodyCellsFunction(tableBodyRow)
+      bodyCellsInRow = tableBodyRow.getChildrenSize()
+      firstBodyCell = tableBodyRow.getFirstChild()
+      firstBodyCellHeaderState = firstBodyCell
+        ? firstBodyCell.getHeaderStyles()
+        : null
 
-    tableHeaderRow = new TableRowNode()
-    appendNHeaderCellsFunction(tableHeaderRow)
-    headerCellsInRow = tableHeaderRow.getChildrenSize()
-    firstHeaderCell = tableHeaderRow.getFirstChild()
-    firstHeaderCellHeaderState = firstHeaderCell
-      ? firstHeaderCell.getHeaderStyles()
-      : null
+      tableHeaderRow = new TableRowNode()
+      appendNHeaderCellsFunction(tableHeaderRow)
+      headerCellsInRow = tableHeaderRow.getChildrenSize()
+      firstHeaderCell = tableHeaderRow.getFirstChild()
+      firstHeaderCellHeaderState = firstHeaderCell
+        ? firstHeaderCell.getHeaderStyles()
+        : null
+    })
   })
   test("returns a function that, when called, appends a specified number of body cells to a table row ", () => {
     expect(firstBodyCell).toBeInstanceOf(TableCellNode)
@@ -128,19 +134,20 @@ describe("cellsToAppend & headerCellsToAppend", () => {
   let secondCellRowTwo: TableCellNode
   let firstCellRowTwoHeaderState: number
   let secondCellRowTwoHeaderState: number
+  beforeAll(() => {
+    testEditor.update(() => {
+      rowArray = Array.from({ length: 2 }).map(() => $createTableRowNode())
+      appendThreeCellsToEachRow(rowArray)
+      firstRowChildren = rowArray[0].getChildren()
+      ;[firstCellRowOne, secondCellRowOne] = firstRowChildren
+      firstCellRowOneHeaderState = firstCellRowOne.getHeaderStyles()
+      secondCellRowOneHeaderState = secondCellRowOne.getHeaderStyles()
 
-  testEditor.update(() => {
-    rowArray = Array.from({ length: 2 }).map(() => $createTableRowNode())
-    appendThreeCellsToEachRow(rowArray)
-    firstRowChildren = rowArray[0].getChildren()
-    ;[firstCellRowOne, secondCellRowOne] = firstRowChildren
-    firstCellRowOneHeaderState = firstCellRowOne.getHeaderStyles()
-    secondCellRowOneHeaderState = secondCellRowOne.getHeaderStyles()
-
-    secondRowChildren = rowArray[1].getChildren()
-    ;[firstCellRowTwo, secondCellRowTwo] = secondRowChildren
-    firstCellRowTwoHeaderState = firstCellRowTwo.getHeaderStyles()
-    secondCellRowTwoHeaderState = secondCellRowTwo.getHeaderStyles()
+      secondRowChildren = rowArray[1].getChildren()
+      ;[firstCellRowTwo, secondCellRowTwo] = secondRowChildren
+      firstCellRowTwoHeaderState = firstCellRowTwo.getHeaderStyles()
+      secondCellRowTwoHeaderState = secondCellRowTwo.getHeaderStyles()
+    })
   })
 
   test("returns a function that, when passed an array of table rows, appends a given number of schildren to each row", () => {
@@ -169,12 +176,13 @@ describe("createWidthTable", () => {
   let tableNode: CustomTableNode
   let numberOfRows: number
   let numberOfColumns: number
-
-  testEditor.update(() => {
-    tableNode = $createWidthTable(rowCount, columnCount, width)
-    const rowNode = tableNode.getFirstChild() as TableRowNode
-    numberOfRows = tableNode.getChildrenSize()
-    numberOfColumns = rowNode.getChildrenSize()
+  beforeAll(() => {
+    testEditor.update(() => {
+      tableNode = $createWidthTable(rowCount, columnCount, width)
+      const rowNode = tableNode.getFirstChild() as TableRowNode
+      numberOfRows = tableNode.getChildrenSize()
+      numberOfColumns = rowNode.getChildrenSize()
+    })
   })
 
   test("returns a tableNode", () => {

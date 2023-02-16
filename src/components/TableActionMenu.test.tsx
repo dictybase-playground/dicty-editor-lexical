@@ -1,4 +1,4 @@
-import { test, expect, vi } from "vitest"
+import { test, expect, vi, beforeAll } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Provider } from "jotai"
@@ -6,9 +6,11 @@ import { tableActionMenuOpenAtom } from "context/AtomConfigs"
 import { useInsertRow } from "hooks/useTableActions"
 import TableActionMenu from "./TableActionMenu"
 
-vi.mock("../hooks/useTableActions.ts", () => ({
-  insertRowAbove: () => {},
-}))
+beforeAll(() => {
+  vi.mock("../hooks/useTableActions.ts", () => ({
+    insertRowAbove: () => {},
+  }))
+})
 
 test.todo(
   "fires the appropriate event handler when an option is clicked",
