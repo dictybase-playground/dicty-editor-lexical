@@ -36,7 +36,7 @@ jobs:
                       const cont = await fs.promises.readFile(file, "utf8")
                       return cont
               }).forEach(async (content) => {
-                      await github.issues.createComment({
+                      await github.rest.issues.createComment({
                         issue_number: context.payload.pull_request.number,
                         owner: context.repo.owner,
                         repo: context.repo.repo,
