@@ -8,13 +8,39 @@ jobs:
       - name: set up node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: check out code
         uses: actions/checkout@v3
       - name: install
         run: yarn
       - name: eslint check
-        uses: reviewdog/action-eslint@v1
+        run: yarn lint:output
+      - name: post comment in pull request
+        if: ${{ failure() }}
+        uses: actions/github-script@v6
         with:
-          fail_on_error: true
-          eslint_flags: "src/"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require("fs")
+            async function run() {
+              const globber = await glob.create(
+                      proces.env.GITHUB_PATH/*.html,
+                      {followSymbolicLinks: false}
+              )
+              const files = globber.glob()
+              files.map(async (file) => {
+                      await fs.promises.readFile(file, "utf8")
+              }).forEach(async (content) => {
+                      await github.issues.createComment({
+                        issue_number: context.github.event.pull_request.number,
+                        owner: context.github.repository_owner,
+                        repo: context.github.repository,
+                        body: `\n\n${$content}`
+                      })
+              })
+            }
+            try {
+              run()
+            } catch(err) {
+                core.error(`Possible error with posting eslint output ${err}`)
+            }
