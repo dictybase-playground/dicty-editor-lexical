@@ -32,11 +32,14 @@ jobs:
               if (!files) { return }
               if (files.length < 1) { return }
               core.warning(files)
-              files.map(async (file) => {
+              files.forEach(async (file) => {
                       const cont = await fs.promises.readFile(file, "utf8")
-                      return cont
-              }).forEach((content) => {
-                      core.warning(`from foreach ${content}`)
+                      await github.rest.issues.createComment({
+                        issue_number: context.payload.pull_request.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: cont
+                      })
               })
             }
             try {
