@@ -34,14 +34,16 @@ jobs:
               core.warning(files)
               files.map(async (file) => {
                       const cont = await fs.promises.readFile(file, "utf8")
+                      core.warning(cont)
                       return cont
               }).forEach(async (content) => {
-                      await github.rest.issues.createComment({
-                        issue_number: context.payload.pull_request.number,
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        body: content
-                      })
+                      core.warning(content)
+                      # await github.rest.issues.createComment({
+                      #   issue_number: context.payload.pull_request.number,
+                      #   owner: context.repo.owner,
+                      #   repo: context.repo.repo,
+                      #   body: content
+                      # })
               })
             }
             try {
