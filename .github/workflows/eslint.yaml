@@ -25,10 +25,12 @@ jobs:
             const path = require("path")
             async function run() {
               const globber = await glob.create(
-                      path.join(process.env.GITHUB_PATH, "*.html"),
+                      "*.html",
                       {followSymbolicLinks: false}
               )
               const files = globber.glob()
+              if (!files) { return }
+              if (files.length < 1) { return }
               files.map(async (file) => {
                       await fs.promises.readFile(file, "utf8")
               }).forEach(async (content) => {
