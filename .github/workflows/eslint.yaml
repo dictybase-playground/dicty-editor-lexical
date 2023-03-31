@@ -31,6 +31,7 @@ jobs:
               const files = globber.glob()
               if (!files) { return }
               if (files.length < 1) { return }
+              core.warning(files)
               files.map(async (file) => {
                       await fs.promises.readFile(file, "utf8")
               }).forEach(async (content) => {
