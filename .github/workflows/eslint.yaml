@@ -25,7 +25,7 @@ jobs:
             const path = require("path")
             async function run() {
               const globber = await glob.create(
-                      "*.html",
+                      "public/*.html",
                       {followSymbolicLinks: false}
               )
               const files = await globber.glob()
@@ -39,7 +39,7 @@ jobs:
                         issue_number: context.github.event.pull_request.number,
                         owner: context.github.repository_owner,
                         repo: context.github.repository,
-                        body: `\n\n${$content}`
+                        body: `\n\n${content}`
                       })
               })
             }

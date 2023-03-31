@@ -12,7 +12,7 @@
     "build": "tsc && vite build",
     "build-github": "tsc && vite build -c viteGithubConfig.ts",
     "lint": "eslint --ext .jsx,.js,.ts,.tsx src/",
-    "lint:output": "eslint -f html --ext .jsx,.js,.ts,.tsx src/ -o report.html",
+    "lint:output": "eslint -f html --ext .jsx,.js,.ts,.tsx src/ -o public/report.html",
     "preview": "vite preview"
   },
   "dependencies": {
