@@ -25,7 +25,7 @@ jobs:
             const path = require("path")
             async function run() {
               const globber = await glob.create(
-                      path.join(proces.env.GITHUB_PATH, "*.html"),
+                      path.join(process.env.GITHUB_PATH, "*.html"),
                       {followSymbolicLinks: false}
               )
               const files = globber.glob()
