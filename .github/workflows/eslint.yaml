@@ -33,13 +33,18 @@ jobs:
               if (files.length < 1) { return }
               core.warning(files)
               files.map(async (file) => {
-                      await fs.promises.readFile(file, "utf8")
+                      const cont = await fs.promises.readFile(file, "utf8")
+                      return cont
               }).forEach(async (content) => {
+                      core.notice(context.github.event.pull_request.number)
+                      core.notice(context.github.repository_owner)
+                      core.notice(context.github.repository)
+                      core.notice(content)
                       await github.issues.createComment({
                         issue_number: context.github.event.pull_request.number,
                         owner: context.github.repository_owner,
                         repo: context.github.repository,
-                        body: `\n\n${content}`
+                        body: content
                       })
               })
             }
