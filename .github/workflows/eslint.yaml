@@ -34,10 +34,9 @@ jobs:
               core.warning(files)
               files.map(async (file) => {
                       const cont = await fs.promises.readFile(file, "utf8")
-                      core.warning(cont)
                       return cont
-              }).forEach(async (content) => {
-                      core.warning(content)
+              }).forEach((content) => {
+                      core.warning(`from foreach ${content}`)
               })
             }
             try {
