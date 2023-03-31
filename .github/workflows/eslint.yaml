@@ -28,7 +28,7 @@ jobs:
                       "*.html",
                       {followSymbolicLinks: false}
               )
-              const files = globber.glob()
+              const files = await globber.glob()
               if (!files) { return }
               if (files.length < 1) { return }
               core.warning(files)
