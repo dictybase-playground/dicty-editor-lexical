@@ -7,7 +7,6 @@ import {
   $insertTableRow,
 } from "@lexical/table"
 
-// eslint-disable-next-line import/prefer-default-export
 export const insertRow = (
   editor: LexicalEditor,
   tableCellNode: TableCellNode | null,
