@@ -5,8 +5,8 @@ import {
   HTMLTableElementWithWithTableSelectionState,
   TableSelection,
 } from "@lexical/table"
-import { $getNodeByKey, NodeMutation, LexicalEditor } from "lexical"
 import { pipe, A, G } from "@mobily/ts-belt"
+import { $getNodeByKey, NodeMutation, LexicalEditor } from "lexical"
 
 const isCreated = ([, mutation]: [string, NodeMutation]) =>
   mutation === "created"
