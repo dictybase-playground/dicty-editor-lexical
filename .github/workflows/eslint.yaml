@@ -14,36 +14,10 @@ jobs:
       - name: install
         run: yarn
       - name: eslint check
+        continue-on-error: true
         run: yarn lint:output
-      - name: post comment in pull request
-        if: ${{ failure() }}
-        uses: actions/github-script@v6
+      - name: Annotate Code Linting Results
+        uses: ataylorme/eslint-annotate-action@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require("fs")
-            const path = require("path")
-            async function run() {
-              const globber = await glob.create(
-                      "public/*.html",
-                      {followSymbolicLinks: false}
-              )
-              const files = await globber.glob()
-              if (!files) { return }
-              if (files.length < 1) { return }
-              core.warning(files)
-              files.forEach(async (file) => {
-                      const cont = await fs.promises.readFile(file, "utf8")
-                      await github.rest.issues.createComment({
-                        issue_number: context.payload.pull_request.number,
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        body: cont
-                      })
-              })
-            }
-            try {
-              run()
-            } catch(err) {
-                core.error(`Possible error with posting eslint output ${err}`)
-            }
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          report-json: "eslint_report.json"
