@@ -4,11 +4,11 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { useSetAtom } from "jotai"
 import { insertTableOpenAtom } from "context/AtomConfigs"
 
-type TextFieldProperties = [
-  string,
-  number,
-  (event: ChangeEvent<HTMLInputElement>) => void,
-][]
+export type TextFieldProperties = {
+  label: string
+  value: number
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void
+}[]
 
 const calculateWidth = (columns: number) => 250 + Math.log(columns) * 500
 
@@ -36,8 +36,8 @@ const useTableFormControls = () => {
   }
 
   const textFieldProperties: TextFieldProperties = [
-    ["Rows", rows, handleChangeRows],
-    ["Columns", columns, handleChangeColumns],
+    { label: "Rows", value: rows, onChange: handleChangeRows },
+    { label: "Columns", value: columns, onChange: handleChangeColumns },
   ]
 
   return { rows, columns, textFieldProperties, handleConfirm }

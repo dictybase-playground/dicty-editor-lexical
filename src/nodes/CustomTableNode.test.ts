@@ -1,4 +1,4 @@
-import { describe, test, expect } from "vitest"
+import { describe, test, expect, beforeAll } from "vitest"
 import { createEditor, SerializedElementNode } from "lexical"
 import { testConfig } from "components/LexicalTestComposer"
 import CustomTableNode, { SerializedCustomTableNode } from "./CustomTableNode"
@@ -38,23 +38,25 @@ describe("CustomTableNode", () => {
 
   let tableDOM: HTMLTableElement
 
-  testEditor.update(() => {
-    tableNode = new CustomTableNode(width)
-    nodeType = tableNode.getType()
+  beforeAll(() => {
+    testEditor.update(() => {
+      tableNode = new CustomTableNode(width)
+      nodeType = tableNode.getType()
 
-    tableWidth = tableNode.__width
+      tableWidth = tableNode.__width
 
-    tableNodeKey = tableNode.getKey()
-    tableNodeClone = CustomTableNode.clone(tableNode)
-    tableNodeCloneKey = tableNodeClone.getKey()
-    tableNodeCloneWidth = tableNodeClone.__width
+      tableNodeKey = tableNode.getKey()
+      tableNodeClone = CustomTableNode.clone(tableNode)
+      tableNodeCloneKey = tableNodeClone.getKey()
+      tableNodeCloneWidth = tableNodeClone.__width
 
-    serializedTableNode = tableNode.exportJSON()
+      serializedTableNode = tableNode.exportJSON()
 
-    importedTableNode = CustomTableNode.importJSON(data)
-    importedTableNodeWidth = importedTableNode.__width
+      importedTableNode = CustomTableNode.importJSON(data)
+      importedTableNodeWidth = importedTableNode.__width
 
-    tableDOM = tableNode.createDOM(testConfig)
+      tableDOM = tableNode.createDOM(testConfig)
+    })
   })
   test('implements a method called "getType", that returns string "table"', () => {
     expect(nodeType).toEqual("table")
